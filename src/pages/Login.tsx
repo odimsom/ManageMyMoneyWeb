@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import type { AxiosError } from 'axios';
 import { useAuth } from '../context/AuthContext';
-import type { LoginRequest } from '../types/auth';
+import type { LoginRequest, ApiError } from '../types/auth';
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState<LoginRequest>({ email: '', password: '' });
@@ -19,8 +20,9 @@ const Login: React.FC = () => {
     try {
       await login(formData);
       navigate('/');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to login. Please check your credentials.');
+    } catch (err) {
+      const error = err as AxiosError<ApiError>;
+      setError(error.response?.data?.message || 'Failed to login. Please check your credentials.');
     }
   };
 
