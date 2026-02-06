@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { dashboardService } from '../services/dashboardService';
 import type { FinancialSummary, AccountSummary, Expense, CategoryBreakdown, DailySummary } from '../services/dashboardService';
 import { useAuth } from '../features/auth/context/AuthContext';
+import Modal from '../components/ui/Modal';
+import TransactionForm from '../components/forms/TransactionForm';
+import AccountForm from '../components/forms/AccountForm';
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
@@ -13,37 +16,41 @@ const Dashboard: React.FC = () => {
   const [transactions, setTransactions] = useState<Expense[]>([]);
   const [topCategories, setTopCategories] = useState<CategoryBreakdown[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Modal states
+  const [activeModal, setActiveModal] = useState<'expense' | 'income' | 'account' | null>(null);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString();
+
+      const [finData, accData, txData, catData, dailyData] = await Promise.all([
+        dashboardService.getFinancialSummary(startOfMonth, endOfMonth),
+        dashboardService.getAccountSummary(),
+        dashboardService.getRecentTransactions(),
+        dashboardService.getTopCategories(startOfMonth, endOfMonth),
+        dashboardService.getDailyExpenses(startOfMonth, endOfMonth)
+      ]);
+
+      setSummary(finData);
+      setAccSummary(accData);
+      setTransactions(txData || []);
+      
+      const safeCatData = catData || [];
+      setTopCategories(safeCatData.sort((a, b) => b.amount - a.amount).slice(0, 4));
+      
+      setDailySummary(dailyData || []);
+    } catch (error) {
+      console.error('Failed to fetch dashboard data', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const now = new Date();
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString();
-
-        const [finData, accData, txData, catData, dailyData] = await Promise.all([
-          dashboardService.getFinancialSummary(startOfMonth, endOfMonth),
-          dashboardService.getAccountSummary(),
-          dashboardService.getRecentTransactions(),
-          dashboardService.getTopCategories(startOfMonth, endOfMonth),
-          dashboardService.getDailyExpenses(startOfMonth, endOfMonth)
-        ]);
-
-        setSummary(finData);
-        setAccSummary(accData);
-        setTransactions(txData || []);
-        
-        const safeCatData = catData || [];
-        setTopCategories(safeCatData.sort((a, b) => b.amount - a.amount).slice(0, 4));
-        
-        setDailySummary(dailyData || []);
-      } catch (error) {
-        console.error('Failed to fetch dashboard data', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -234,18 +241,33 @@ const Dashboard: React.FC = () => {
           <div className="space-y-10">
               <div className="bg-card rounded-[2.5rem] p-10 border border-white/5">
                   <h3 className="text-lg font-black mb-8">{t('dashboard.quick_actions')}</h3>
-                  <div className="grid grid-cols-1 gap-4">
-                      <button className="flex items-center gap-5 p-6 rounded-[2rem] border-2 border-dashed border-white/5 hover:border-accent-purple/40 hover:bg-accent-purple/5 transition-all group">
+                   <div className="grid grid-cols-1 gap-4">
+                      <button 
+                        onClick={() => setActiveModal('expense')}
+                        className="flex items-center gap-5 p-6 rounded-[2rem] border-2 border-dashed border-white/5 hover:border-accent-purple/40 hover:bg-accent-purple/5 transition-all group"
+                      >
                           <div className="w-12 h-12 rounded-2xl bg-accent-purple flex items-center justify-center text-white shadow-lg shadow-accent-purple/20">
                               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 4v16m8-8H4" /></svg>
                           </div>
                           <span className="font-black text-white/60 group-hover:text-white transition-colors">{t('dashboard.add_expense')}</span>
                       </button>
-                      <button className="flex items-center gap-5 p-6 rounded-[2rem] border-2 border-dashed border-white/5 hover:border-green-500/40 hover:bg-green-500/5 transition-all group">
+                      <button 
+                        onClick={() => setActiveModal('income')}
+                        className="flex items-center gap-5 p-6 rounded-[2rem] border-2 border-dashed border-white/5 hover:border-green-500/40 hover:bg-green-500/5 transition-all group"
+                      >
                           <div className="w-12 h-12 rounded-2xl bg-green-500 flex items-center justify-center text-white shadow-lg shadow-green-500/20">
                               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                           </div>
                           <span className="font-black text-white/60 group-hover:text-white transition-colors">{t('dashboard.add_income')}</span>
+                      </button>
+                      <button 
+                        onClick={() => setActiveModal('account')}
+                        className="flex items-center gap-5 p-6 rounded-[2rem] border-2 border-dashed border-white/5 hover:border-blue-500/40 hover:bg-blue-500/5 transition-all group"
+                      >
+                          <div className="w-12 h-12 rounded-2xl bg-blue-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+                              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                          </div>
+                          <span className="font-black text-white/60 group-hover:text-white transition-colors">Add Account</span>
                       </button>
                   </div>
               </div>
@@ -278,6 +300,36 @@ const Dashboard: React.FC = () => {
                </div>
           </div>
       </div>
+
+      {/* Modals */}
+      <Modal 
+        isOpen={activeModal === 'expense' || activeModal === 'income'} 
+        onClose={() => setActiveModal(null)}
+        title={activeModal === 'expense' ? t('dashboard.add_expense') : t('dashboard.add_income')}
+      >
+        <TransactionForm 
+          type={activeModal === 'expense' ? 'Expense' : 'Income'} 
+          onCancel={() => setActiveModal(null)}
+          onSuccess={() => {
+            setActiveModal(null);
+            fetchData();
+          }}
+        />
+      </Modal>
+
+      <Modal 
+        isOpen={activeModal === 'account'} 
+        onClose={() => setActiveModal(null)}
+        title="Add New Account"
+      >
+        <AccountForm 
+          onCancel={() => setActiveModal(null)}
+          onSuccess={() => {
+            setActiveModal(null);
+            fetchData();
+          }}
+        />
+      </Modal>
     </div>
   );
 };

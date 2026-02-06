@@ -31,19 +31,30 @@ export interface TransactionFilters {
   search?: string;
 }
 
+export interface CreateExpenseRequest {
+  amount: number;
+  description: string;
+  categoryId: string;
+  accountId: string;
+  date: string;
+  currency: string;
+}
+
+export interface CreateIncomeRequest {
+  amount: number;
+  description: string;
+  categoryId: string;
+  accountId: string;
+  date: string;
+  currency: string;
+}
+
 const getTransactions = async (filters: TransactionFilters) => {
   // The API might have separate endpoints for expenses and incomes, 
   // or a unified one. Based on dashboardService, we have /api/Expenses.
   // I'll assume /api/Expenses for now and check for Incomes.
   const response = await api.get<{ data: PaginatedResponse<Transaction> }>(`/api/Expenses`, {
-    params: {
-      PageNumber: filters.pageNumber || 1,
-      PageSize: filters.pageSize || 10,
-      CategoryId: filters.categoryId,
-      FromDate: filters.fromDate,
-      ToDate: filters.toDate,
-      Search: filters.search
-    }
+    params: filters
   });
   
   // Adding type to each transaction for UI display
@@ -52,6 +63,29 @@ const getTransactions = async (filters: TransactionFilters) => {
   return { ...response.data.data, data: transactions };
 };
 
+const createExpense = async (data: CreateExpenseRequest) => {
+  const response = await api.post<{ data: Transaction }>(`/api/Expenses`, data);
+  return response.data.data;
+};
+
+const createIncome = async (data: CreateIncomeRequest) => {
+  const response = await api.post<{ data: Transaction }>(`/api/Income`, data);
+  return response.data.data;
+};
+
+export interface IncomeSource {
+  id: string;
+  name: string;
+}
+
+const getIncomeSources = async () => {
+  const response = await api.get<{ data: IncomeSource[] }>(`/api/Income/sources`);
+  return response.data.data || [];
+};
+
 export const transactionsService = {
-  getTransactions
+  getTransactions,
+  createExpense,
+  createIncome,
+  getIncomeSources
 };
