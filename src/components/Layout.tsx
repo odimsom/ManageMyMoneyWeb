@@ -30,8 +30,8 @@ const Layout: React.FC = () => {
   return (
     <div className="min-h-screen bg-bg-deep text-white flex p-4 md:p-6 lg:p-10 gap-6 lg:gap-10" data-theme="night">
       
-      {/* Sidebar - Floating Pill */}
-      <aside className="hidden lg:flex flex-col w-20 bg-card rounded-[2.5rem] p-4 items-center justify-between border border-white/5 shadow-2xl relative z-30">
+      {/* Sidebar - Fixed Floating Pill */}
+      <aside className="hidden lg:flex flex-col w-20 bg-card rounded-[2.5rem] p-4 items-center justify-between border border-white/5 shadow-2xl fixed left-6 top-10 bottom-10 z-30">
         <div className="flex flex-col items-center gap-10">
            <div className="w-12 h-12 bg-accent-purple rounded-2xl flex items-center justify-center rotate-12 shadow-lg shadow-accent-purple/20">
               <span className="text-xl font-black italic">M</span>
@@ -63,7 +63,7 @@ const Layout: React.FC = () => {
       </aside>
 
       {/* Main Container */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 lg:pl-32">
         
         {/* Modern Header */}
         <header className="flex items-center justify-between mb-8 lg:mb-12">
