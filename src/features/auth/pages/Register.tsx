@@ -132,7 +132,7 @@ const Register: React.FC = () => {
               >
                 <option value="USD">USD - US Dollar</option>
                 <option value="EUR">EUR - Euro</option>
-                <option value="DOM">DOM - Dominican Peso</option>
+                <option value="DOP">DOP - Dominican Peso</option>
               </select>
             </div>
           </div>
