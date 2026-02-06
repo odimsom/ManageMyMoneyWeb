@@ -37,7 +37,7 @@ const Register: React.FC = () => {
     try {
       await register({
         ...formData,
-        verificationUrl: `${window.location.origin}/verify-email`
+        verificationUrl: `${window.location.origin}/verify-email?token=`
       });
       alert('Registration successful! Please check your email to verify your account.');
       navigate('/login');

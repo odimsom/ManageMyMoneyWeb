@@ -12,15 +12,15 @@ const VerifyEmail: React.FC = () => {
 
   useEffect(() => {
     const verify = async () => {
-      const code = searchParams.get('code');
-      if (!code) {
+      const token = searchParams.get('token');
+      if (!token) {
         setStatus('error');
         setMessage('Invalid verification link.');
         return;
       }
 
       try {
-        await authService.verifyEmail(code);
+        await authService.verifyEmail(token);
         setStatus('success');
       } catch (err) {
         const error = err as AxiosError<ApiError>;
