@@ -1,17 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../features/auth/context/AuthContext';
-import { useTranslation } from 'react-i18next';
 
 const Layout: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-const Layout: React.FC = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { i18n } = useTranslation();
 
   const handleLogout = () => {
     logout();
