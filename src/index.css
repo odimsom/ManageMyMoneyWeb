@@ -16,47 +16,49 @@
 
 @layer base {
   :root {
-    --glass-blur: blur(20px);
+    --glass-blur: blur(25px);
   }
   
   body {
     background-color: var(--color-bg-deep);
     color: white;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
 @layer components {
   .glass-panel {
-    @apply bg-white/5 backdrop-blur-xl border border-white/5 shadow-2xl;
+    @apply bg-white/[0.02] backdrop-blur-2xl border border-white/5 shadow-2xl;
   }
   
   .card-elite {
-    background-color: var(--color-card);
+    background-color: #0c0c0e;
     border-radius: 2.5rem;
-    padding: 2.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   }
 
   .btn-pill {
-    @apply rounded-full px-8 py-4 font-bold transition-all active:scale-95;
+    @apply rounded-full px-8 py-4 font-black transition-all active:scale-95;
   }
 }
 
 @layer utilities {
   .animate-fade-in {
-    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   .animate-fade-in-up {
-    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   .animate-blob {
-    animation: blob 15s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    animation: blob 20s infinite cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .bg-mesh-ultra {
+  .bg-mmm-mesh {
     background-image: 
-      radial-gradient(at 0% 0%, rgba(156, 124, 244, 0.05) 0, transparent 50%), 
-      radial-gradient(at 100% 100%, rgba(244, 211, 94, 0.03) 0, transparent 50%);
+      radial-gradient(at 0% 0%, rgba(156, 124, 244, 0.08) 0, transparent 40%), 
+      radial-gradient(at 100% 100%, rgba(244, 211, 94, 0.05) 0, transparent 40%),
+      radial-gradient(at 50% 50%, rgba(15, 15, 18, 1) 0, transparent 100%);
     background-color: var(--color-bg-deep);
   }
 }

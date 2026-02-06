@@ -2,14 +2,23 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import type { AxiosError } from 'axios';
 import { useAuth } from '../../auth/context/AuthContext';
+import { useToast } from '../../../hooks/useToast';
 import type { LoginRequest, ApiError } from '../../auth/types/auth';
+import { useEffect } from 'react';
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState<LoginRequest>({ email: '', password: '' });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
+  const { showToast } = useToast();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,18 +32,21 @@ const Login: React.FC = () => {
 
     try {
       await login(formData);
+      showToast('Acceso concedido. Bienvenido a ManageMyMoney.', 'success');
       navigate('/');
     } catch (err) {
       const error = err as AxiosError<ApiError>;
-      setError(error.response?.data?.message || 'Invalid credentials. Access denied.');
+      const message = error.response?.data?.message || 'Identidad no reconocida. Acceso denegado.';
+      setError(message);
+      showToast(message, 'error');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-bg-deep flex items-center justify-center p-6 relative overflow-hidden" data-theme="night">
-      {/* Dynamic Background */}
+    <div className="min-h-screen bg-mmm-mesh flex items-center justify-center p-6 relative overflow-hidden" data-theme="night">
+      {/* Background Blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-accent-purple/10 rounded-full blur-[140px] animate-blob"></div>
         <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-accent-yellow/5 rounded-full blur-[140px] animate-blob animation-delay-4000"></div>
@@ -44,23 +56,21 @@ const Login: React.FC = () => {
         <div className="flex justify-center mb-12 animate-fade-in">
           <div className="flex items-center gap-3 group cursor-default">
              <div className="w-12 h-12 bg-accent-purple rounded-[1.25rem] flex items-center justify-center rotate-12 group-hover:rotate-0 transition-all duration-500 shadow-2xl shadow-accent-purple/40">
-                <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <span className="text-xl font-black italic text-white">M</span>
              </div>
-             <span className="text-3xl font-black tracking-tighter text-white">nixtio</span>
+             <span className="text-3xl font-black tracking-tighter text-white">ManageMyMoney</span>
           </div>
         </div>
 
         <div className="card-elite animate-fade-in-up border border-white/5 shadow-[0_0_80px_rgba(0,0,0,0.5)]">
           <div className="mb-10 text-center">
-            <h2 className="text-4xl font-black mb-2 tracking-tight text-white">Access Hub</h2>
-            <p className="text-white/30 font-black uppercase tracking-[0.3em] text-[10px]">Security Protocol v2.4</p>
+            <h2 className="text-4xl font-black mb-2 tracking-tight text-white">Secure Access</h2>
+            <p className="text-white/30 font-black uppercase tracking-[0.3em] text-[10px]">Manage your wealth with confidence</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 ml-6">Identifier</label>
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 ml-6">Email Address</label>
               <input
                 name="email"
                 type="email"
@@ -68,14 +78,14 @@ const Login: React.FC = () => {
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full bg-white/[0.03] border border-white/5 rounded-full h-16 px-8 focus:border-accent-purple/50 focus:bg-white/[0.05] transition-all outline-none font-bold text-lg text-white placeholder:text-white/10"
-                placeholder="name@nimbus.io"
+                placeholder="your@email.com"
               />
             </div>
 
             <div className="space-y-2">
               <div className="flex justify-between items-center px-6">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Security Key</label>
-                <a href="#" className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-purple hover:text-white transition-colors">Reset?</a>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Password</label>
+                <a href="#" className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-purple hover:text-white transition-colors">Forgot?</a>
               </div>
               <input
                 name="password"
@@ -104,7 +114,7 @@ const Login: React.FC = () => {
                   <span className="loading loading-spinner loading-md"></span>
                 ) : (
                   <>
-                    Initialize
+                    Sign In
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
@@ -116,9 +126,9 @@ const Login: React.FC = () => {
 
           <div className="mt-12 text-center">
             <p className="text-white/20 text-xs font-bold">
-              New operative?{' '}
+              New here?{' '}
               <Link to="/register" className="text-accent-yellow hover:text-white transition-colors border-b-2 border-accent-yellow/20 hover:border-white">
-                Request Entry
+                Create Account
               </Link>
             </p>
           </div>
@@ -127,10 +137,10 @@ const Login: React.FC = () => {
         <div className="mt-12 flex justify-center gap-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
            <div className="flex items-center gap-2 opacity-10 hover:opacity-50 transition-opacity cursor-default">
               <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white">Nexus Stable</span>
+              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white">Server Online</span>
            </div>
            <div className="flex items-center gap-2 opacity-10">
-              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white">Global Nodes: 12/12</span>
+              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white">MMM Core v1.2</span>
            </div>
         </div>
       </div>

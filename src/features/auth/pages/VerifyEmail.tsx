@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import type { AxiosError } from 'axios';
 import { authService } from '../services/authService';
+import { useToast } from '../../../hooks/useToast';
 import type { ApiError } from '../types/auth';
 
 const VerifyEmail: React.FC = () => {
@@ -9,31 +10,37 @@ const VerifyEmail: React.FC = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying');
   const [message, setMessage] = useState('');
+  const { showToast } = useToast();
 
   useEffect(() => {
     const verify = async () => {
       const tokenValue = searchParams.get('token') || searchParams.get('code');
       if (!tokenValue) {
+        const msg = 'Enlace de verificación inválido.';
         setStatus('error');
-        setMessage('Invalid verification link.');
+        setMessage(msg);
+        showToast(msg, 'error');
         return;
       }
 
       try {
         await authService.verifyEmail(tokenValue);
         setStatus('success');
+        showToast('¡Cuenta verificada con éxito!', 'success');
       } catch (err) {
         const error = err as AxiosError<ApiError>;
+        const msg = error.response?.data?.message || 'Error en la verificación del protocolo.';
         setStatus('error');
-        setMessage(error.response?.data?.message || 'Protocol failure. Verification aborted.');
+        setMessage(msg);
+        showToast(msg, 'error');
       }
     };
 
     verify();
-  }, [searchParams]);
+  }, [searchParams, showToast]);
 
   return (
-    <div className="min-h-screen bg-bg-deep flex items-center justify-center p-6 relative overflow-hidden" data-theme="night">
+    <div className="min-h-screen bg-mmm-mesh flex items-center justify-center p-6 relative overflow-hidden" data-theme="night">
       {/* Dynamic Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[20%] left-[10%] w-[40%] h-[40%] bg-accent-purple/10 rounded-full blur-[140px] animate-blob"></div>
@@ -49,8 +56,8 @@ const VerifyEmail: React.FC = () => {
                 <div className="w-full h-full border-[6px] border-white/5 border-t-accent-purple rounded-full animate-spin"></div>
               </div>
               <div>
-                <h2 className="text-3xl font-black text-white tracking-tight mb-2 uppercase">Syncing Node</h2>
-                <p className="text-white/30 font-black uppercase tracking-[0.2em] text-[9px]">Analyzing Security Certificate</p>
+                <h2 className="text-3xl font-black text-white tracking-tight mb-2 uppercase">Verifying Identity</h2>
+                <p className="text-white/30 font-black uppercase tracking-[0.2em] text-[9px]">Analyzing digital signature</p>
               </div>
             </div>
           )}
@@ -63,14 +70,14 @@ const VerifyEmail: React.FC = () => {
                 </svg>
               </div>
               <div>
-                <h2 className="text-3xl font-black text-white tracking-tight mb-2 uppercase italic">Gate Open</h2>
-                <p className="text-white/30 font-black uppercase tracking-[0.2em] text-[9px]">Identity Confirmed. Nexus Initialized.</p>
+                <h2 className="text-3xl font-black text-white tracking-tight mb-2 uppercase italic">Access Granted</h2>
+                <p className="text-white/30 font-black uppercase tracking-[0.2em] text-[9px]">Identity confirmed. System ready.</p>
               </div>
               <button
                 onClick={() => navigate('/login')}
                 className="w-full h-16 rounded-full bg-accent-purple text-white font-black text-xl shadow-2xl shadow-accent-purple/20 hover:scale-[1.02] active:scale-95 transition-all"
               >
-                Access Base
+                Sign In Now
               </button>
             </div>
           )}
@@ -83,21 +90,21 @@ const VerifyEmail: React.FC = () => {
                 </svg>
               </div>
               <div className="px-4">
-                <h2 className="text-3xl font-black text-white tracking-tight mb-2 uppercase">Access Aborted</h2>
+                <h2 className="text-3xl font-black text-white tracking-tight mb-2 uppercase">Protocol Error</h2>
                 <p className="text-red-500/60 font-black uppercase tracking-[0.1em] text-[10px] bg-red-500/10 p-4 rounded-3xl border border-red-500/10 mb-8">{message}</p>
               </div>
               <button
                 onClick={() => navigate('/login')}
                 className="w-full h-16 rounded-full bg-white/5 border border-white/5 text-white font-black text-lg hover:bg-white/10 transition-all"
               >
-                Return to Node
+                Return Home
               </button>
             </div>
           )}
         </div>
 
         <div className="mt-12 text-center opacity-10">
-          <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white">System: MMM Secure Ledger v2.4.0</p>
+          <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white">ManageMyMoney Secure Protocol v1.2</p>
         </div>
       </div>
     </div>
