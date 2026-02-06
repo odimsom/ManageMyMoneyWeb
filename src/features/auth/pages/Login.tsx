@@ -20,157 +20,118 @@ const Login: React.FC = () => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
+
     try {
       await login(formData);
       navigate('/');
     } catch (err) {
       const error = err as AxiosError<ApiError>;
-      setError(error.response?.data?.message || 'Failed to login. Please check your credentials.');
+      setError(error.response?.data?.message || 'Invalid credentials. Access denied.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-mesh text-white overflow-hidden" data-theme="night">
-      {/* Background Blobs */}
+    <div className="min-h-screen bg-bg-deep flex items-center justify-center p-6 relative overflow-hidden" data-theme="night">
+      {/* Dynamic Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-blob"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/10 rounded-full blur-[120px] animate-blob animation-delay-2000"></div>
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-accent-purple/10 rounded-full blur-[140px] animate-blob"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-accent-yellow/5 rounded-full blur-[140px] animate-blob animation-delay-4000"></div>
       </div>
 
-      {/* Abstract Design Side */}
-      <div className="hidden lg:flex lg:w-[45%] relative justify-center items-center overflow-hidden border-r border-white/5">
-        <div className="relative z-10 p-16 max-w-xl animate-fade-in-up">
-           <div className="mb-12 flex items-center gap-4 group">
-             <div className="p-3 bg-primary/20 rounded-2xl backdrop-blur-xl border border-primary/30 group-hover:scale-110 transition-transform duration-500">
-                <svg className="h-10 w-10 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <div className="w-full max-w-[480px] z-10">
+        <div className="flex justify-center mb-12 animate-fade-in">
+          <div className="flex items-center gap-3 group cursor-default">
+             <div className="w-12 h-12 bg-accent-purple rounded-[1.25rem] flex items-center justify-center rotate-12 group-hover:rotate-0 transition-all duration-500 shadow-2xl shadow-accent-purple/40">
+                <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
              </div>
-             <span className="text-4xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">ManageMyMoney</span>
-           </div>
-           
-           <h1 className="text-6xl font-black tracking-tight leading-[1.1] mb-8">
-             Master your <br />
-             <span className="text-primary italic">Finances</span>, secure <br />
-             your <span className="opacity-60 font-light">future.</span>
-           </h1>
-           <p className="text-xl text-white/50 leading-relaxed font-medium mb-12">
-             Join the next generation of financial management. Professional tools, advanced insights, and absolute security.
-           </p>
-
-           <div className="flex gap-12 items-center">
-              <div className="flex -space-x-3">
-                 {[1,2,3,4].map(i => (
-                   <div key={i} className={`w-12 h-12 rounded-full border-4 border-[#0a0c10] bg-base-200 flex items-center justify-center text-[10px] font-bold overflow-hidden`}>
-                      <div className={`w-full h-full bg-gradient-to-br ${i % 2 === 0 ? 'from-primary to-accent' : 'from-secondary to-primary'} opacity-80`}></div>
-                   </div>
-                 ))}
-              </div>
-              <div>
-                 <p className="text-sm font-bold text-white">Trusted by 25k+ professionals</p>
-                 <p className="text-xs text-white/40 uppercase tracking-widest mt-1">Enterprise Ready</p>
-              </div>
-           </div>
+             <span className="text-3xl font-black tracking-tighter text-white">nixtio</span>
+          </div>
         </div>
-      </div>
 
-      {/* Login Form Side */}
-      <div className="w-full lg:w-[55%] flex flex-col justify-center px-6 sm:px-12 lg:px-24 xl:px-32 relative z-10">
-        <div className="mx-auto w-full max-w-lg animate-fade-in" style={{ animationDelay: '200ms' }}>
-            <div className="mb-12">
-               <div className="lg:hidden mb-10 flex items-center gap-3">
-                  <div className="p-2 bg-primary/20 rounded-xl">
-                      <svg className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                  </div>
-                  <span className="text-2xl font-black">MMM</span>
-               </div>
-               <h2 className="text-4xl font-black text-white tracking-tight mb-3">Welcome Back</h2>
-               <p className="text-white/40 font-medium">
-                  Don't have an account yet?{' '}
-                  <Link to="/register" className="text-primary hover:text-primary/80 transition-colors font-bold border-b-2 border-primary/20 hover:border-primary">
-                    Join the waitlist
-                  </Link>
-               </p>
+        <div className="card-elite animate-fade-in-up border border-white/5 shadow-[0_0_80px_rgba(0,0,0,0.5)]">
+          <div className="mb-10 text-center">
+            <h2 className="text-4xl font-black mb-2 tracking-tight text-white">Access Hub</h2>
+            <p className="text-white/30 font-black uppercase tracking-[0.3em] text-[10px]">Security Protocol v2.4</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 ml-6">Identifier</label>
+              <input
+                name="email"
+                type="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full bg-white/[0.03] border border-white/5 rounded-full h-16 px-8 focus:border-accent-purple/50 focus:bg-white/[0.05] transition-all outline-none font-bold text-lg text-white placeholder:text-white/10"
+                placeholder="name@nimbus.io"
+              />
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="form-control w-full">
-                <label className="label">
-                  <span className="label-text font-bold text-white/50 text-xs uppercase tracking-widest">Email Address</span>
-                </label>
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="input input-bordered w-full h-14 rounded-2xl bg-white/5 border-white/10 focus:border-primary focus:ring-0 transition-all font-medium text-white placeholder:text-white/20"
-                  placeholder="name@company.com"
-                />
+            <div className="space-y-2">
+              <div className="flex justify-between items-center px-6">
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Security Key</label>
+                <a href="#" className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-purple hover:text-white transition-colors">Reset?</a>
               </div>
+              <input
+                name="password"
+                type="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full bg-white/[0.03] border border-white/5 rounded-full h-16 px-8 focus:border-accent-purple/50 focus:bg-white/[0.05] transition-all outline-none font-bold text-lg text-white placeholder:text-white/10"
+                placeholder="••••••••"
+              />
+            </div>
 
-              <div className="form-control w-full">
-                <div className="flex justify-between items-center mb-1">
-                   <label className="label py-0">
-                     <span className="label-text font-bold text-white/50 text-xs uppercase tracking-widest">Security Code</span>
-                   </label>
-                   <a href="#" className="text-xs font-bold text-primary/60 hover:text-primary transition-colors">
-                      Forgot?
-                   </a>
-                </div>
-                <input
-                  name="password"
-                  type="password"
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="input input-bordered w-full h-14 rounded-2xl bg-white/5 border-white/10 focus:border-primary focus:ring-0 transition-all font-medium text-white placeholder:text-white/20"
-                  placeholder="••••••••"
-                />
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 text-red-500 rounded-[2rem] p-4 text-center text-sm font-bold animate-fade-in shadow-xl">
+                {error}
               </div>
+            )}
 
-              {error && (
-                <div className="alert alert-error rounded-2xl border-none bg-error/20 text-error-content shadow-lg animate-fade-in-up">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span className="text-sm font-bold">{error}</span>
-                </div>
-              )}
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`w-full h-16 rounded-full bg-accent-purple text-white font-black text-xl shadow-2xl shadow-accent-purple/20 hover:shadow-accent-purple/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 ${isLoading ? 'opacity-70' : ''}`}
+              >
+                {isLoading ? (
+                  <span className="loading loading-spinner loading-md"></span>
+                ) : (
+                  <>
+                    Initialize
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
 
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className={`btn btn-primary w-full h-14 rounded-2xl text-lg font-black tracking-tight shadow-xl shadow-primary/20 border-none transition-all active:scale-[0.98] ${isLoading ? 'loading' : ''}`}
-                >
-                  {isLoading ? 'Verifying...' : 'System Access'}
-                </button>
-              </div>
+          <div className="mt-12 text-center">
+            <p className="text-white/20 text-xs font-bold">
+              New operative?{' '}
+              <Link to="/register" className="text-accent-yellow hover:text-white transition-colors border-b-2 border-accent-yellow/20 hover:border-white">
+                Request Entry
+              </Link>
+            </p>
+          </div>
+        </div>
 
-               <div className="divider opacity-10 uppercase text-[10px] font-bold tracking-[0.3em] my-10 text-white">Secure Authentication</div>
-
-                <div className="grid grid-cols-2 gap-4">
-                    <button type="button" className="btn btn-ghost bg-white/5 hover:bg-white/10 border border-white/5 rounded-2xl h-14 gap-3 font-bold group">
-                      <span className="text-sm opacity-60 group-hover:opacity-100 transition-opacity uppercase tracking-widest">Google</span>
-                    </button>
-                    <button type="button" className="btn btn-ghost bg-white/5 hover:bg-white/10 border border-white/5 rounded-2xl h-14 gap-3 font-bold group">
-                         <span className="text-sm opacity-60 group-hover:opacity-100 transition-opacity uppercase tracking-widest">Github</span>
-                    </button>
-                </div>
-            </form>
-            
-            <footer className="mt-20 flex justify-between items-center opacity-30">
-               <p className="text-[10px] font-bold uppercase tracking-widest">v2.4.0 Stable</p>
-               <div className="flex gap-4">
-                   <div className="w-2 h-2 rounded-full bg-success"></div>
-                   <p className="text-[10px] font-bold uppercase tracking-widest">All Systems Operational</p>
-               </div>
-            </footer>
+        <div className="mt-12 flex justify-center gap-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+           <div className="flex items-center gap-2 opacity-10 hover:opacity-50 transition-opacity cursor-default">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white">Nexus Stable</span>
+           </div>
+           <div className="flex items-center gap-2 opacity-10">
+              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white">Global Nodes: 12/12</span>
+           </div>
         </div>
       </div>
     </div>

@@ -50,185 +50,148 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-mesh text-white overflow-hidden" data-theme="night">
-      {/* Background Blobs */}
+    <div className="min-h-screen bg-bg-deep flex items-center justify-center p-6 relative overflow-hidden" data-theme="night">
+      {/* Dynamic Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] right-[-10%] w-[45%] h-[45%] bg-primary/20 rounded-full blur-[120px] animate-blob"></div>
-        <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-accent/10 rounded-full blur-[120px] animate-blob animation-delay-4000"></div>
+        <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] bg-accent-purple/10 rounded-full blur-[140px] animate-blob"></div>
+        <div className="absolute bottom-[-20%] left-[-10%] w-[60%] h-[60%] bg-accent-yellow/5 rounded-full blur-[140px] animate-blob animation-delay-4000"></div>
       </div>
 
-      {/* Abstract Design Side (Left) */}
-      <div className="hidden lg:flex lg:w-[40%] relative justify-center items-center overflow-hidden border-r border-white/5">
-        <div className="relative z-10 p-16 max-w-xl animate-fade-in-up">
-           <div className="mb-12 flex items-center gap-4">
-             <div className="p-3 bg-primary/20 rounded-2xl backdrop-blur-xl border border-primary/30">
-                <svg className="h-10 w-10 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <div className="w-full max-w-2xl z-10">
+        <div className="flex justify-center mb-10 animate-fade-in">
+          <div className="flex items-center gap-3 group cursor-default">
+             <div className="w-10 h-10 bg-accent-purple rounded-[1rem] flex items-center justify-center rotate-12 group-hover:rotate-0 transition-all duration-500 shadow-xl shadow-accent-purple/40">
+                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8l-6 6m6-6l6 6m-6-6v12" />
                 </svg>
              </div>
-             <span className="text-4xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">ManageMyMoney</span>
-           </div>
-           
-           <h2 className="text-5xl font-black tracking-tight leading-[1.1] mb-8">
-             Your journey to <br />
-             <span className="text-accent underline decoration-primary/30 underline-offset-8">Financial Freedom</span> <br />
-             starts here.
-           </h2>
-           <p className="text-lg text-white/50 leading-relaxed font-medium mb-12">
-             Configure your workspace in seconds. Track expenses, manage assets, and grow your wealth with professional-grade tools.
-           </p>
-
-           <div className="grid grid-cols-2 gap-6">
-                <div className="bg-white/5 p-6 rounded-3xl border border-white/10 backdrop-blur-xl group hover:bg-white/10 transition-colors">
-                    <div className="text-3xl font-black text-primary">100%</div>
-                    <div className="text-[10px] text-white/40 uppercase tracking-[0.2em] mt-2 font-bold group-hover:text-white/60 transition-colors">Free Analytics</div>
-                </div>
-                <div className="bg-white/5 p-6 rounded-3xl border border-white/10 backdrop-blur-xl group hover:bg-white/10 transition-colors">
-                    <div className="text-3xl font-black text-accent">Vault</div>
-                    <div className="text-[10px] text-white/40 uppercase tracking-[0.2em] mt-2 font-bold group-hover:text-white/60 transition-colors">Secure Encryption</div>
-                </div>
-           </div>
+             <span className="text-2xl font-black tracking-tighter text-white">nixtio</span>
+          </div>
         </div>
-      </div>
 
-      {/* Form Side (Right) */}
-      <div className="w-full lg:w-[60%] flex flex-col justify-center px-6 sm:px-12 lg:px-24 xl:px-32 py-12 lg:py-0 relative z-10 overflow-y-auto">
-        <div className="mx-auto w-full max-w-2xl animate-fade-in" style={{ animationDelay: '200ms' }}>
-            <div className="mb-10">
-               <h2 className="text-4xl font-black text-white tracking-tight mb-3">Create Account</h2>
-               <p className="text-white/40 font-medium">
-                  Already participating?{' '}
-                  <Link to="/login" className="text-primary hover:text-primary/80 transition-colors font-bold border-b-2 border-primary/20 hover:border-primary">
-                    Secure Login
-                  </Link>
-               </p>
+        <div className="card-elite animate-fade-in-up border border-white/5 shadow-2xl relative">
+          <div className="mb-10 text-center">
+            <h2 className="text-3xl font-black mb-2 tracking-tight text-white">Initialize Operative</h2>
+            <p className="text-white/20 font-black uppercase tracking-[0.3em] text-[9px]">Encounter Protocols v2.4</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-white/20 ml-6">First Name</label>
+                <input
+                  name="firstName"
+                  type="text"
+                  required
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className="w-full bg-white/[0.03] border border-white/5 rounded-full h-14 px-8 focus:border-accent-purple/50 focus:bg-white/[0.05] transition-all outline-none font-bold text-white placeholder:text-white/10"
+                  placeholder="John"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-white/20 ml-6">Last Name</label>
+                <input
+                  name="lastName"
+                  type="text"
+                  required
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  className="w-full bg-white/[0.03] border border-white/5 rounded-full h-14 px-8 focus:border-accent-purple/50 focus:bg-white/[0.05] transition-all outline-none font-bold text-white placeholder:text-white/10"
+                  placeholder="Doe"
+                />
+              </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="form-control w-full">
-                  <label className="label">
-                    <span className="label-text font-bold text-white/50 text-xs uppercase tracking-widest">First Name</span>
-                  </label>
-                  <input
-                    name="firstName"
-                    type="text"
-                    required
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    className="input input-bordered w-full h-14 rounded-2xl bg-white/5 border-white/10 focus:border-primary focus:ring-0 transition-all font-medium text-white"
-                    placeholder="John"
-                  />
-                </div>
-                <div className="form-control w-full">
-                  <label className="label">
-                    <span className="label-text font-bold text-white/50 text-xs uppercase tracking-widest">Last Name</span>
-                  </label>
-                  <input
-                    name="lastName"
-                    type="text"
-                    required
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    className="input input-bordered w-full h-14 rounded-2xl bg-white/5 border-white/10 focus:border-primary focus:ring-0 transition-all font-medium text-white"
-                    placeholder="Doe"
-                  />
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-white/20 ml-6">Identifier</label>
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full bg-white/[0.03] border border-white/5 rounded-full h-14 px-8 focus:border-accent-purple/50 focus:bg-white/[0.05] transition-all outline-none font-bold text-white placeholder:text-white/10"
+                  placeholder="john@nimbus.io"
+                />
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="form-control w-full">
-                    <label className="label">
-                      <span className="label-text font-bold text-white/50 text-xs uppercase tracking-widest">Email Address</span>
-                    </label>
-                    <input
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="input input-bordered w-full h-14 rounded-2xl bg-white/5 border-white/10 focus:border-primary focus:ring-0 transition-all font-medium text-white"
-                      placeholder="john@example.com"
-                    />
-                  </div>
-                  <div className="form-control w-full">
-                    <label className="label">
-                      <span className="label-text font-bold text-white/50 text-xs uppercase tracking-widest">Default Currency</span>
-                    </label>
-                    <select
-                        name="currency"
-                        value={formData.currency}
-                        onChange={handleChange}
-                        className="select select-bordered w-full h-14 rounded-2xl bg-white/5 border-white/10 focus:border-primary focus:ring-0 transition-all font-bold text-white"
-                    >
-                        <option value="USD">USD - US Dollar</option>
-                        <option value="EUR">EUR - Euro</option>
-                        <option value="DOP">DOP - Dominican Peso</option>
-                    </select>
-                  </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="form-control w-full">
-                    <label className="label">
-                      <span className="label-text font-bold text-white/50 text-xs uppercase tracking-widest">Security Pin</span>
-                    </label>
-                    <input
-                      name="password"
-                      type="password"
-                      autoComplete="new-password"
-                      required
-                      value={formData.password}
-                      onChange={handleChange}
-                      className="input input-bordered w-full h-14 rounded-2xl bg-white/5 border-white/10 focus:border-primary focus:ring-0 transition-all font-medium text-white"
-                      placeholder="••••••••"
-                    />
-                  </div>
-                  <div className="form-control w-full">
-                    <label className="label">
-                      <span className="label-text font-bold text-white/50 text-xs uppercase tracking-widest">Confirm Pin</span>
-                    </label>
-                    <input
-                      name="confirmPassword"
-                      type="password"
-                      autoComplete="new-password"
-                      required
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      className="input input-bordered w-full h-14 rounded-2xl bg-white/5 border-white/10 focus:border-primary focus:ring-0 transition-all font-medium text-white"
-                      placeholder="••••••••"
-                    />
-                  </div>
-              </div>
-
-              {error && (
-                <div className="alert alert-error rounded-2xl border-none bg-error/20 text-error-content shadow-lg animate-fade-in-up">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span className="text-sm font-bold">{error}</span>
-                </div>
-              )}
-
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className={`btn btn-primary w-full h-14 rounded-2xl text-lg font-black tracking-tight shadow-xl shadow-primary/20 border-none transition-all active:scale-[0.98] ${isLoading ? 'loading' : ''}`}
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-white/20 ml-6">Currency</label>
+                <select
+                  name="currency"
+                  value={formData.currency}
+                  onChange={handleChange}
+                  className="w-full bg-white/[0.03] border border-white/5 rounded-full h-14 px-8 focus:border-accent-purple/50 focus:bg-white/[0.05] transition-all outline-none font-bold text-white appearance-none cursor-pointer"
                 >
-                  {isLoading ? 'Processing Registration...' : 'Initialize Account'}
-                </button>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="DOP">DOP</option>
+                </select>
               </div>
-              
-              <div className="text-center">
-                  <p className="text-[10px] text-white/20 font-bold uppercase tracking-[0.2em] leading-loose">
-                    By initializing your account, you agree to our <br />
-                    <a href="#" className="text-white/40 hover:text-primary transition-colors border-b border-primary/20">Terms of Governance</a> and <a href="#" className="text-white/40 hover:text-primary transition-colors border-b border-primary/20">Data Privacy Protocol</a>.
-                  </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-white/20 ml-6">Security Key</label>
+                <input
+                  name="password"
+                  type="password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full bg-white/[0.03] border border-white/5 rounded-full h-14 px-8 focus:border-accent-purple/50 focus:bg-white/[0.05] transition-all outline-none font-bold text-white placeholder:text-white/10"
+                  placeholder="••••••••"
+                />
               </div>
-            </form>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-white/20 ml-6">Confirm Key</label>
+                <input
+                  name="confirmPassword"
+                  type="password"
+                  required
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="w-full bg-white/[0.03] border border-white/5 rounded-full h-14 px-8 focus:border-accent-purple/50 focus:bg-white/[0.05] transition-all outline-none font-bold text-white placeholder:text-white/10"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 text-red-500 rounded-[2rem] p-4 text-center text-sm font-bold animate-fade-in shadow-xl">
+                {error}
+              </div>
+            )}
+
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`w-full h-16 rounded-full bg-accent-purple text-white font-black text-xl shadow-2xl shadow-accent-purple/20 hover:shadow-accent-purple/40 hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-3 ${isLoading ? 'opacity-70' : ''}`}
+              >
+                {isLoading ? (
+                  <span className="loading loading-spinner loading-md"></span>
+                ) : (
+                  <>
+                    Authorize Account
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+
+          <div className="mt-10 text-center">
+            <p className="text-white/20 text-xs font-bold">
+              Active operative?{' '}
+              <Link to="/login" className="text-accent-yellow hover:text-white transition-colors border-b-2 border-accent-yellow/20 hover:border-white">
+                Access Node
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

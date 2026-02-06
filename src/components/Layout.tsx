@@ -7,12 +7,11 @@ const Layout: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { t, i18n } = useTranslation();
-
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  };
+const Layout: React.FC = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { i18n } = useTranslation();
 
   const handleLogout = () => {
     logout();
@@ -20,163 +19,143 @@ const Layout: React.FC = () => {
   };
 
   const navItems = [
-    { name: t('dashboard.title'), path: '/', icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+    { name: 'Statistics', path: '/', icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 8v8m-4-5v5m-4-2v2" /></svg>
     )},
     { name: 'Transactions', path: '/transactions', icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
     )},
     { name: 'Budgets', path: '/budgets', icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
     )},
-    { name: 'Reports', path: '/reports', icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+    { name: 'Settings', path: '/settings', icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
     )},
   ];
 
   return (
-    <div className="min-h-screen bg-base-300 flex text-base-content" data-theme="night">
+    <div className="min-h-screen bg-bg-deep text-white flex p-4 md:p-6 lg:p-10 gap-6 lg:gap-10" data-theme="night">
       
-      {/* Sidebar (Desktop) */}
-      <aside className="hidden md:flex flex-col w-72 bg-base-200 border-r border-base-100 min-h-screen fixed left-0 top-0 bottom-0 z-30 shadow-2xl">
-        <div className="p-8 flex items-center gap-4">
-             <div className="p-2 bg-primary/10 rounded-xl border border-primary/20">
-                <svg className="h-7 w-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-             </div>
-             <div>
-                <span className="text-xl font-black tracking-tighter text-white">ManageMyMoney</span>
-                <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-primary/60">Digital Assets</p>
-             </div>
+      {/* Sidebar - Floating Pill */}
+      <aside className="hidden lg:flex flex-col w-20 bg-card rounded-[2.5rem] p-4 items-center justify-between border border-white/5 shadow-2xl relative z-30">
+        <div className="flex flex-col items-center gap-10">
+           <div className="w-12 h-12 bg-accent-purple rounded-2xl flex items-center justify-center rotate-12 shadow-lg shadow-accent-purple/20">
+              <span className="text-xl font-black">n</span>
+           </div>
+           
+           <nav className="flex flex-col gap-6">
+              {navItems.map((item) => {
+                 const isActive = location.pathname === item.path;
+                 return (
+                  <Link
+                    key={item.name}
+                    to={item.path}
+                    className={`p-4 rounded-2xl transition-all relative group ${isActive ? 'bg-accent-purple text-white' : 'text-white/20 hover:text-white hover:bg-white/5'}`}
+                    title={item.name}
+                  >
+                    {item.icon}
+                    {isActive && <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-10 px-3 py-1 bg-white text-black text-[10px] font-black uppercase rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">{item.name}</div>}
+                  </Link>
+                 )
+              })}
+           </nav>
         </div>
 
-        <nav className="flex-1 px-4 py-4 space-y-1.5 overflow-y-auto">
-          {navItems.map((item) => {
-             const isActive = location.pathname === item.path;
-             return (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={`group flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all duration-300 ${
-                  isActive 
-                    ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' 
-                    : 'text-base-content/60 hover:bg-base-100 hover:text-white'
-                }`}
-              >
-                <span className={`${isActive ? 'text-primary-content' : 'text-primary/70 group-hover:text-primary transition-colors'}`}>
-                  {item.icon}
-                </span>
-                {item.name}
-              </Link>
-             )
-          })}
-        </nav>
-
-        <div className="p-6 mt-auto bg-base-300/50 border-t border-base-100">
-           {/* User Profile Summary */}
-           <div className="flex items-center gap-4 mb-6">
-              <div className="avatar placeholder">
-                <div className="bg-primary text-primary-content rounded-full w-12 border-2 border-primary/20 shadow-lg">
-                  <span className="text-lg font-bold">{user?.firstName?.charAt(0) || 'U'}</span>
-                </div>
-              </div>
-              <div className="min-w-0">
-                  <p className="text-sm font-bold text-white truncate">{user?.firstName} {user?.lastName}</p>
-                  <p className="text-[11px] text-base-content/50 truncate font-mono uppercase tracking-wider">{user?.currency || 'USD'}</p>
-              </div>
-           </div>
-
-           <div className="flex flex-col gap-2">
-              <div className="grid grid-cols-2 gap-2 mb-2">
-                 <button className={`btn btn-xs rounded-lg ${i18n.language === 'en' ? 'btn-primary' : 'btn-ghost'}`} onClick={() => changeLanguage('en')}>EN</button>
-                 <button className={`btn btn-xs rounded-lg ${i18n.language === 'es' ? 'btn-primary' : 'btn-ghost'}`} onClick={() => changeLanguage('es')}>ES</button>
-              </div>
-              
-              <button 
-                onClick={handleLogout}
-                className="btn btn-error btn-outline btn-sm w-full rounded-xl gap-2 font-bold"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                Logout
-              </button>
-           </div>
+        <div className="flex flex-col gap-6 items-center">
+           <button onClick={handleLogout} className="p-4 rounded-2xl text-white/20 hover:text-red-500 hover:bg-red-500/10 transition-all" title="Logout">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+           </button>
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <div className="flex-1 md:ml-72 flex flex-col min-w-0 overflow-hidden">
+      {/* Main Container */}
+      <div className="flex-1 flex flex-col min-w-0">
         
-        {/* Header */}
-        <header className="sticky top-0 z-20 bg-base-200/80 backdrop-blur-xl border-b border-base-100 px-6 py-4 flex items-center justify-between">
-             <div className="flex items-center gap-4">
-                 <button onClick={() => setSidebarOpen(true)} className="md:hidden btn btn-ghost btn-square">
-                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-                 </button>
-                 <h1 className="text-xl font-black text-white tracking-tight">
-                   {navItems.find(i => i.path === location.pathname)?.name || 'Dashboard'}
-                 </h1>
-             </div>
+        {/* Modern Header */}
+        <header className="flex items-center justify-between mb-8 lg:mb-12">
+            <div className="flex items-center gap-12 flex-1">
+               <div className="hidden md:flex flex-1 max-w-md relative group">
+                  <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none opacity-20 group-focus-within:opacity-100 transition-opacity">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                  </div>
+                  <input 
+                    type="text" 
+                    placeholder="Search operations..." 
+                    className="w-full h-14 bg-card rounded-2xl pl-16 pr-8 border border-white/5 focus:border-accent-purple/50 outline-none font-bold text-sm transition-all"
+                  />
+               </div>
+               
+               <div className="hidden lg:flex items-center gap-4 bg-card px-6 h-14 rounded-2xl border border-white/5">
+                  <div className="flex -space-x-2">
+                     {[1,2,3].map(i => (
+                       <div key={i} className="w-8 h-8 rounded-full border-2 border-card bg-accent-purple/20 flex items-center justify-center text-[8px] font-black">
+                         OP
+                       </div>
+                     ))}
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-white/40">12 of 15 active nodes</span>
+               </div>
+            </div>
 
-             <div className="flex items-center gap-2">
-                <div className="dropdown dropdown-end">
-                   <button className="btn btn-ghost btn-circle">
-                      <div className="indicator">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                        <span className="badge badge-xs badge-primary indicator-item"></span>
-                      </div>
-                   </button>
-                </div>
-                
-                <div className="avatar online md:hidden">
-                   <div className="w-8 rounded-full border border-primary/20">
-                      <span className="text-xs flex items-center justify-center h-full font-bold">{user?.firstName?.charAt(0)}</span>
-                   </div>
-                </div>
-             </div>
+            <div className="flex items-center gap-6">
+               <div className="flex flex-col items-end">
+                  <span className="text-sm font-black text-white">{user?.firstName} {user?.lastName}</span>
+                  <span className="text-[9px] font-black uppercase tracking-widest text-white/30">System Admin</span>
+               </div>
+               <div className="w-12 h-12 rounded-2xl bg-accent-purple/10 border border-accent-purple/20 flex items-center justify-center text-accent-purple font-black">
+                  {user?.firstName?.charAt(0)}
+               </div>
+            </div>
         </header>
 
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-base-300 p-6 md:p-10">
-            <div className="max-w-7xl mx-auto animate-fade-in">
-                <Outlet />
-            </div>
-        </main>
-      </div>
-
-      {/* Drawer for Mobile (Redesigned with Sidebar Logic) */}
-      <div className={`fixed inset-0 z-50 transition-opacity duration-300 ${sidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSidebarOpen(false)}></div>
-          <div className={`absolute top-0 left-0 w-80 h-full bg-base-200 shadow-2xl transition-transform duration-300 ease-out border-r border-base-100 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-              <div className="flex flex-col h-full">
-                  <div className="p-8 flex items-center justify-between border-b border-base-100">
-                      <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                              <svg className="h-5 w-5 text-primary-content" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                              </svg>
-                          </div>
-                          <span className="text-lg font-black tracking-tight text-white">MMM</span>
+        {/* Global Statistics (Mocking the reference style) */}
+        {location.pathname === '/' && (
+           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-10 animate-fade-in">
+              <div className="lg:col-span-3 bg-card rounded-[2.5rem] p-10 border border-white/5 relative overflow-hidden">
+                 <div className="flex justify-between items-center mb-10">
+                    <h3 className="text-2xl font-black">Overview Statistics</h3>
+                    <div className="flex gap-4">
+                       <span className="text-[10px] font-black uppercase text-white hover:text-accent-purple cursor-pointer transition-colors px-2">Days</span>
+                       <span className="text-[10px] font-black uppercase text-white/20 hover:text-white cursor-pointer transition-colors px-2">Weeks</span>
+                       <span className="text-[10px] font-black uppercase text-white/20 hover:text-white cursor-pointer transition-colors px-2">Months</span>
+                    </div>
+                 </div>
+                 <div className="h-64 flex items-end gap-1">
+                    {[3,5,2,8,4,6,3,9,5,7,4,5,2,8,4,6].map((h, i) => (
+                      <div key={i} className="flex-1 bg-accent-purple/10 rounded-full group cursor-pointer hover:bg-accent-purple/30 transition-all flex flex-col justify-end overflow-hidden" style={{ height: `${h * 10}%` }}>
+                         <div className="h-1/3 w-full bg-accent-purple opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       </div>
-                      <button onClick={() => setSidebarOpen(false)} className="btn btn-ghost btn-sm btn-circle">
-                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                      </button>
-                  </div>
-                  
-                  <nav className="flex-1 p-4 space-y-1">
-                      {navItems.map((item) => (
-                          <Link
-                              key={item.name}
-                              to={item.path}
-                              onClick={() => setSidebarOpen(false)}
-                              className={`flex items-center gap-4 px-4 py-4 rounded-2xl text-sm font-bold transition-all ${ location.pathname === item.path ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' : 'text-base-content/70 hover:bg-base-100'}`}
-                          >
-                              {item.icon}
-                              {item.name}
-                          </Link>
-                      ))}
-                  </nav>
+                    ))}
+                 </div>
               </div>
-          </div>
+              <div className="flex flex-col gap-6">
+                 <div className="bg-accent-purple rounded-[2.5rem] p-8 text-black relative overflow-hidden group">
+                    <div className="relative z-10">
+                       <h4 className="text-[11px] font-black uppercase tracking-widest mb-1 opacity-50">Total Assets</h4>
+                       <div className="text-4xl font-black tracking-tighter">$278,402.00</div>
+                    </div>
+                    <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+                 </div>
+                 <div className="bg-card rounded-[2.5rem] p-8 border border-white/5 flex-1">
+                    <h4 className="text-[11px] font-black uppercase tracking-widest text-white/20 mb-6">Recent Alerts</h4>
+                    <div className="space-y-4">
+                       <div className="flex items-center gap-4">
+                          <div className="w-2 h-2 rounded-full bg-accent-yellow"></div>
+                          <span className="text-xs font-bold text-white/60">Large transaction detected</span>
+                       </div>
+                       <div className="flex items-center gap-4">
+                          <div className="w-2 h-2 rounded-full bg-accent-purple"></div>
+                          <span className="text-xs font-bold text-white/60">System update available</span>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        )}
+
+        <main className="flex-1">
+            <Outlet />
+        </main>
       </div>
     </div>
   );

@@ -4,59 +4,76 @@
 @custom-variant dark (&:where(.dark, [data-theme="dark"], [data-theme="night"], [data-theme="dark"] *));
 
 @theme {
-  --color-glass: rgba(255, 255, 255, 0.05);
-  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --color-glass: rgba(255, 255, 255, 0.03);
+  --color-glass-border: rgba(255, 255, 255, 0.05);
+  
+  /* Reference palette from image */
+  --color-bg-deep: #050505;
+  --color-card: #0f0f12;
+  --color-accent-purple: #9c7cf4;
+  --color-accent-yellow: #f4d35e;
 }
 
 @layer base {
   :root {
-    --glass-blur: blur(12px);
+    --glass-blur: blur(20px);
+  }
+  
+  body {
+    background-color: var(--color-bg-deep);
+    color: white;
+    font-family: 'Inter', sans-serif;
   }
 }
 
 @layer components {
   .glass-panel {
-    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-2xl;
+    @apply bg-white/5 backdrop-blur-xl border border-white/5 shadow-2xl;
+  }
+  
+  .card-elite {
+    background-color: var(--color-card);
+    border-radius: 2.5rem;
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+  }
+
+  .btn-pill {
+    @apply rounded-full px-8 py-4 font-bold transition-all active:scale-95;
   }
 }
 
 @layer utilities {
   .animate-fade-in {
-    animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   .animate-fade-in-up {
-    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   .animate-blob {
-    animation: blob 10s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    animation: blob 15s infinite cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
-  .animation-delay-4000 {
-    animation-delay: 4s;
-  }
-  .bg-mesh {
+  .bg-mesh-ultra {
     background-image: 
-      radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-      radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-      radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+      radial-gradient(at 0% 0%, rgba(156, 124, 244, 0.05) 0, transparent 50%), 
+      radial-gradient(at 100% 100%, rgba(244, 211, 94, 0.03) 0, transparent 50%);
+    background-color: var(--color-bg-deep);
   }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; filter: blur(4px); }
+  from { opacity: 0; filter: blur(10px); }
   to { opacity: 1; filter: blur(0); }
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); filter: blur(4px); }
+  from { opacity: 0; transform: translateY(40px); filter: blur(10px); }
   to { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
 @keyframes blob {
   0% { transform: translate(0px, 0px) scale(1); }
-  33% { transform: translate(40px, -60px) scale(1.15); }
-  66% { transform: translate(-30px, 30px) scale(0.9); }
+  33% { transform: translate(50px, -70px) scale(1.1); }
+  66% { transform: translate(-40px, 40px) scale(0.95); }
   100% { transform: translate(0px, 0px) scale(1); }
 }
