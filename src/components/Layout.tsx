@@ -91,47 +91,6 @@ const Layout: React.FC = () => {
             </div>
         </header>
 
-        {/* Global Statistics (MMM Business Logic) */}
-        {location.pathname === '/' && (
-           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-10 animate-fade-in">
-              <div className="lg:col-span-3 bg-card rounded-[2.5rem] p-10 border border-white/5 relative overflow-hidden">
-                 <div className="flex justify-between items-center mb-10">
-                    <h3 className="text-2xl font-black">Cash Flow Overview</h3>
-                    <div className="flex gap-4">
-                       <span className="text-[10px] font-black uppercase text-white hover:text-accent-purple cursor-pointer transition-colors px-2">Days</span>
-                       <span className="text-[10px] font-black uppercase text-white/20 hover:text-white cursor-pointer transition-colors px-2">Weeks</span>
-                       <span className="text-[10px] font-black uppercase text-white/20 hover:text-white cursor-pointer transition-colors px-2">Months</span>
-                    </div>
-                 </div>
-                 <div className="h-64 flex items-end gap-1 px-4">
-                    {[3,5,2,8,4,6,3,9,5,7,4,5,2,8,4,6].map((h, i) => (
-                      <div key={i} className="flex-1 bg-accent-purple/5 rounded-t-full group cursor-pointer hover:bg-accent-purple/20 transition-all flex flex-col justify-end overflow-hidden" style={{ height: `${h * 10}%` }}>
-                         <div className="h-full w-full bg-accent-purple opacity-0 group-hover:opacity-40 transition-opacity"></div>
-                      </div>
-                    ))}
-                 </div>
-              </div>
-              <div className="flex flex-col gap-6">
-                 <div className="bg-accent-purple rounded-[2.5rem] p-8 text-black relative overflow-hidden group">
-                    <div className="relative z-10">
-                       <h4 className="text-[11px] font-black uppercase tracking-widest mb-1 opacity-50">Current Balance</h4>
-                       <div className="text-3xl font-black tracking-tighter">$12,450.00</div>
-                    </div>
-                    <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-                 </div>
-                 <div className="bg-card rounded-[2.5rem] p-8 border border-white/5 flex-1 space-y-8">
-                    <div>
-                       <h4 className="text-[11px] font-black uppercase tracking-widest text-white/20 mb-2">Monthly Expenses</h4>
-                       <div className="text-xl font-black text-red-500">-$2,120.40</div>
-                    </div>
-                    <div className="pt-4 border-t border-white/5">
-                       <h4 className="text-[11px] font-black uppercase tracking-widest text-white/20 mb-2">Monthly Income</h4>
-                       <div className="text-xl font-black text-green-400">+$5,800.00</div>
-                    </div>
-                 </div>
-              </div>
-           </div>
-        )}
 
         <main className="flex-1">
             <Outlet />

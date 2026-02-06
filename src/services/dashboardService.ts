@@ -1,5 +1,7 @@
 import api from './api';
 
+export type Currency = 'USD' | 'EUR' | 'DOP';
+
 export interface FinancialSummary {
   totalIncome: number;
   totalExpenses: number;
@@ -42,35 +44,48 @@ export interface CategoryBreakdown {
   amount: number;
 }
 
+export interface DailySummary {
+  date: string;
+  amount: number;
+}
+
 const getFinancialSummary = async (fromDate: string, toDate: string) => {
-  const response = await api.get<{ data: FinancialSummary }>(`/reports/summary`, {
+  const response = await api.get<{ data: FinancialSummary }>(`/api/Reports/summary`, {
     params: { fromDate, toDate }
   });
   return response.data.data;
 };
 
 const getAccountSummary = async () => {
-    const response = await api.get<{ data: AccountSummary }>(`/accounts/summary`);
+    const response = await api.get<{ data: AccountSummary }>(`/api/Accounts/summary`);
     return response.data.data;
 }
 
 const getTopCategories = async (fromDate: string, toDate: string) => {
-  const response = await api.get<{ data: CategoryBreakdown[] }>(`/reports/top-categories`, {
-    params: { fromDate, toDate, top: 3 }
+  const response = await api.get<{ data: CategoryBreakdown[] }>(`/api/Expenses/summary/category`, {
+    params: { fromDate, toDate }
   });
   return response.data.data;
 };
 
 const getRecentTransactions = async () => {
-  const response = await api.get<{ data: PaginatedResponse<Expense> }>(`/expenses`, {
-    params: { pageNumber: 1, pageSize: 5, sort: '-date' }
+  const response = await api.get<{ data: PaginatedResponse<Expense> }>(`/api/Expenses`, {
+    params: { PageNumber: 1, PageSize: 5 }
   });
   return response.data.data.data;
+};
+
+const getDailyExpenses = async (fromDate: string, toDate: string) => {
+  const response = await api.get<{ data: DailySummary[] }>(`/api/Expenses/summary/daily`, {
+    params: { fromDate, toDate }
+  });
+  return response.data.data;
 };
 
 export const dashboardService = {
   getFinancialSummary,
   getAccountSummary,
   getTopCategories,
-  getRecentTransactions
+  getRecentTransactions,
+  getDailyExpenses
 };
