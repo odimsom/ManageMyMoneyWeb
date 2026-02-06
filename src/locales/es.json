@@ -1,0 +1,23 @@
+{
+  "dashboard": {
+    "title": "Panel de Control",
+    "welcome": "Bienvenido de nuevo, Usuario",
+    "total_balance": "Balance Total",
+    "total_income": "Ingresos Totales",
+    "total_expenses": "Gastos Totales",
+    "recent_transactions": "Transacciones Recientes",
+    "view_all": "Ver Todo",
+    "quick_actions": "Acciones Rápidas",
+    "add_income": "Añadir Ingreso",
+    "add_expense": "Añadir Gasto",
+    "description": "Descripción",
+    "amount": "Monto",
+    "date": "Fecha",
+    "category": "Categoría",
+    "no_transactions": "No se encontraron transacciones recientes."
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ocurrió un error"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back, User",
+    "total_balance": "Total Balance",
+    "total_income": "Total Income",
+    "total_expenses": "Total Expenses",
+    "recent_transactions": "Recent Transactions",
+    "view_all": "View All",
+    "quick_actions": "Quick Actions",
+    "add_income": "Add Income",
+    "add_expense": "Add Expense",
+    "description": "Description",
+    "amount": "Amount",
+    "date": "Date",
+    "category": "Category",
+    "no_transactions": "No recent transactions found."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred"
+  }
+}
