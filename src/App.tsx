@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider } from './features/auth/context/AuthContext';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import Login from './features/auth/pages/Login';
+import Register from './features/auth/pages/Register';
+import VerifyEmail from './features/auth/pages/VerifyEmail';
 import Dashboard from './pages/Dashboard';
 
 function App() {
@@ -13,11 +14,11 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
           
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
               <Route path="/" element={<Dashboard />} />
-              {/* Add more protected routes here */}
             </Route>
           </Route>
         </Routes>

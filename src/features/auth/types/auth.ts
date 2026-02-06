@@ -18,12 +18,21 @@ export interface RegisterRequest {
   firstName: string;
   lastName: string;
   currency: string;
+  verificationUrl?: string;
 }
 
 export interface AuthResponse {
-  token: string;
+  accessToken: string;
+  refreshToken: string;
   expiresAt: string;
   user: User;
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  message?: string;
+  data: T;
+  errors?: string[];
 }
 
 export interface ApiError {
