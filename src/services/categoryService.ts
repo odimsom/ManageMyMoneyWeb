@@ -9,7 +9,7 @@ export interface Category {
 
 const getCategories = async () => {
   const response = await api.get<{ data: Category[] }>(`/api/Categories`);
-  return response.data.data;
+  return response.data.data || [];
 };
 
 export const categoryService = {

@@ -31,9 +31,12 @@ const Dashboard: React.FC = () => {
 
         setSummary(finData);
         setAccSummary(accData);
-        setTransactions(txData);
-        setTopCategories(catData.sort((a, b) => b.amount - a.amount).slice(0, 4));
-        setDailySummary(dailyData);
+        setTransactions(txData || []);
+        
+        const safeCatData = catData || [];
+        setTopCategories(safeCatData.sort((a, b) => b.amount - a.amount).slice(0, 4));
+        
+        setDailySummary(dailyData || []);
       } catch (error) {
         console.error('Failed to fetch dashboard data', error);
       } finally {

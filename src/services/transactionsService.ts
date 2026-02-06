@@ -47,7 +47,8 @@ const getTransactions = async (filters: TransactionFilters) => {
   });
   
   // Adding type to each transaction for UI display
-  const transactions = response.data.data.data.map(t => ({ ...t, type: 'Expense' as const }));
+  const transactionsRaw = response.data.data?.data || [];
+  const transactions = transactionsRaw.map(t => ({ ...t, type: 'Expense' as const }));
   return { ...response.data.data, data: transactions };
 };
 

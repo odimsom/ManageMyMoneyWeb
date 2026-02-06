@@ -15,7 +15,7 @@ export interface Budget {
 
 const getBudgets = async () => {
   const response = await api.get<{ data: Budget[] }>(`/api/Budgets`);
-  return response.data.data;
+  return response.data.data || [];
 };
 
 const createBudget = async (data: Partial<Budget>) => {
