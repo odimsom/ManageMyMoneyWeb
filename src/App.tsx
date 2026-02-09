@@ -9,6 +9,9 @@ import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import Budgets from './pages/Budgets';
 import Categories from './pages/Categories';
+import Income from './pages/Income';
+import Reports from './pages/Reports';
+import Accounts from './pages/Accounts';
 
 import { ToastProvider } from './context/ToastContext';
 
@@ -24,10 +27,13 @@ function App() {
             
             <Route element={<ProtectedRoute />}>
               <Route element={<Layout />}>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/transactions" element={<Transactions />} />
-                <Route path="/budgets" element={<Budgets />} />
-                <Route path="/categories" element={<Categories />} />
+                <Route index element={<Dashboard />} />
+                <Route path="income" element={<Income />} />
+                <Route path="reports" element={<Reports />} />
+                <Route path="transactions" element={<Transactions />} />
+                <Route path="budgets" element={<Budgets />} />
+                <Route path="categories" element={<Categories />} />
+                <Route path="accounts" element={<Accounts />} />
               </Route>
             </Route>
           </Routes>

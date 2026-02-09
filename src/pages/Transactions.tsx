@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { transactionsService } from '../services/transactionsService';
-import type { Transaction, TransactionFilters } from '../services/transactionsService';
+import { expenseService } from '../services/expenseService';
+import type { Expense } from '../services/expenseService';
 import { categoryService } from '../services/categoryService';
 import type { Category } from '../services/categoryService';
 import { useToast } from '../hooks/useToast';
@@ -9,31 +9,31 @@ import { useToast } from '../hooks/useToast';
 const Transactions: React.FC = () => {
   const { t } = useTranslation();
   const { showToast } = useToast();
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [filters, setFilters] = useState<TransactionFilters>({
-    pageNumber: 1,
-    pageSize: 20,
-    search: '',
-    categoryId: ''
-  });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState('');
 
-  const fetchTransactions = useCallback(async () => {
+  const fetchExpenses = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await transactionsService.getTransactions(filters);
-      setTransactions(response.data);
+      const response = await expenseService.getExpenses({ 
+        PageSize: 50,
+        SearchTerm: searchTerm,
+        CategoryId: selectedCategoryId || undefined
+      });
+      setExpenses(response.items || []);
     } catch {
-      showToast('Error al cargar transacciones', 'error');
+      showToast('Error al cargar gastos', 'error');
     } finally {
       setIsLoading(false);
     }
-  }, [filters, showToast]);
+  }, [searchTerm, selectedCategoryId, showToast]);
 
   useEffect(() => {
-    fetchTransactions();
-  }, [fetchTransactions]);
+    fetchExpenses();
+  }, [fetchExpenses]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -46,14 +46,6 @@ const Transactions: React.FC = () => {
     };
     fetchCategories();
   }, []);
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters(prev => ({ ...prev, search: e.target.value, pageNumber: 1 }));
-  };
-
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilters(prev => ({ ...prev, categoryId: e.target.value, pageNumber: 1 }));
-  };
 
   const formatCurrency = (amount: number, currency = 'USD') => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount);
@@ -72,15 +64,15 @@ const Transactions: React.FC = () => {
             <input 
               type="text" 
               placeholder="Search..." 
-              value={filters.search}
-              onChange={handleSearchChange}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="h-12 bg-card rounded-xl pl-12 pr-6 border border-white/5 focus:border-accent-purple/50 outline-none font-bold text-xs transition-all w-64"
             />
           </div>
 
           <select 
-            value={filters.categoryId}
-            onChange={handleCategoryChange}
+            value={selectedCategoryId}
+            onChange={(e) => setSelectedCategoryId(e.target.value)}
             className="h-12 bg-card rounded-xl px-6 border border-white/5 focus:border-accent-purple/50 outline-none font-black text-[10px] uppercase tracking-widest transition-all appearance-none cursor-pointer"
           >
             <option value="">All Categories</option>
@@ -106,36 +98,40 @@ const Transactions: React.FC = () => {
                   <th className="px-6 pb-2">Description</th>
                   <th className="px-6 pb-2">Category</th>
                   <th className="px-6 pb-2">Account</th>
-                  <th className="px-6 pb-2">Date</th>
                   <th className="px-6 pb-2 text-right">Amount</th>
                 </tr>
               </thead>
               <tbody>
-                {transactions.length === 0 ? (
+                {expenses.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="text-center py-20 text-white/10 font-black uppercase tracking-widest text-sm italic">
-                      No transactions found.
+                    <td colSpan={4} className="text-center py-20 text-white/10 font-black uppercase tracking-widest text-sm italic">
+                      No expenses found.
                     </td>
                   </tr>
                 ) : (
-                  transactions.map((t) => (
-                    <tr key={t.id} className="group hover:bg-white/[0.03] transition-all">
+                  expenses.map((e) => (
+                    <tr key={e.id} className="group hover:bg-white/[0.03] transition-all">
                       <td className="px-6 py-4 bg-white/[0.02] rounded-l-[1.5rem] border-y border-l border-white/5 group-hover:border-accent-purple/50">
-                        <div className="font-black text-white group-hover:text-accent-purple transition-colors">{t.description}</div>
+                        <div className="flex flex-col">
+                          <div className="font-black text-white group-hover:text-accent-purple transition-colors">{e.description}</div>
+                          <div className="text-[9px] font-black uppercase text-white/10 tracking-tighter mt-1">{new Date(e.date).toLocaleDateString()}</div>
+                        </div>
                       </td>
                       <td className="px-6 py-4 bg-white/[0.02] border-y border-white/5 group-hover:border-accent-purple/50">
                         <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase tracking-widest text-white/40">
-                          {t.categoryName}
+                          {e.categoryName}
                         </span>
                       </td>
                       <td className="px-6 py-4 bg-white/[0.02] border-y border-white/5 group-hover:border-accent-purple/50 text-[10px] font-black uppercase tracking-widest text-white/20">
-                        {t.accountName}
-                      </td>
-                      <td className="px-6 py-4 bg-white/[0.02] border-y border-white/5 group-hover:border-accent-purple/50 text-[10px] font-black uppercase tracking-widest text-white/20">
-                        {new Date(t.date).toLocaleDateString()}
+                        {e.accountName}
                       </td>
                       <td className="px-6 py-4 bg-white/[0.02] rounded-r-[1.5rem] border-y border-r border-white/5 group-hover:border-accent-purple/50 text-right">
-                        <div className="text-lg font-black text-white">{formatCurrency(t.amount, t.currency)}</div>
+                        <div className="text-lg font-black text-white">{formatCurrency(e.amount, e.currencyCode)}</div>
+                        <div className="flex gap-1 justify-end mt-1">
+                          {e.tags?.map(tag => (
+                            <span key={tag.id} className="text-[7px] font-black uppercase px-1 border border-white/10 rounded">{tag.name}</span>
+                          ))}
+                        </div>
                       </td>
                     </tr>
                   ))

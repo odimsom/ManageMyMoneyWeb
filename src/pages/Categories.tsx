@@ -1,15 +1,19 @@
 import React, { useEffect, useState, useCallback } from 'react';
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { categoryService } from '../services/categoryService';
-import type { Category } from '../services/categoryService';
+import type { Category, Subcategory } from '../services/categoryService';
 import { useToast } from '../hooks/useToast';
 import Modal from '../components/ui/Modal';
 import CategoryForm from '../components/forms/CategoryForm';
 
+interface CategoryWithSubs extends Category {
+  subcategories?: Subcategory[];
+}
+
 const Categories: React.FC = () => {
-  // const { t } = useTranslation(); 
+  const { t } = useTranslation(); 
   const { showToast } = useToast();
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<CategoryWithSubs[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -17,7 +21,16 @@ const Categories: React.FC = () => {
     setIsLoading(true);
     try {
       const data = await categoryService.getExpenseCategories();
-      setCategories(data);
+      // Fetch subcategories for each category (simplified for demo)
+      const withSubs = await Promise.all(data.map(async (cat) => {
+        try {
+          const subs = await categoryService.getSubcategories(cat.id);
+          return { ...cat, subcategories: subs };
+        } catch {
+          return { ...cat, subcategories: [] };
+        }
+      }));
+      setCategories(withSubs);
     } catch {
       showToast('Error loading categories', 'error');
     } finally {
@@ -47,7 +60,7 @@ const Categories: React.FC = () => {
   return (
     <div className="flex flex-col gap-10 animate-fade-in-up pb-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-black text-white">Expense Categories</h1>
+        <h1 className="text-4xl font-black text-white">{t('categories.title', { defaultValue: 'Expense Categories' })}</h1>
         <button 
           onClick={() => setIsModalOpen(true)}
           className="px-8 h-14 bg-accent-purple text-white font-black rounded-full hover:scale-105 active:scale-95 transition-all shadow-xl shadow-accent-purple/20"
@@ -82,7 +95,7 @@ const Categories: React.FC = () => {
                 </div>
               </div>
               
-              <div>
+              <div className="flex-1">
                 <h3 className="text-xl font-black text-white group-hover:text-accent-purple transition-colors truncate">
                   {category.name}
                 </h3>
@@ -92,6 +105,19 @@ const Categories: React.FC = () => {
                   </p>
                 )}
               </div>
+
+              {category.subcategories && category.subcategories.length > 0 && (
+                <div className="mt-4 pt-4 border-t border-white/5">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-white/10 mb-2">Subcategories</div>
+                  <div className="flex flex-wrap gap-2">
+                    {category.subcategories.map(sub => (
+                      <span key={sub.id} className="text-[9px] font-bold px-2 py-1 bg-white/5 rounded-lg text-white/40 group-hover:text-white/60 transition-colors">
+                        {sub.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
              
               <div className="absolute -top-10 -right-10 w-24 h-24 bg-accent-purple/5 rounded-full blur-2xl group-hover:scale-150 transition-transform"></div>
             </div>

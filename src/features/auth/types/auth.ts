@@ -40,3 +40,32 @@ export interface ApiError {
   detail?: string;
   errors?: Record<string, string[]>;
 }
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  token: string;
+  newPassword: string;
+}
+
+export interface RefreshTokenRequest {
+  refreshToken: string;
+}
+
+export interface ResendVerificationEmailRequest {
+  email: string;
+}
+
+export interface UpdateUserProfileRequest {
+  firstName: string;
+  lastName: string;
+  currency: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
