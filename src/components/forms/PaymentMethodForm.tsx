@@ -39,7 +39,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ onSuccess, onCanc
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label className={labelClasses}>{t('common.name') || 'Payment Method Name'}</label>
+        <label className={labelClasses}>{t('common.name')}</label>
         <input 
           type="text"
           required
@@ -51,16 +51,16 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ onSuccess, onCanc
       </div>
 
       <div>
-        <label className={labelClasses}>{t('common.type') || 'Type'}</label>
+        <label className={labelClasses}>{t('common.type')}</label>
         <select 
           required
           value={formData.type}
           onChange={e => setFormData({ ...formData, type: e.target.value })}
           className={inputClasses}
         >
-          <option value="BankAccount">Bank Account</option>
-          <option value="Cash">Cash</option>
-          <option value="Other">Other</option>
+          <option value="BankAccount">{t('accounts.bank_account')}</option>
+          <option value="Cash">{t('accounts.cash')}</option>
+          <option value="Other">{t('accounts.other')}</option>
         </select>
       </div>
 
@@ -73,7 +73,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ onSuccess, onCanc
           className="w-5 h-5 rounded border-white/10 bg-white/5 text-accent-purple focus:ring-accent-purple/50"
         />
         <label htmlFor="isDefault" className="text-xs font-bold text-white/60 cursor-pointer">
-          Set as default payment method
+          {t('accounts.set_default')}
         </label>
       </div>
 
@@ -90,7 +90,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ onSuccess, onCanc
           disabled={isSubmitting}
           className="flex-1 h-16 rounded-2xl bg-white text-black font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 uppercase tracking-widest text-xs disabled:opacity-50"
         >
-          {isSubmitting ? '...' : (t('common.save') || 'Save Method')}
+          {isSubmitting ? '...' : t('common.save')}
         </button>
       </div>
     </form>

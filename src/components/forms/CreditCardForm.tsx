@@ -50,7 +50,7 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onSuccess, onCancel }) 
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className={labelClasses}>{t('common.card_name') || 'Card Name'}</label>
+          <label className={labelClasses}>{t('common.card_name')}</label>
           <input 
             type="text"
             required
@@ -61,7 +61,7 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onSuccess, onCancel }) 
           />
         </div>
         <div>
-          <label className={labelClasses}>{t('common.bank_name') || 'Bank Name'}</label>
+          <label className={labelClasses}>{t('common.bank_name')}</label>
           <input 
             type="text"
             required
@@ -75,7 +75,7 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onSuccess, onCancel }) 
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className={labelClasses}>{t('common.credit_limit') || 'Credit Limit'}</label>
+          <label className={labelClasses}>{t('common.credit_limit')}</label>
           <input 
             type="number"
             step="0.01"
@@ -87,7 +87,7 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onSuccess, onCancel }) 
           />
         </div>
         <div>
-          <label className={labelClasses}>{t('common.current_balance') || 'Current Balance'}</label>
+          <label className={labelClasses}>{t('common.current_balance')}</label>
           <input 
             type="number"
             step="0.01"
@@ -115,7 +115,7 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onSuccess, onCancel }) 
           </select>
         </div>
         <div>
-          <label className={labelClasses}>{t('common.closing_date') || 'Closing Day'}</label>
+          <label className={labelClasses}>{t('common.closing_date')}</label>
           <input 
             type="number"
             min="1"
@@ -127,7 +127,7 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onSuccess, onCancel }) 
           />
         </div>
         <div>
-          <label className={labelClasses}>{t('common.due_date') || 'Due Day'}</label>
+          <label className={labelClasses}>{t('common.due_date')}</label>
           <input 
             type="number"
             min="1"
@@ -153,7 +153,7 @@ const CreditCardForm: React.FC<CreditCardFormProps> = ({ onSuccess, onCancel }) 
           disabled={isSubmitting}
           className="flex-1 h-16 rounded-2xl bg-white text-black font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 uppercase tracking-widest text-xs disabled:opacity-50"
         >
-          {isSubmitting ? '...' : (t('common.save') || 'Save Card')}
+          {isSubmitting ? '...' : t('common.save')}
         </button>
       </div>
     </form>

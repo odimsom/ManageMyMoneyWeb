@@ -67,7 +67,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ onSuccess, onCancel }) => {
           onChange={e => setFormData({ ...formData, categoryId: e.target.value })}
           className={inputClasses}
         >
-          <option value="">Select Category</option>
+          <option value="">{t('common.select_category')}</option>
           {categories.map(cat => (
             <option key={cat.id} value={cat.id}>{cat.name}</option>
           ))}
@@ -94,15 +94,15 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ onSuccess, onCancel }) => {
             onChange={e => setFormData({ ...formData, period: e.target.value as 'Monthly' | 'Yearly' })}
             className={inputClasses}
           >
-            <option value="Monthly">Monthly</option>
-            <option value="Yearly">Yearly</option>
+            <option value="Monthly">{t('common.monthly')}</option>
+            <option value="Yearly">{t('common.yearly')}</option>
           </select>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className={labelClasses}>Start Date</label>
+          <label className={labelClasses}>{t('common.start_date')}</label>
           <input 
             type="date"
             required
@@ -112,7 +112,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ onSuccess, onCancel }) => {
           />
         </div>
         <div>
-          <label className={labelClasses}>End Date</label>
+          <label className={labelClasses}>{t('common.end_date')}</label>
           <input 
             type="date"
             required

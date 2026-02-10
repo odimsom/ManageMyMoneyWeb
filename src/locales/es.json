@@ -69,7 +69,20 @@
     "default_badge": "Predeterminado",
     "no_payment_methods": "No se encontraron métodos de pago",
     "no_credit_cards": "No se encontraron tarjetas de crédito",
-    "no_transfers": "No hay historial de transferencias"
+    "no_transfers": "No hay historial de transferencias",
+    "bank_account": "Cuenta Bancaria",
+    "cash": "Efectivo",
+    "other": "Otro",
+    "set_default": "Establecer como método de pago predeterminado",
+    "from_account": "Desde la Cuenta",
+    "to_account": "Hacia la Cuenta",
+    "transfer_error_same": "Las cuentas de origen y destino deben ser diferentes",
+    "transfer_error_amount": "El monto debe ser mayor a cero",
+    "transfer_success": "Transferencia completada con éxito",
+    "transfer_error": "Error al completar la transferencia",
+    "transfer_placeholder": "¿Para qué es esta transferencia?",
+    "transfer_processing": "Procesando...",
+    "transfer_complete": "Completar Transferencia"
   },
   "income": {
     "title": "Gestión de Ingresos",
@@ -120,7 +133,21 @@
     "closing_date": "Día de Cierre",
     "due_date": "Día de Vencimiento",
     "add": "Añadir",
-    "statistics": "Estadísticas"
+    "statistics": "Estadísticas",
+    "select_category": "Seleccionar Categoría",
+    "select_account": "Seleccionar Cuenta",
+    "start_date": "Fecha de Inicio",
+    "end_date": "Fecha de Finalización",
+    "income": "Ingreso",
+    "expense": "Gasto",
+    "variable": "Variable",
+    "fixed": "Fijo",
+    "discretionary": "Discrecional",
+    "color": "Color",
+    "icon": "Icono",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "optional": "Opcional"
   },
   "categories": {
     "title": "Categorías",
@@ -154,7 +181,8 @@
     "current_amount": "Monto Actual",
     "target_date": "Fecha Objetivo",
     "current": "Actual",
-    "target": "Objetivo"
+    "target": "Objetivo",
+    "initial_contribution": "Contribución Inicial"
   },
   "transactions": {
     "all_categories": "Todas las Categorías",

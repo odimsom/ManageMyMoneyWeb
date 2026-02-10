@@ -63,8 +63,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess, onCancel }) => {
             onChange={e => setFormData({ ...formData, transactionType: e.target.value as 'Income' | 'Expense' })}
             className={selectClasses}
           >
-            <option value="Expense" className="bg-gray-800 text-white">Expense</option>
-            <option value="Income" className="bg-gray-800 text-white">Income</option>
+            <option value="Expense" className="bg-gray-800 text-white">{t('common.expense')}</option>
+            <option value="Income" className="bg-gray-800 text-white">{t('common.income')}</option>
           </select>
         </div>
       </div>
@@ -88,13 +88,13 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess, onCancel }) => {
             onChange={e => setFormData({ ...formData, type: e.target.value })}
             className={selectClasses}
           >
-            <option value="Variable" className="bg-gray-800 text-white">Variable</option>
-            <option value="Fixed" className="bg-gray-800 text-white">Fixed</option>
-            <option value="Discretionary" className="bg-gray-800 text-white">Discretionary</option>
+            <option value="Variable" className="bg-gray-800 text-white">{t('common.variable')}</option>
+            <option value="Fixed" className="bg-gray-800 text-white">{t('common.fixed')}</option>
+            <option value="Discretionary" className="bg-gray-800 text-white">{t('common.discretionary')}</option>
           </select>
         </div>
         <div>
-          <label className={labelClasses}>Color</label>
+          <label className={labelClasses}>{t('common.color')}</label>
            <div className="flex items-center gap-2">
             <input 
               type="color"
@@ -108,7 +108,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess, onCancel }) => {
       </div>
       
        <div>
-        <label className={labelClasses}>Icon (Emoji)</label>
+        <label className={labelClasses}>{t('common.icon')}</label>
         <input 
           type="text"
           value={formData.icon || ''}

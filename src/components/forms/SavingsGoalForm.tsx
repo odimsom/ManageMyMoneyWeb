@@ -85,7 +85,7 @@ const SavingsGoalForm: React.FC<SavingsGoalFormProps> = ({ onSuccess, onCancel }
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className={labelClasses}>Initial Contribution</label>
+          <label className={labelClasses}>{t('savings_goals.initial_contribution')}</label>
           <input 
             type="number"
             step="0.01"
@@ -97,7 +97,7 @@ const SavingsGoalForm: React.FC<SavingsGoalFormProps> = ({ onSuccess, onCancel }
         </div>
         <div className="flex gap-4">
            <div className="flex-1">
-            <label className={labelClasses}>Icon</label>
+            <label className={labelClasses}>{t('common.icon')}</label>
             <input 
               type="text"
               value={formData.icon}
@@ -106,7 +106,7 @@ const SavingsGoalForm: React.FC<SavingsGoalFormProps> = ({ onSuccess, onCancel }
             />
           </div>
           <div>
-            <label className={labelClasses}>Color</label>
+            <label className={labelClasses}>{t('common.color')}</label>
             <input 
               type="color"
               value={formData.color}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { accountService } from '../../services/accountService';
+import { useTranslation } from 'react-i18next';
 import type { Account, TransferRequest } from '../../services/accountService';
 import { useToast } from '../../hooks/useToast';
 
@@ -9,6 +10,7 @@ interface TransferFormProps {
 }
 
 const TransferForm: React.FC<TransferFormProps> = ({ onSuccess, onCancel }) => {
+  const { t } = useTranslation();
   const { showToast } = useToast();
   
   const [accounts, setAccounts] = useState<Account[]>([]);
@@ -27,30 +29,30 @@ const TransferForm: React.FC<TransferFormProps> = ({ onSuccess, onCancel }) => {
         const data = await accountService.getAccounts();
         setAccounts(data);
       } catch {
-        showToast('Error loading accounts', 'error');
+        showToast(t('accounts.error_loading'), 'error');
       }
     };
     fetchAccounts();
-  }, [showToast]);
+  }, [showToast, t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.fromAccountId === formData.toAccountId) {
-      showToast('Source and destination accounts must be different', 'error');
+      showToast(t('accounts.transfer_error_same'), 'error');
       return;
     }
     if (formData.amount <= 0) {
-      showToast('Amount must be greater than zero', 'error');
+      showToast(t('accounts.transfer_error_amount'), 'error');
       return;
     }
 
     setIsSubmitting(true);
     try {
       await accountService.transfer(formData);
-      showToast('Transfer completed successfully', 'success');
+      showToast(t('accounts.transfer_success'), 'success');
       onSuccess();
     } catch {
-      showToast('Failed to complete transfer', 'error');
+      showToast(t('accounts.transfer_error'), 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -60,14 +62,14 @@ const TransferForm: React.FC<TransferFormProps> = ({ onSuccess, onCancel }) => {
     <form onSubmit={handleSubmit} className="space-y-6 p-1">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">From Account</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">{t('accounts.from_account')}</label>
           <select
             required
             className="w-full h-14 bg-[#0a0a0a] rounded-2xl px-6 border border-white/5 focus:border-accent-purple/50 outline-none font-bold text-sm transition-all appearance-none"
             value={formData.fromAccountId}
             onChange={(e) => setFormData({ ...formData, fromAccountId: e.target.value })}
           >
-            <option value="">Select Account</option>
+            <option value="">{t('common.select_account')}</option>
             {accounts.map(acc => (
               <option key={acc.id} value={acc.id}>{acc.name} ({acc.currency} {acc.balance})</option>
             ))}
@@ -75,14 +77,14 @@ const TransferForm: React.FC<TransferFormProps> = ({ onSuccess, onCancel }) => {
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">To Account</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">{t('accounts.to_account')}</label>
           <select
             required
             className="w-full h-14 bg-[#0a0a0a] rounded-2xl px-6 border border-white/5 focus:border-accent-purple/50 outline-none font-bold text-sm transition-all appearance-none"
             value={formData.toAccountId}
             onChange={(e) => setFormData({ ...formData, toAccountId: e.target.value })}
           >
-            <option value="">Select Account</option>
+            <option value="">{t('common.select_account')}</option>
             {accounts.map(acc => (
               <option key={acc.id} value={acc.id}>{acc.name} ({acc.currency} {acc.balance})</option>
             ))}
@@ -92,7 +94,7 @@ const TransferForm: React.FC<TransferFormProps> = ({ onSuccess, onCancel }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">Amount</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">{t('common.amount')}</label>
           <input
             type="number"
             step="0.01"
@@ -105,7 +107,7 @@ const TransferForm: React.FC<TransferFormProps> = ({ onSuccess, onCancel }) => {
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">Date</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">{t('common.date')}</label>
           <input
             type="date"
             required
@@ -117,10 +119,10 @@ const TransferForm: React.FC<TransferFormProps> = ({ onSuccess, onCancel }) => {
       </div>
 
       <div className="space-y-2">
-        <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">Description (Optional)</label>
+        <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">{t('common.description')} ({t('common.optional') || 'Optional'})</label>
         <textarea
           className="w-full h-32 bg-[#0a0a0a] rounded-2xl p-6 border border-white/5 focus:border-accent-purple/50 outline-none font-bold text-sm transition-all resize-none"
-          placeholder="What's this transfer for?"
+          placeholder={t('accounts.transfer_placeholder')}
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
         />
@@ -132,14 +134,14 @@ const TransferForm: React.FC<TransferFormProps> = ({ onSuccess, onCancel }) => {
           onClick={onCancel}
           className="flex-1 h-14 bg-white/5 text-white font-black rounded-full hover:bg-white/10 transition-all border border-white/5 uppercase tracking-widest text-xs"
         >
-          Cancel
+          {t('common.cancel')}
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
           className="flex-1 h-14 bg-accent-purple text-white font-black rounded-full hover:scale-105 active:scale-95 transition-all shadow-xl shadow-accent-purple/20 uppercase tracking-widest text-xs disabled:opacity-50 disabled:hover:scale-100"
         >
-          {isSubmitting ? 'Processing...' : 'Complete Transfer'}
+          {isSubmitting ? t('accounts.transfer_processing') : t('accounts.transfer_complete')}
         </button>
       </div>
     </form>

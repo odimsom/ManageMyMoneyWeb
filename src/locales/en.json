@@ -69,7 +69,20 @@
     "default_badge": "Default",
     "no_payment_methods": "No payment methods found",
     "no_credit_cards": "No credit cards found",
-    "no_transfers": "No transfers history"
+    "no_transfers": "No transfers history",
+    "bank_account": "Bank Account",
+    "cash": "Cash",
+    "other": "Other",
+    "set_default": "Set as default payment method",
+    "from_account": "From Account",
+    "to_account": "To Account",
+    "transfer_error_same": "Source and destination accounts must be different",
+    "transfer_error_amount": "Amount must be greater than zero",
+    "transfer_success": "Transfer completed successfully",
+    "transfer_error": "Failed to complete transfer",
+    "transfer_placeholder": "What's this transfer for?",
+    "transfer_processing": "Processing...",
+    "transfer_complete": "Complete Transfer"
   },
   "income": {
     "title": "Income Management",
@@ -120,7 +133,21 @@
     "closing_date": "Closing Day",
     "due_date": "Due Day",
     "add": "Add",
-    "statistics": "Statistics"
+    "statistics": "Statistics",
+    "select_category": "Select Category",
+    "select_account": "Select Account",
+    "start_date": "Start Date",
+    "end_date": "End Date",
+    "income": "Income",
+    "expense": "Expense",
+    "variable": "Variable",
+    "fixed": "Fixed",
+    "discretionary": "Discretionary",
+    "color": "Color",
+    "icon": "Icon",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "optional": "Optional"
   },
   "categories": {
     "title": "Categories",
@@ -154,7 +181,8 @@
     "current_amount": "Current Amount",
     "target_date": "Target Date",
     "current": "Current",
-    "target": "Target"
+    "target": "Target",
+    "initial_contribution": "Initial Contribution"
   },
   "transactions": {
     "all_categories": "All Categories",
