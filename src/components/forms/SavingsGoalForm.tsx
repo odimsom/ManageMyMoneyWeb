@@ -1,35 +1,36 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { accountService } from '../../services/accountService';
+import { budgetsService } from '../../services/budgetsService';
 import { useToast } from '../../hooks/useToast';
 
-interface AccountFormProps {
+interface SavingsGoalFormProps {
   onSuccess: () => void;
   onCancel: () => void;
 }
 
-const AccountForm: React.FC<AccountFormProps> = ({ onSuccess, onCancel }) => {
+const SavingsGoalForm: React.FC<SavingsGoalFormProps> = ({ onSuccess, onCancel }) => {
   const { t } = useTranslation();
   const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
     name: '',
-    type: 'Checking',
-    initialBalance: '',
+    targetAmount: '',
+    targetDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
     currency: 'USD',
-    institutionName: '',
-    accountNumber: '',
-    color: '#a855f7'
+    initialContribution: '0',
+    color: '#10b981',
+    icon: '🎯'
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await accountService.createAccount({
+      await budgetsService.createSavingsGoal({
         ...formData,
-        initialBalance: parseFloat(formData.initialBalance) || 0
+        targetAmount: parseFloat(formData.targetAmount) || 0,
+        initialContribution: parseFloat(formData.initialContribution) || 0
       });
       showToast(t('common.success'), 'success');
       onSuccess();
@@ -46,70 +47,73 @@ const AccountForm: React.FC<AccountFormProps> = ({ onSuccess, onCancel }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label className={labelClasses}>{t('dashboard.account_name')}</label>
+        <label className={labelClasses}>{t('common.name')}</label>
         <input 
           type="text"
           required
           value={formData.name}
           onChange={e => setFormData({ ...formData, name: e.target.value })}
           className={inputClasses}
-          placeholder="e.g. Personal Bank Account"
+          placeholder="e.g. New Car, Vacation"
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className={labelClasses}>{t('dashboard.account_type')}</label>
-          <select 
-            required
-            value={formData.type}
-            onChange={e => setFormData({ ...formData, type: e.target.value })}
-            className={inputClasses}
-          >
-            <option value="Checking" className="bg-gray-800 text-white">Checking</option>
-            <option value="Savings" className="bg-gray-800 text-white">Savings</option>
-            <option value="CreditCard" className="bg-gray-800 text-white">Credit Card</option>
-            <option value="Cash" className="bg-gray-800 text-white">Cash</option>
-            <option value="Investment" className="bg-gray-800 text-white">Investment</option>
-          </select>
-        </div>
-        <div>
-          <label className={labelClasses}>{t('dashboard.currency')}</label>
-          <select 
-            required
-            value={formData.currency}
-            onChange={e => setFormData({ ...formData, currency: e.target.value })}
-            className={inputClasses}
-          >
-            <option value="USD" className="bg-gray-800 text-white">USD</option>
-            <option value="DOP" className="bg-gray-800 text-white">DOP</option>
-            <option value="EUR" className="bg-gray-800 text-white">EUR</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className={labelClasses}>{t('dashboard.initial_balance')}</label>
+          <label className={labelClasses}>{t('savings_goals.target_amount')}</label>
           <input 
             type="number"
             step="0.01"
             required
-            value={formData.initialBalance}
-            onChange={e => setFormData({ ...formData, initialBalance: e.target.value })}
+            value={formData.targetAmount}
+            onChange={e => setFormData({ ...formData, targetAmount: e.target.value })}
             className={inputClasses}
             placeholder="0.00"
           />
         </div>
         <div>
-          <label className={labelClasses}>{t('dashboard.institution')}</label>
+          <label className={labelClasses}>{t('savings_goals.target_date')}</label>
           <input 
-            type="text"
-            value={formData.institutionName}
-            onChange={e => setFormData({ ...formData, institutionName: e.target.value })}
+            type="date"
+            required
+            value={formData.targetDate}
+            onChange={e => setFormData({ ...formData, targetDate: e.target.value })}
             className={inputClasses}
-            placeholder="e.g. Chase, BPD"
           />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className={labelClasses}>Initial Contribution</label>
+          <input 
+            type="number"
+            step="0.01"
+            value={formData.initialContribution}
+            onChange={e => setFormData({ ...formData, initialContribution: e.target.value })}
+            className={inputClasses}
+            placeholder="0.00"
+          />
+        </div>
+        <div className="flex gap-4">
+           <div className="flex-1">
+            <label className={labelClasses}>Icon</label>
+            <input 
+              type="text"
+              value={formData.icon}
+              onChange={e => setFormData({ ...formData, icon: e.target.value })}
+              className={inputClasses}
+            />
+          </div>
+          <div>
+            <label className={labelClasses}>Color</label>
+            <input 
+              type="color"
+              value={formData.color}
+              onChange={e => setFormData({ ...formData, color: e.target.value })}
+              className="h-14 w-14 rounded-2xl border-none outline-none bg-transparent cursor-pointer"
+            />
+          </div>
         </div>
       </div>
 
@@ -126,11 +130,11 @@ const AccountForm: React.FC<AccountFormProps> = ({ onSuccess, onCancel }) => {
           disabled={isSubmitting}
           className="flex-1 h-16 rounded-2xl bg-white text-black font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 uppercase tracking-widest text-xs disabled:opacity-50"
         >
-          {isSubmitting ? '...' : t('dashboard.create_account')}
+          {isSubmitting ? '...' : t('common.save')}
         </button>
       </div>
     </form>
   );
 };
 
-export default AccountForm;
+export default SavingsGoalForm;

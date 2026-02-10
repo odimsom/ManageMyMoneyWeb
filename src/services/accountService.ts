@@ -93,12 +93,14 @@ export interface CreateCreditCardRequest {
   name: string;
   bankName: string;
   creditLimit: number;
+  currentBalance?: number;
+  currency?: string;
   closingDay: number;
   dueDay: number;
   color?: string;
 }
 
-const getAccounts = async (activeOnly = true) => {
+const getAccounts = async (activeOnly: boolean = true) => {
   const response = await api.get<{ data: Account[] }>(`/api/Accounts`, {
     params: { activeOnly }
   });

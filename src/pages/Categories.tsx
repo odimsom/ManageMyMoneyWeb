@@ -16,12 +16,15 @@ const Categories: React.FC = () => {
   const [categories, setCategories] = useState<CategoryWithSubs[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filterType, setFilterType] = useState<'Expense' | 'Income'>('Expense');
 
   const fetchCategories = useCallback(async () => {
     setIsLoading(true);
     try {
-      const data = await categoryService.getExpenseCategories();
-      // Fetch subcategories for each category (simplified for demo)
+      const data = filterType === 'Expense' 
+        ? await categoryService.getExpenseCategories() 
+        : await categoryService.getIncomeCategories();
+        
       const withSubs = await Promise.all(data.map(async (cat) => {
         try {
           const subs = await categoryService.getSubcategories(cat.id);
@@ -32,11 +35,11 @@ const Categories: React.FC = () => {
       }));
       setCategories(withSubs);
     } catch {
-      showToast('Error loading categories', 'error');
+      showToast(t('common.error'), 'error');
     } finally {
       setIsLoading(false);
     }
-  }, [showToast]);
+  }, [showToast, t, filterType]);
 
   useEffect(() => {
     fetchCategories();
@@ -60,12 +63,28 @@ const Categories: React.FC = () => {
   return (
     <div className="flex flex-col gap-10 animate-fade-in-up pb-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-black text-white">{t('categories.title', { defaultValue: 'Expense Categories' })}</h1>
+        <div className="flex flex-col gap-1">
+          <h1 className="text-4xl font-black text-white">{t('categories.title')}</h1>
+          <div className="flex gap-4 mt-2">
+            <button 
+              onClick={() => setFilterType('Expense')}
+              className={`text-xs font-black uppercase tracking-widest transition-all ${filterType === 'Expense' ? 'text-accent-purple' : 'text-white/20 hover:text-white/40'}`}
+            >
+              {t('categories.expense_title')}
+            </button>
+            <button 
+              onClick={() => setFilterType('Income')}
+              className={`text-xs font-black uppercase tracking-widest transition-all ${filterType === 'Income' ? 'text-green-500' : 'text-white/20 hover:text-white/40'}`}
+            >
+              {t('categories.income_title')}
+            </button>
+          </div>
+        </div>
         <button 
           onClick={() => setIsModalOpen(true)}
           className="px-8 h-14 bg-accent-purple text-white font-black rounded-full hover:scale-105 active:scale-95 transition-all shadow-xl shadow-accent-purple/20"
         >
-          Add Category
+          {t('categories.add_category')}
         </button>
       </div>
 
@@ -76,8 +95,8 @@ const Categories: React.FC = () => {
               <span className="text-4xl">🏷️</span>
             </div>
             <div className="text-center">
-              <div className="text-xl font-black text-white mb-2">No categories found</div>
-              <p className="text-white/20 font-medium">Create custom categories to organize your expenses.</p>
+              <div className="text-xl font-black text-white mb-2">{t('categories.no_categories')}</div>
+              <p className="text-white/20 font-medium">{t('categories.create_custom')}</p>
             </div>
           </div>
         ) : (
@@ -108,7 +127,7 @@ const Categories: React.FC = () => {
 
               {category.subcategories && category.subcategories.length > 0 && (
                 <div className="mt-4 pt-4 border-t border-white/5">
-                  <div className="text-[10px] font-black uppercase tracking-widest text-white/10 mb-2">Subcategories</div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-white/10 mb-2">{t('categories.subcategories')}</div>
                   <div className="flex flex-wrap gap-2">
                     {category.subcategories.map(sub => (
                       <span key={sub.id} className="text-[9px] font-bold px-2 py-1 bg-white/5 rounded-lg text-white/40 group-hover:text-white/60 transition-colors">
@@ -128,7 +147,7 @@ const Categories: React.FC = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="New Expense Category"
+        title={t('categories.new_category')}
       >
         <CategoryForm onSuccess={handleSuccess} onCancel={() => setIsModalOpen(false)} />
       </Modal>

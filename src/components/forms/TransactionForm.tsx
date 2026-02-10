@@ -35,8 +35,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, onSuccess, onCa
         const [accs, cats] = await Promise.all([
           accountService.getAccounts(),
           type === 'Expense' 
-            ? categoryService.getCategories() // En una implementación real, esto podría filtrar por tipo
-            : categoryService.getCategories()
+            ? categoryService.getExpenseCategories() 
+            : categoryService.getIncomeCategories()
         ]);
         setAccounts(accs);
         setCategories(cats);
@@ -81,7 +81,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, onSuccess, onCa
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className={labelClasses}>{t('dashboard.amount')}</label>
+          <label className={labelClasses}>{t('common.amount')}</label>
           <input 
             type="number"
             step="0.01"
@@ -93,7 +93,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, onSuccess, onCa
           />
         </div>
         <div>
-          <label className={labelClasses}>{t('dashboard.date')}</label>
+          <label className={labelClasses}>{t('common.date')}</label>
           <input 
             type="date"
             required
@@ -105,7 +105,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, onSuccess, onCa
       </div>
 
       <div>
-        <label className={labelClasses}>{t('dashboard.description')}</label>
+        <label className={labelClasses}>{t('common.description')}</label>
         <input 
           type="text"
           required
@@ -118,7 +118,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, onSuccess, onCa
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className={labelClasses}>{t('dashboard.account')}</label>
+          <label className={labelClasses}>{t('common.account')}</label>
           <select 
             required
             value={formData.accountId}
@@ -126,12 +126,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, onSuccess, onCa
             className={inputClasses}
           >
             {accounts.map(acc => (
-              <option key={acc.id} value={acc.id}>{acc.name} ({acc.currency})</option>
+              <option key={acc.id} value={acc.id} className="bg-gray-800 text-white">{acc.name} ({acc.currency})</option>
             ))}
           </select>
         </div>
         <div>
-          <label className={labelClasses}>{t('dashboard.category')}</label>
+          <label className={labelClasses}>{t('common.category')}</label>
           <select 
             required
             value={formData.categoryId}
@@ -139,7 +139,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, onSuccess, onCa
             className={inputClasses}
           >
             {categories.map(cat => (
-              <option key={cat.id} value={cat.id}>{cat.name}</option>
+              <option key={cat.id} value={cat.id} className="bg-gray-800 text-white">{cat.name}</option>
             ))}
           </select>
         </div>

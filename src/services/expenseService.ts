@@ -114,6 +114,22 @@ const getExpenses = async (params: {
   return response.data.data;
 };
 
+const exportExpensesByExcel = async (fromDate?: string, toDate?: string) => {
+  const response = await api.get('/api/Expenses/export/excel', {
+    params: { fromDate, toDate },
+    responseType: 'blob'
+  });
+  return response.data;
+};
+
+const exportExpensesByCsv = async (fromDate?: string, toDate?: string) => {
+  const response = await api.get('/api/Expenses/export/csv', {
+    params: { fromDate, toDate },
+    responseType: 'blob'
+  });
+  return response.data;
+};
+
 const createExpense = async (data: CreateExpenseRequest) => {
   const response = await api.post<{ data: Expense }>('/api/Expenses', data);
   return response.data.data;
@@ -206,5 +222,7 @@ export const expenseService = {
   addAttachment,
   deleteAttachment,
   createRecurringExpense,
-  getRecurringExpenses
+  getRecurringExpenses,
+  exportExpensesByExcel,
+  exportExpensesByCsv
 };

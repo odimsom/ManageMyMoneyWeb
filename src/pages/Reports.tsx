@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { reportService } from '../services/reportService';
+import { expenseService } from '../services/expenseService';
+import { incomeService } from '../services/incomeService';
 import type { MonthlyReport, FinancialSummary, BudgetPerformance } from '../services/reportService';
+import { useToast } from '../hooks/useToast';
 
 const Reports: React.FC = () => {
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [summary, setSummary] = useState<FinancialSummary | null>(null);
   const [monthlyReport, setMonthlyReport] = useState<MonthlyReport | null>(null);
   const [budgetPerformance, setBudgetPerformance] = useState<BudgetPerformance[]>([]);
@@ -41,6 +45,40 @@ const Reports: React.FC = () => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount);
   };
 
+  const handleExportIncome = async () => {
+    try {
+      const data = await incomeService.exportIncomeByExcel();
+      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `income-report-${new Date().toISOString().split('T')[0]}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      showToast(t('common.export_success'), 'success');
+    } catch {
+      showToast(t('common.export_error'), 'error');
+    }
+  };
+
+  const handleExportExpenses = async (format: 'excel' | 'csv') => {
+    try {
+      const data = format === 'excel' ? await expenseService.exportExpensesByExcel() : await expenseService.exportExpensesByCsv();
+      const blob = new Blob([data], { type: format === 'excel' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `expense-report-${new Date().toISOString().split('T')[0]}.${format === 'excel' ? 'xlsx' : 'csv'}`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      showToast(t('common.export_success'), 'success');
+    } catch {
+      showToast(t('common.export_error'), 'error');
+    }
+  };
+
   if (isLoading) {
     return <div className="animate-pulse space-y-10">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -52,9 +90,43 @@ const Reports: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-10 animate-fade-in-up pb-10">
-      <header>
-        <h1 className="text-4xl font-black tracking-tighter mb-2">{t('reports.title')}</h1>
-        <p className="text-white/40 font-medium">{t('reports.description')}</p>
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <h1 className="text-4xl font-black tracking-tighter mb-2">{t('reports.title')}</h1>
+          <p className="text-white/40 font-medium">{t('reports.description')}</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex flex-col gap-2">
+            <span className="text-[9px] font-black uppercase text-white/20 tracking-widest px-2">{t('reports.income_label')}</span>
+            <button 
+              onClick={() => handleExportIncome()}
+              className="h-10 bg-green-500/10 hover:bg-green-500/20 text-green-500 px-5 rounded-xl border border-green-500/20 font-black text-[9px] uppercase tracking-widest transition-all flex items-center gap-2"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5l5 5v11a2 2 0 01-2 2z" /></svg>
+              {t('transactions.excel_export')}
+            </button>
+          </div>
+          <div className="w-px h-10 bg-white/5 mx-2 self-end mb-1"></div>
+          <div className="flex flex-col gap-2">
+            <span className="text-[9px] font-black uppercase text-white/20 tracking-widest px-2">{t('reports.expenses_label')}</span>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => handleExportExpenses('excel')}
+                className="h-10 bg-accent-purple/10 hover:bg-accent-purple/20 text-accent-purple px-5 rounded-xl border border-accent-purple/20 font-black text-[9px] uppercase tracking-widest transition-all flex items-center gap-2"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5l5 5v11a2 2 0 01-2 2z" /></svg>
+                {t('transactions.excel_export')}
+              </button>
+              <button 
+                onClick={() => handleExportExpenses('csv')}
+                className="h-10 bg-white/5 hover:bg-white/10 text-white/60 px-5 rounded-xl border border-white/5 font-black text-[9px] uppercase tracking-widest transition-all flex items-center gap-2"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5l5 5v11a2 2 0 01-2 2z" /></svg>
+                {t('transactions.csv_export')}
+              </button>
+            </div>
+          </div>
+        </div>
       </header>
 
       {/* Financial Summary Cards */}
@@ -63,7 +135,7 @@ const Reports: React.FC = () => {
           <h4 className="text-[10px] font-black uppercase tracking-widest text-white/20 mb-2">{t('reports.net_worth')}</h4>
           <div className="text-3xl font-black text-white">{summary ? formatCurrency(summary.netWorth) : '$0.00'}</div>
           <div className="mt-4 flex items-center gap-2">
-            <span className="text-[10px] font-black uppercase text-green-500">+{summary?.savingsRate}% savings rate</span>
+            <span className="text-[10px] font-black uppercase text-green-500">+{t('reports.savings_rate', { rate: summary?.savingsRate || 0 })}</span>
           </div>
         </div>
         <div className="bg-card rounded-[2rem] p-8 border border-white/5">
@@ -101,8 +173,8 @@ const Reports: React.FC = () => {
                 ></div>
               </div>
               <div className="flex justify-between mt-3 text-[10px] font-black uppercase">
-                <span className="text-green-500">Income: {monthlyReport ? formatCurrency(monthlyReport.totalIncome) : '$0'}</span>
-                <span className="text-red-500">Expenses: {monthlyReport ? formatCurrency(monthlyReport.totalExpenses) : '$0'}</span>
+                <span className="text-green-500">{t('reports.income_label')}: {monthlyReport ? formatCurrency(monthlyReport.totalIncome) : '$0'}</span>
+                <span className="text-red-500">{t('reports.expenses_label')}: {monthlyReport ? formatCurrency(monthlyReport.totalExpenses) : '$0'}</span>
               </div>
             </div>
 
@@ -134,7 +206,7 @@ const Reports: React.FC = () => {
                   <div className="flex justify-between text-[10px] font-black uppercase mb-2">
                     <span>{bp.budgetName}</span>
                     <span className={bp.status === 'OverBudget' ? 'text-red-500' : bp.status === 'NearLimit' ? 'text-yellow-500' : 'text-green-500'}>
-                      {bp.performancePercentage}% used
+                      {bp.performancePercentage}% {t('reports.used')}
                     </span>
                   </div>
                   <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">

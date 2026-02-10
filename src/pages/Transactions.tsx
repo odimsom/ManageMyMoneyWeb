@@ -25,11 +25,11 @@ const Transactions: React.FC = () => {
       });
       setExpenses(response.items || []);
     } catch {
-      showToast('Error al cargar gastos', 'error');
+      showToast(t('common.error'), 'error');
     } finally {
       setIsLoading(false);
     }
-  }, [searchTerm, selectedCategoryId, showToast]);
+  }, [searchTerm, selectedCategoryId, showToast, t]);
 
   useEffect(() => {
     fetchExpenses();
@@ -51,35 +51,74 @@ const Transactions: React.FC = () => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount);
   };
 
+  const handleExport = async (format: 'excel' | 'csv') => {
+    try {
+      const data = format === 'excel' ? await expenseService.exportExpensesByExcel() : await expenseService.exportExpensesByCsv();
+      const blob = new Blob([data], { type: format === 'excel' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `transactions-${new Date().toISOString().split('T')[0]}.${format === 'excel' ? 'xlsx' : 'csv'}`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      showToast(t('common.export_success'), 'success');
+    } catch {
+      showToast(t('common.export_error'), 'error');
+    }
+  };
+
   return (
     <div className="flex flex-col gap-10 animate-fade-in-up pb-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <h1 className="text-4xl font-black text-white">{t('dashboard.recent_transactions')}</h1>
         
         <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => handleExport('excel')}
+              className="h-12 bg-green-500/10 hover:bg-green-500/20 text-green-500 px-6 rounded-xl border border-green-500/20 font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5l5 5v11a2 2 0 01-2 2z" /></svg>
+              {t('transactions.excel_export')}
+            </button>
+            <button 
+              onClick={() => handleExport('csv')}
+              className="h-12 bg-white/5 hover:bg-white/10 text-white/60 px-6 rounded-xl border border-white/5 font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5l5 5v11a2 2 0 01-2 2z" /></svg>
+              {t('transactions.csv_export')}
+            </button>
+          </div>
+
           <div className="relative group">
             <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none opacity-20 group-focus-within:opacity-100 transition-opacity">
               <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             </div>
             <input 
               type="text" 
-              placeholder="Search..." 
+              placeholder={t('transactions.search_placeholder')} 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="h-12 bg-card rounded-xl pl-12 pr-6 border border-white/5 focus:border-accent-purple/50 outline-none font-bold text-xs transition-all w-64"
             />
           </div>
 
-          <select 
-            value={selectedCategoryId}
-            onChange={(e) => setSelectedCategoryId(e.target.value)}
-            className="h-12 bg-card rounded-xl px-6 border border-white/5 focus:border-accent-purple/50 outline-none font-black text-[10px] uppercase tracking-widest transition-all appearance-none cursor-pointer"
-          >
-            <option value="">All Categories</option>
-            {categories.map(cat => (
-              <option key={cat.id} value={cat.id}>{cat.name}</option>
-            ))}
-          </select>
+          <div className="relative">
+            <select 
+              value={selectedCategoryId}
+              onChange={(e) => setSelectedCategoryId(e.target.value)}
+              className="h-12 bg-card rounded-xl px-6 pr-10 border border-white/5 focus:border-accent-purple/50 outline-none font-black text-[10px] uppercase tracking-widest transition-all appearance-none cursor-pointer"
+            >
+              <option value="">{t('transactions.all_categories')}</option>
+              {categories.map(cat => (
+                <option key={cat.id} value={cat.id} className="bg-gray-800 text-white">{cat.name}</option>
+              ))}
+            </select>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-20">
+               <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M19 9l-7 7-7-7" /></svg>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -95,17 +134,17 @@ const Transactions: React.FC = () => {
             <table className="w-full text-left border-separate border-spacing-y-4">
               <thead>
                 <tr className="text-[10px] font-black uppercase tracking-widest text-white/20">
-                  <th className="px-6 pb-2">Description</th>
-                  <th className="px-6 pb-2">Category</th>
-                  <th className="px-6 pb-2">Account</th>
-                  <th className="px-6 pb-2 text-right">Amount</th>
+                  <th className="px-6 pb-2">{t('common.description')}</th>
+                  <th className="px-6 pb-2">{t('common.category')}</th>
+                  <th className="px-6 pb-2">{t('common.account')}</th>
+                  <th className="px-6 pb-2 text-right">{t('common.amount')}</th>
                 </tr>
               </thead>
               <tbody>
                 {expenses.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="text-center py-20 text-white/10 font-black uppercase tracking-widest text-sm italic">
-                      No expenses found.
+                      {t('transactions.no_expenses')}
                     </td>
                   </tr>
                 ) : (

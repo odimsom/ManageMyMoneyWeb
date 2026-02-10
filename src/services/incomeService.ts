@@ -62,6 +62,14 @@ const getIncomes = async (params: { fromDate?: string; toDate?: string; pageNumb
   return response.data;
 };
 
+const exportIncomeByExcel = async (fromDate?: string, toDate?: string) => {
+  const response = await api.get('/api/Income/export/excel', {
+    params: { fromDate, toDate },
+    responseType: 'blob'
+  });
+  return response.data;
+};
+
 const getIncomeById = async (id: string) => {
   const response = await api.get<{ data: Income }>(`/api/Income/${id}`);
   return response.data.data;
@@ -117,5 +125,6 @@ export const incomeService = {
   getIncomeSources,
   createIncomeSource,
   updateIncomeSource,
-  deleteIncomeSource
+  deleteIncomeSource,
+  exportIncomeByExcel
 };

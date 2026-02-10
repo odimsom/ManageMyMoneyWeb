@@ -6,6 +6,8 @@ import { useToast } from '../hooks/useToast';
 import Modal from '../components/ui/Modal';
 import AccountForm from '../components/forms/AccountForm';
 import TransferForm from '../components/forms/TransferForm';
+import PaymentMethodForm from '../components/forms/PaymentMethodForm';
+import CreditCardForm from '../components/forms/CreditCardForm';
 
 const Accounts: React.FC = () => {
   const { t } = useTranslation();
@@ -33,11 +35,11 @@ const Accounts: React.FC = () => {
       setCreditCards(cc);
       setTransfers(tf);
     } catch {
-      showToast('Error loading accounts data', 'error');
+      showToast(t('accounts.error_loading'), 'error');
     } finally {
       setIsLoading(false);
     }
-  }, [showToast]);
+  }, [showToast, t]);
 
   useEffect(() => {
     fetchData();
@@ -60,19 +62,19 @@ const Accounts: React.FC = () => {
   return (
     <div className="flex flex-col gap-10 animate-fade-in-up pb-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-black text-white">{t('accounts.title', { defaultValue: 'My Accounts' })}</h1>
+        <h1 className="text-4xl font-black text-white">{t('accounts.title')}</h1>
         <div className="flex gap-4">
           <button 
             onClick={() => setActiveModal('transfer')}
             className="px-6 h-12 bg-white/5 text-white font-black rounded-full hover:bg-white/10 transition-all border border-white/5"
           >
-            {t('accounts.transfer', { defaultValue: 'Transfer' })}
+            {t('accounts.transfer')}
           </button>
           <button 
             onClick={() => setActiveModal('account')}
             className="px-8 h-12 bg-accent-purple text-white font-black rounded-full hover:scale-105 active:scale-95 transition-all shadow-xl shadow-accent-purple/20"
           >
-            {t('accounts.add_account', { defaultValue: 'Add Account' })}
+            {t('accounts.add_account')}
           </button>
         </div>
       </div>
@@ -95,7 +97,7 @@ const Accounts: React.FC = () => {
             </div>
             
             <h3 className="text-xl font-black text-white group-hover:text-accent-purple transition-colors mb-1">{acc.name}</h3>
-            <p className="text-xs text-white/40 mb-6">{acc.institutionName || 'Personal Account'}</p>
+            <p className="text-xs text-white/40 mb-6">{acc.institutionName || t('accounts.personal_account')}</p>
             
             <div className="text-3xl font-black text-white tracking-tighter">
               {formatCurrency(acc.balance, acc.currency)}
@@ -111,17 +113,17 @@ const Accounts: React.FC = () => {
         <div className="flex flex-col gap-10">
           <div className="bg-card rounded-[2.5rem] p-8 border border-white/5">
             <div className="flex items-center justify-between mb-8">
-              <h3 className="text-xl font-black">{t('accounts.payment_methods', { defaultValue: 'Payment Methods' })}</h3>
+              <h3 className="text-xl font-black">{t('accounts.payment_methods')}</h3>
               <button 
                 onClick={() => setActiveModal('payment-method')}
                 className="text-xs font-black text-accent-purple hover:text-white transition-colors uppercase tracking-widest"
               >
-                + Add
+                + {t('common.add')}
               </button>
             </div>
             <div className="space-y-4">
               {paymentMethods.length === 0 ? (
-                <div className="text-center py-10 text-white/10 font-black uppercase text-xs italic">No payment methods found</div>
+                <div className="text-center py-10 text-white/10 font-black uppercase text-xs italic">{t('accounts.no_payment_methods')}</div>
               ) : (
                 paymentMethods.map(pm => (
                   <div key={pm.id} className="flex items-center justify-between p-5 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all group">
@@ -137,7 +139,7 @@ const Accounts: React.FC = () => {
                       </div>
                     </div>
                     {pm.isDefault && (
-                      <span className="text-[9px] font-black uppercase tracking-widest bg-accent-purple/20 text-accent-purple px-2 py-1 rounded-md">Default</span>
+                      <span className="text-[9px] font-black uppercase tracking-widest bg-accent-purple/20 text-accent-purple px-2 py-1 rounded-md">{t('accounts.default_badge')}</span>
                     )}
                   </div>
                 ))
@@ -147,17 +149,17 @@ const Accounts: React.FC = () => {
 
           <div className="bg-card rounded-[2.5rem] p-8 border border-white/5">
             <div className="flex items-center justify-between mb-8">
-              <h3 className="text-xl font-black">{t('accounts.credit_cards', { defaultValue: 'Credit Cards' })}</h3>
+              <h3 className="text-xl font-black">{t('accounts.credit_cards')}</h3>
               <button 
                 onClick={() => setActiveModal('credit-card')}
                 className="text-xs font-black text-accent-purple hover:text-white transition-colors uppercase tracking-widest"
               >
-                + Add
+                + {t('common.add')}
               </button>
             </div>
             <div className="grid grid-cols-1 gap-4">
               {creditCards.length === 0 ? (
-                <div className="text-center py-10 text-white/10 font-black uppercase text-xs italic">No credit cards found</div>
+                <div className="text-center py-10 text-white/10 font-black uppercase text-xs italic">{t('accounts.no_credit_cards')}</div>
               ) : (
                 creditCards.map(cc => (
                   <div key={cc.id} className="relative group overflow-hidden p-8 rounded-[2rem] border border-white/5 bg-gradient-to-br from-white/5 to-transparent hover:border-accent-purple/30 transition-all">
@@ -172,11 +174,11 @@ const Accounts: React.FC = () => {
                       
                       <div className="flex justify-between items-end">
                         <div>
-                          <div className="text-[10px] font-black uppercase tracking-widest text-white/20 mb-1">Current Balance</div>
+                          <div className="text-[10px] font-black uppercase tracking-widest text-white/20 mb-1">{t('common.current_balance')}</div>
                           <div className="text-2xl font-black">{formatCurrency(cc.currentBalance)}</div>
                         </div>
                         <div className="text-right">
-                          <div className="text-[10px] font-black uppercase tracking-widest text-white/20 mb-1">Limit</div>
+                          <div className="text-[10px] font-black uppercase tracking-widest text-white/20 mb-1">{t('common.credit_limit')}</div>
                           <div className="text-sm font-black text-white/60">{formatCurrency(cc.creditLimit)}</div>
                         </div>
                       </div>
@@ -192,11 +194,11 @@ const Accounts: React.FC = () => {
         {/* Transfers History */}
         <div className="bg-card rounded-[2.5rem] p-8 border border-white/5">
           <div className="flex items-center justify-between mb-8">
-            <h3 className="text-xl font-black">{t('accounts.recent_transfers', { defaultValue: 'Recent Transfers' })}</h3>
+            <h3 className="text-xl font-black">{t('accounts.recent_transfers')}</h3>
           </div>
           <div className="space-y-4">
             {transfers.length === 0 ? (
-              <div className="text-center py-20 text-white/10 font-black uppercase text-sm italic">No transfers history</div>
+              <div className="text-center py-20 text-white/10 font-black uppercase text-sm italic">{t('accounts.no_transfers')}</div>
             ) : (
               transfers.map(tf => (
                 <div key={tf.id} className="p-6 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-all group">
@@ -223,7 +225,7 @@ const Accounts: React.FC = () => {
       <Modal 
         isOpen={activeModal === 'account'} 
         onClose={() => setActiveModal(null)}
-        title={t('accounts.add_account', { defaultValue: 'Add New Account' })}
+        title={t('accounts.add_account')}
       >
         <AccountForm onCancel={() => setActiveModal(null)} onSuccess={() => { setActiveModal(null); fetchData(); }} />
       </Modal>
@@ -231,9 +233,25 @@ const Accounts: React.FC = () => {
       <Modal 
         isOpen={activeModal === 'transfer'} 
         onClose={() => setActiveModal(null)}
-        title={t('accounts.new_transfer', { defaultValue: 'New Fund Transfer' })}
+        title={t('accounts.new_transfer')}
       >
         <TransferForm onSuccess={() => { setActiveModal(null); fetchData(); }} onCancel={() => setActiveModal(null)} />
+      </Modal>
+
+      <Modal 
+        isOpen={activeModal === 'payment-method'} 
+        onClose={() => setActiveModal(null)}
+        title={t('accounts.add_payment_method')}
+      >
+        <PaymentMethodForm onSuccess={() => { setActiveModal(null); fetchData(); }} onCancel={() => setActiveModal(null)} />
+      </Modal>
+
+      <Modal 
+        isOpen={activeModal === 'credit-card'} 
+        onClose={() => setActiveModal(null)}
+        title={t('accounts.add_credit_card')}
+      >
+        <CreditCardForm onSuccess={() => { setActiveModal(null); fetchData(); }} onCancel={() => setActiveModal(null)} />
       </Modal>
     </div>
   );

@@ -23,9 +23,21 @@ const NotificationList: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    fetchNotifications();
+    let isMounted = true;
+    
+    const loadData = async () => {
+      if (isMounted) {
+        await fetchNotifications();
+      }
+    };
+
+    loadData();
     const interval = setInterval(fetchNotifications, 60000); // Polling every minute
-    return () => clearInterval(interval);
+    
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, [fetchNotifications]);
 
   const handleMarkAsRead = async (id: string) => {

@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { budgetsService } from '../services/budgetsService';
 import type { Budget, SavingsGoal } from '../services/budgetsService';
 import { useToast } from '../hooks/useToast';
+import Modal from '../components/ui/Modal';
+import BudgetForm from '../components/forms/BudgetForm';
+import SavingsGoalForm from '../components/forms/SavingsGoalForm';
 
 const Budgets: React.FC = () => {
   const { t } = useTranslation();
@@ -10,6 +13,7 @@ const Budgets: React.FC = () => {
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [savingsGoals, setSavingsGoals] = useState<SavingsGoal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeModal, setActiveModal] = useState<'budget' | 'goal' | null>(null);
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -18,14 +22,14 @@ const Budgets: React.FC = () => {
         budgetsService.getBudgets(),
         budgetsService.getSavingsGoals()
       ]);
-      setBudgets(budgetData); // Original line
+      setBudgets(budgetData);
       setSavingsGoals(goalsData);
     } catch {
-      showToast('Error al cargar datos de presupuesto', 'error');
+      showToast(t('common.error'), 'error');
     } finally {
       setIsLoading(false);
     }
-  }, [showToast]);
+  }, [showToast, t]);
 
   useEffect(() => {
     fetchData();
@@ -56,9 +60,12 @@ const Budgets: React.FC = () => {
     <div className="flex flex-col gap-20 animate-fade-in-up pb-10">
       <section>
         <div className="flex items-center justify-between mb-10">
-          <h1 className="text-4xl font-black text-white">{t('dashboard.budgets_title', { defaultValue: 'My Budgets' })}</h1>
-          <button className="px-8 h-14 bg-accent-purple text-white font-black rounded-full hover:scale-105 active:scale-95 transition-all shadow-xl shadow-accent-purple/20">
-            Create Budget
+          <h1 className="text-4xl font-black text-white">{t('budgets.title')}</h1>
+          <button 
+            onClick={() => setActiveModal('budget')}
+            className="px-8 h-14 bg-accent-purple text-white font-black rounded-full hover:scale-105 active:scale-95 transition-all shadow-xl shadow-accent-purple/20"
+          >
+            {t('budgets.create_budget')}
           </button>
         </div>
 
@@ -69,8 +76,8 @@ const Budgets: React.FC = () => {
                 <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
               </div>
               <div className="text-center">
-                <div className="text-xl font-black text-white mb-2">No budgets set yet</div>
-                <p className="text-white/20 font-medium">Define spending limits to stay on top of your finances.</p>
+                <div className="text-xl font-black text-white mb-2">{t('budgets.no_budgets')}</div>
+                <p className="text-white/20 font-medium">{t('budgets.description')}</p>
               </div>
             </div>
           ) : (
@@ -81,7 +88,7 @@ const Budgets: React.FC = () => {
                     <div className="flex justify-between items-start mb-10">
                       <div>
                         <h3 className="text-xl font-black text-white group-hover:text-accent-purple transition-colors">{budget.categoryName}</h3>
-                        <div className="text-[10px] font-black uppercase tracking-widest text-white/20">{budget.period} Budget</div>
+                        <div className="text-[10px] font-black uppercase tracking-widest text-white/20">{budget.period} {t('budgets.budget_label')}</div>
                       </div>
                       <div className="text-right">
                         <div className="text-sm font-black text-white/60 mb-1">{budget.percentage}%</div>
@@ -97,13 +104,13 @@ const Budgets: React.FC = () => {
 
                     <div className="flex justify-between items-center text-sm font-black italic">
                       <div>
-                        <div className="text-[10px] text-white/20 font-black uppercase not-italic tracking-widest mb-1">Spent</div>
+                        <div className="text-[10px] text-white/20 font-black uppercase not-italic tracking-widest mb-1">{t('budgets.spent')}</div>
                         <div className={budget.spentAmount > budget.amount ? 'text-red-500' : 'text-white'}>
                           {formatCurrency(budget.spentAmount, budget.currency)}
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-[10px] text-white/20 font-black uppercase not-italic tracking-widest mb-1">Limit</div>
+                        <div className="text-[10px] text-white/20 font-black uppercase not-italic tracking-widest mb-1">{t('budgets.limit')}</div>
                         <div className="text-white/60">
                           {formatCurrency(budget.amount, budget.currency)}
                         </div>
@@ -120,9 +127,12 @@ const Budgets: React.FC = () => {
 
       <section>
         <div className="flex items-center justify-between mb-10">
-          <h2 className="text-3xl font-black text-white">Savings Goals</h2>
-          <button className="px-8 h-14 bg-green-500 text-white font-black rounded-full hover:scale-105 active:scale-95 transition-all shadow-xl shadow-green-500/20">
-            Create Goal
+          <h2 className="text-3xl font-black text-white">{t('savings_goals.title')}</h2>
+          <button 
+            onClick={() => setActiveModal('goal')}
+            className="px-8 h-14 bg-green-500 text-white font-black rounded-full hover:scale-105 active:scale-95 transition-all shadow-xl shadow-green-500/20"
+          >
+            {t('savings_goals.create_goal')}
           </button>
         </div>
 
@@ -132,7 +142,7 @@ const Budgets: React.FC = () => {
               <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center text-white/10">
                 <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               </div>
-              <div className="text-xl font-black text-white italic">Dream big. Start small.</div>
+              <div className="text-xl font-black text-white italic">{t('savings_goals.description')}</div>
             </div>
           ) : (
             savingsGoals.map((goal) => {
@@ -157,13 +167,13 @@ const Budgets: React.FC = () => {
 
                     <div className="flex justify-between items-center text-sm font-black italic">
                       <div>
-                        <div className="text-[10px] text-white/20 font-black uppercase not-italic tracking-widest mb-1">Current</div>
+                        <div className="text-[10px] text-white/20 font-black uppercase not-italic tracking-widest mb-1">{t('savings_goals.current')}</div>
                         <div className="text-white">
                           {formatCurrency(goal.currentAmount, goal.currency)}
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-[10px] text-white/20 font-black uppercase not-italic tracking-widest mb-1">Target</div>
+                        <div className="text-[10px] text-white/20 font-black uppercase not-italic tracking-widest mb-1">{t('savings_goals.target')}</div>
                         <div className="text-white/60">
                           {formatCurrency(goal.targetAmount, goal.currency)}
                         </div>
@@ -177,6 +187,22 @@ const Budgets: React.FC = () => {
           )}
         </div>
       </section>
+
+      <Modal
+        isOpen={activeModal === 'budget'}
+        onClose={() => setActiveModal(null)}
+        title={t('budgets.new_budget')}
+      >
+        <BudgetForm onSuccess={() => { setActiveModal(null); fetchData(); }} onCancel={() => setActiveModal(null)} />
+      </Modal>
+
+      <Modal
+        isOpen={activeModal === 'goal'}
+        onClose={() => setActiveModal(null)}
+        title={t('savings_goals.new_goal')}
+      >
+        <SavingsGoalForm onSuccess={() => { setActiveModal(null); fetchData(); }} onCancel={() => setActiveModal(null)} />
+      </Modal>
     </div>
   );
 };

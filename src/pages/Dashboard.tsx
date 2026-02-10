@@ -122,8 +122,8 @@ const Dashboard: React.FC = () => {
                <h2 className="text-3xl font-black text-white mb-2">{t('dashboard.welcome', { name: user?.firstName })}</h2>
                <p className="text-white/60 font-medium max-w-md">
                  {report && report.netSavings > 0 
-                   ? "You've saved more than last month. Keep it up!" 
-                   : "Try to reduce non-essential spending this month."}
+                   ? t('dashboard.savings_positive') 
+                   : t('dashboard.savings_negative')}
                </p>
             </div>
             <button className="px-10 h-16 bg-white text-black font-black rounded-full hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/5">
@@ -143,7 +143,7 @@ const Dashboard: React.FC = () => {
                 <span className="text-[10px] font-black uppercase tracking-widest text-white/20 group-hover:text-white/40 transition-colors">{t('dashboard.total_balance')}</span>
              </div>
              <div className="text-2xl font-black text-white">{summary ? formatCurrency(summary.netWorth) : formatCurrency(totalBalance)}</div>
-             <p className="text-[9px] font-bold text-white/20 mt-2">{accounts.length} active accounts monitored</p>
+             <p className="text-[9px] font-bold text-white/20 mt-2">{t('dashboard.active_accounts', { count: accounts.length })}</p>
           </div>
 
           <div className="card-elite p-8 border border-white/5 group hover:border-green-500/30 transition-all">
@@ -154,7 +154,7 @@ const Dashboard: React.FC = () => {
                 <span className="text-[10px] font-black uppercase tracking-widest text-white/20 group-hover:text-white/40 transition-colors">{t('dashboard.total_income')}</span>
              </div>
              <div className="text-2xl font-black text-green-400">{formatCurrency(report?.totalIncome || 0)}</div>
-             <p className="text-[9px] font-bold text-white/20 mt-2">Captured this billing cycle</p>
+             <p className="text-[9px] font-bold text-white/20 mt-2">{t('dashboard.captured_cycle')}</p>
           </div>
 
           <div className="card-elite p-8 border border-white/5 group hover:border-red-500/30 transition-all">
@@ -165,7 +165,7 @@ const Dashboard: React.FC = () => {
                 <span className="text-[10px] font-black uppercase tracking-widest text-white/20 group-hover:text-white/40 transition-colors">{t('dashboard.total_expenses')}</span>
              </div>
              <div className="text-2xl font-black text-red-500">{formatCurrency(report?.totalExpenses || 0)}</div>
-             <p className="text-[9px] font-bold text-white/20 mt-2">Deducted current month</p>
+             <p className="text-[9px] font-bold text-white/20 mt-2">{t('dashboard.deducted_month')}</p>
           </div>
 
           <div className="card-elite p-8 border border-white/5 group hover:border-blue-500/30 transition-all">
@@ -178,7 +178,7 @@ const Dashboard: React.FC = () => {
              <div className={`text-2xl font-black ${(report?.netSavings || 0) >= 0 ? 'text-blue-400' : 'text-red-400'}`}>
                 {formatCurrency(report?.netSavings || 0)}
              </div>
-             <p className="text-[9px] font-bold text-white/20 mt-2">Net performance overview</p>
+             <p className="text-[9px] font-bold text-white/20 mt-2">{t('dashboard.performance_overview')}</p>
           </div>
       </div>
 
@@ -245,7 +245,7 @@ const Dashboard: React.FC = () => {
                    <h3 className="text-lg font-black mb-8">{t('dashboard.top_categories')}</h3>
                    <div className="space-y-8">
                        {topCategories.length === 0 ? (
-                           <div className="text-sm text-white/20 font-black uppercase italic text-center py-10">No data available</div>
+                           <div className="text-sm text-white/20 font-black uppercase italic text-center py-10">{t('dashboard.no_data')}</div>
                        ) : (
                            topCategories.map((cat, idx) => (
                                <div key={idx} className="group">
