@@ -7,7 +7,7 @@ import type { MonthlyReport, FinancialSummary, BudgetPerformance } from '../serv
 import { useToast } from '../hooks/useToast';
 
 const Reports: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { showToast } = useToast();
   const [summary, setSummary] = useState<FinancialSummary | null>(null);
   const [monthlyReport, setMonthlyReport] = useState<MonthlyReport | null>(null);
@@ -152,7 +152,7 @@ const Reports: React.FC = () => {
       <div className="bg-card rounded-[2.5rem] p-10 border border-white/5">
         <div className="flex justify-between items-center mb-10">
           <h3 className="text-xl font-black">{t('reports.monthly_performance')}</h3>
-          <div className="text-sm font-black text-white/40">{new Date().toLocaleString('default', { month: 'long', year: 'numeric' })}</div>
+          <div className="text-sm font-black text-white/40">{new Date().toLocaleString(i18n.language, { month: 'long', year: 'numeric' })}</div>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">

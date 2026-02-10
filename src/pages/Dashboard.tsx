@@ -76,7 +76,7 @@ const Dashboard: React.FC = () => {
          <div className="lg:col-span-2 bg-card rounded-[2.5rem] p-10 border border-white/5 relative overflow-hidden flex flex-col justify-between">
             <div className="relative z-10">
                 <h3 className="text-xl font-black mb-1">{t('dashboard.spending_overview')}</h3>
-                <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Daily performance indicator</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-white/20">{t('dashboard.daily_indicator')}</p>
             </div>
             
             <div className="flex items-end gap-3 h-48 relative z-10">
@@ -272,7 +272,7 @@ const Dashboard: React.FC = () => {
       <Modal 
         isOpen={!!activeModal} 
         onClose={() => setActiveModal(null)}
-        title={activeModal === 'expense' ? t('dashboard.add_expense') : activeModal === 'income' ? t('dashboard.add_income') : 'Add Account'}
+        title={activeModal === 'expense' ? t('dashboard.add_expense') : activeModal === 'income' ? t('dashboard.add_income') : t('accounts.add_account')}
       >
         {activeModal === 'account' ? (
           <AccountForm onCancel={() => setActiveModal(null)} onSuccess={() => { setActiveModal(null); fetchData(); }} />

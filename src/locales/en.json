@@ -37,7 +37,8 @@
     "deducted_month": "Deducted current month",
     "performance_overview": "Net performance overview",
     "no_data": "No data available",
-    "spending_overview": "Spending Overview"
+    "spending_overview": "Spending Overview",
+    "daily_indicator": "Daily performance indicator"
   },
   "reports": {
     "title": "Financial Reports",

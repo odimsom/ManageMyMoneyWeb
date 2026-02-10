@@ -37,7 +37,8 @@
     "deducted_month": "Deducido este mes",
     "performance_overview": "Resumen de rendimiento neto",
     "no_data": "No hay datos disponibles",
-    "spending_overview": "Resumen de Gastos"
+    "spending_overview": "Resumen de Gastos",
+    "daily_indicator": "Indicador de rendimiento diario"
   },
   "reports": {
     "title": "Informes Financieros",
