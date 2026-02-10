@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { categoryService } from '../../services/categoryService';
-import type { CreateCategoryRequest } from '../../services/categoryService';
+import type { Category, CreateCategoryRequest } from '../../services/categoryService';
 import { useToast } from '../../hooks/useToast';
 
 interface CategoryFormProps {
@@ -13,6 +13,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess, onCancel }) => {
   const { t } = useTranslation(); 
   const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [parentCategories, setParentCategories] = useState<Category[]>([]);
+  const [parentId, setParentId] = useState<string>('');
   
   const [formData, setFormData] = useState<CreateCategoryRequest>({
     name: '',
@@ -23,11 +25,31 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess, onCancel }) => {
     transactionType: 'Expense'
   });
 
+  useEffect(() => {
+    const fetchParents = async () => {
+      try {
+        const data = await categoryService.getCategories(formData.transactionType);
+        setParentCategories(data);
+      } catch (error) {
+        console.error('Failed to fetch parent categories', error);
+      }
+    };
+    fetchParents();
+  }, [formData.transactionType]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await categoryService.createCategory(formData);
+      if (parentId) {
+        await categoryService.createSubcategory({
+          categoryId: parentId,
+          name: formData.name,
+          description: formData.description
+        });
+      } else {
+        await categoryService.createCategory(formData);
+      }
       showToast(t('common.success'), 'success');
       onSuccess();
     } catch (error) {
@@ -46,6 +68,38 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess, onCancel }) => {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
+          <label className={labelClasses}>{t('categories.transaction_type')}</label>
+          <select 
+            value={formData.transactionType}
+            onChange={e => {
+              setFormData({ ...formData, transactionType: e.target.value as 'Income' | 'Expense' });
+              setParentId(''); // Reset parent when type changes
+            }}
+            className={selectClasses}
+          >
+            <option value="Expense" className="bg-gray-800 text-white">{t('common.expense')}</option>
+            <option value="Income" className="bg-gray-800 text-white">{t('common.income')}</option>
+          </select>
+        </div>
+        <div>
+          <label className={labelClasses}>{t('categories.subcategories')} ({t('common.optional')})</label>
+          <select 
+            value={parentId}
+            onChange={e => setParentId(e.target.value)}
+            className={selectClasses}
+          >
+            <option value="" className="bg-gray-800 text-white">{t('common.none') || 'None (Top Level)'}</option>
+            {parentCategories.map(cat => (
+              <option key={cat.id} value={cat.id} className="bg-gray-800 text-white">
+                {cat.icon} {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
           <label className={labelClasses}>{t('common.name')}</label>
           <input 
             type="text"
@@ -56,17 +110,20 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess, onCancel }) => {
             placeholder="e.g. Groceries"
           />
         </div>
-        <div>
-          <label className={labelClasses}>{t('categories.transaction_type')}</label>
-          <select 
-            value={formData.transactionType}
-            onChange={e => setFormData({ ...formData, transactionType: e.target.value as 'Income' | 'Expense' })}
-            className={selectClasses}
-          >
-            <option value="Expense" className="bg-gray-800 text-white">{t('common.expense')}</option>
-            <option value="Income" className="bg-gray-800 text-white">{t('common.income')}</option>
-          </select>
-        </div>
+        {!parentId && (
+           <div>
+            <label className={labelClasses}>{t('common.type')}</label>
+            <select 
+              value={formData.type}
+              onChange={e => setFormData({ ...formData, type: e.target.value })}
+              className={selectClasses}
+            >
+              <option value="Variable" className="bg-gray-800 text-white">{t('common.variable')}</option>
+              <option value="Fixed" className="bg-gray-800 text-white">{t('common.fixed')}</option>
+              <option value="Discretionary" className="bg-gray-800 text-white">{t('common.discretionary')}</option>
+            </select>
+          </div>
+        )}
       </div>
 
       <div>
@@ -80,43 +137,32 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess, onCancel }) => {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className={labelClasses}>{t('common.type')}</label>
-          <select 
-            value={formData.type}
-            onChange={e => setFormData({ ...formData, type: e.target.value })}
-            className={selectClasses}
-          >
-            <option value="Variable" className="bg-gray-800 text-white">{t('common.variable')}</option>
-            <option value="Fixed" className="bg-gray-800 text-white">{t('common.fixed')}</option>
-            <option value="Discretionary" className="bg-gray-800 text-white">{t('common.discretionary')}</option>
-          </select>
-        </div>
-        <div>
-          <label className={labelClasses}>{t('common.color')}</label>
-           <div className="flex items-center gap-2">
+      {!parentId && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className={labelClasses}>{t('common.color')}</label>
+             <div className="flex items-center gap-2">
+              <input 
+                type="color"
+                value={formData.color || '#a855f7'}
+                onChange={e => setFormData({ ...formData, color: e.target.value })}
+                className="h-14 w-14 rounded-2xl border-none outline-none bg-transparent cursor-pointer"
+              />
+              <span className="text-white/50 text-sm font-black">{formData.color}</span>
+            </div>
+          </div>
+          <div>
+            <label className={labelClasses}>{t('common.icon')}</label>
             <input 
-              type="color"
-              value={formData.color || '#a855f7'}
-              onChange={e => setFormData({ ...formData, color: e.target.value })}
-              className="h-14 w-14 rounded-2xl border-none outline-none bg-transparent cursor-pointer"
+              type="text"
+              value={formData.icon || ''}
+              onChange={e => setFormData({ ...formData, icon: e.target.value })}
+              className={inputClasses}
+              placeholder="e.g. 🛒"
             />
-            <span className="text-white/50 text-sm font-black">{formData.color}</span>
           </div>
         </div>
-      </div>
-      
-       <div>
-        <label className={labelClasses}>{t('common.icon')}</label>
-        <input 
-          type="text"
-          value={formData.icon || ''}
-          onChange={e => setFormData({ ...formData, icon: e.target.value })}
-          className={inputClasses}
-          placeholder="e.g. 🛒"
-        />
-      </div>
+      )}
 
       <div className="flex gap-4 pt-4">
         <button 

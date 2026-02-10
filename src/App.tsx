@@ -13,6 +13,7 @@ import Income from './pages/Income';
 import Reports from './pages/Reports';
 import Accounts from './pages/Accounts';
 import Settings from './pages/Settings';
+import Reminders from './pages/Reminders';
 
 import { ToastProvider } from './context/ToastContext';
 
@@ -35,6 +36,7 @@ function App() {
                 <Route path="budgets" element={<Budgets />} />
                 <Route path="categories" element={<Categories />} />
                 <Route path="accounts" element={<Accounts />} />
+                <Route path="reminders" element={<Reminders />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
             </Route>

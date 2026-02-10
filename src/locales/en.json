@@ -110,7 +110,14 @@
     "title": "Notifications",
     "mark_all_read": "Mark all as read",
     "mark_read": "Mark as read",
-    "empty": "No notifications found"
+    "empty": "No notifications found",
+    "reminders": "Reminders",
+    "alerts": "Alerts",
+    "severity": "Severity",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "critical": "Critical"
   },
   "common": {
     "loading": "Loading...",
@@ -148,7 +155,24 @@
     "icon": "Icon",
     "monthly": "Monthly",
     "yearly": "Yearly",
-    "optional": "Optional"
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "optional": "Optional",
+    "tags": "Tags",
+    "is_recurring": "Recurring Transaction",
+    "frequency": "Frequency",
+    "attachments": "Attachments",
+    "add_tag": "Add Tag",
+    "no_tags": "No tags",
+    "upload_attachment": "Upload Attachment",
+    "view_attachments": "View Attachments",
+    "day_of_month": "Day of Month",
+    "day_of_week": "Day of Week",
+    "required": "Required",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm_delete": "Are you sure you want to delete this item?"
   },
   "categories": {
     "title": "Categories",
@@ -170,7 +194,8 @@
     "period": "Period",
     "spent": "Spent",
     "limit": "Limit",
-    "budget_label": "Budget"
+    "budget_label": "Budget",
+    "edit_budget": "Edit Budget"
   },
   "savings_goals": {
     "title": "Savings Goals",
@@ -183,7 +208,10 @@
     "target_date": "Target Date",
     "current": "Current",
     "target": "Target",
-    "initial_contribution": "Initial Contribution"
+    "initial_contribution": "Initial Contribution",
+    "add_contribution": "Add Contribution",
+    "withdraw": "Withdraw",
+    "edit_goal": "Edit Savings Goal"
   },
   "transactions": {
     "all_categories": "All Categories",
@@ -191,6 +219,7 @@
     "search_placeholder": "Search...",
     "excel_export": "Excel",
     "csv_export": "CSV",
-    "title_nav": "Transactions"
+    "title_nav": "Transactions",
+    "edit_transaction": "Edit Transaction"
   }
 }

@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { budgetsService } from '../services/budgetsService';
 import type { Budget, SavingsGoal } from '../services/budgetsService';
+import { accountService } from '../services/accountService';
+import type { Account } from '../services/accountService';
 import { useToast } from '../hooks/useToast';
 import Modal from '../components/ui/Modal';
 import BudgetForm from '../components/forms/BudgetForm';
@@ -12,18 +14,28 @@ const Budgets: React.FC = () => {
   const { showToast } = useToast();
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [savingsGoals, setSavingsGoals] = useState<SavingsGoal[]>([]);
+  const [accounts, setAccounts] = useState<Account[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeModal, setActiveModal] = useState<'budget' | 'goal' | null>(null);
+  const [activeModal, setActiveModal] = useState<'budget' | 'goal' | 'contribution' | 'withdrawal' | null>(null);
+  const [selectedGoal, setSelectedGoal] = useState<SavingsGoal | null>(null);
+  const [actionAmount, setActionAmount] = useState('');
+  const [selectedAccountId, setSelectedAccountId] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [editingBudget, setEditingBudget] = useState<Budget | null>(null);
+  const [editingGoal, setEditingGoal] = useState<SavingsGoal | null>(null);
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [budgetData, goalsData] = await Promise.all([
+      const [budgetData, goalsData, accountsData] = await Promise.all([
         budgetsService.getBudgets(),
-        budgetsService.getSavingsGoals()
+        budgetsService.getSavingsGoals(),
+        accountService.getAccounts()
       ]);
       setBudgets(budgetData);
       setSavingsGoals(goalsData);
+      setAccounts(accountsData);
+      if (accountsData.length > 0) setSelectedAccountId(accountsData[0].id);
     } catch {
       showToast(t('common.error'), 'error');
     } finally {
@@ -34,6 +46,63 @@ const Budgets: React.FC = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  const handleDeleteBudget = async (id: string) => {
+    if (!window.confirm(t('common.confirm_delete'))) return;
+    try {
+      await budgetsService.deleteBudget(id);
+      showToast(t('common.success'), 'success');
+      fetchData();
+    } catch {
+      showToast(t('common.error'), 'error');
+    }
+  };
+
+  const handleDeleteGoal = async (id: string) => {
+    if (!window.confirm(t('common.confirm_delete'))) return;
+    try {
+      await budgetsService.cancelSavingsGoal(id);
+      showToast(t('common.success'), 'success');
+      fetchData();
+    } catch {
+      showToast(t('common.error'), 'error');
+    }
+  };
+
+  const handleFormSuccess = () => {
+    setActiveModal(null);
+    setEditingBudget(null);
+    setEditingGoal(null);
+    fetchData();
+  };
+
+  const handleActionSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedGoal || !actionAmount || !selectedAccountId) return;
+    
+    setIsSubmitting(true);
+    try {
+      const amount = parseFloat(actionAmount);
+      if (activeModal === 'contribution') {
+        await budgetsService.addContribution(selectedGoal.id, {
+          amount,
+          date: new Date().toISOString(),
+          accountId: selectedAccountId
+        });
+      } else if (activeModal === 'withdrawal') {
+        await budgetsService.withdrawFromGoal(selectedGoal.id, amount);
+      }
+      
+      showToast(t('common.success'), 'success');
+      setActiveModal(null);
+      setActionAmount('');
+      fetchData();
+    } catch {
+      showToast(t('common.error'), 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const formatCurrency = (amount: number, currency = 'USD') => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount);
@@ -47,14 +116,12 @@ const Budgets: React.FC = () => {
             <div key={i} className="h-64 bg-white/5 rounded-[2.5rem]"></div>
           ))}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-64 bg-white/5 rounded-[2.5rem]"></div>
-          ))}
-        </div>
       </div>
     );
   }
+
+  const inputClasses = "w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-6 text-white placeholder:text-white/20 focus:border-accent-purple/50 focus:bg-white/[0.08] outline-none transition-all font-medium";
+  const labelClasses = "text-[10px] font-black uppercase tracking-widest text-white/30 mb-2 block ml-4";
 
   return (
     <div className="flex flex-col gap-20 animate-fade-in-up pb-10">
@@ -90,8 +157,19 @@ const Budgets: React.FC = () => {
                         <h3 className="text-xl font-black text-white group-hover:text-accent-purple transition-colors">{budget.categoryName}</h3>
                         <div className="text-[10px] font-black uppercase tracking-widest text-white/20">{budget.period} {t('budgets.budget_label')}</div>
                       </div>
-                      <div className="text-right">
-                        <div className="text-sm font-black text-white/60 mb-1">{budget.percentage}%</div>
+                      <div className="flex gap-2">
+                        <button 
+                          onClick={() => { setEditingBudget(budget); setActiveModal('budget'); }}
+                          className="w-8 h-8 rounded-lg bg-white/5 hover:bg-accent-purple/20 text-white/40 hover:text-accent-purple flex items-center justify-center transition-all"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteBudget(budget.id)}
+                          className="w-8 h-8 rounded-lg bg-white/5 hover:bg-red-500/20 text-white/40 hover:text-red-500 flex items-center justify-center transition-all"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        </button>
                       </div>
                     </div>
 
@@ -155,7 +233,20 @@ const Budgets: React.FC = () => {
                         <h3 className="text-xl font-black text-white group-hover:text-green-500 transition-colors">{goal.name}</h3>
                         <div className="text-[10px] font-black uppercase tracking-widest text-white/20">{goal.status}</div>
                       </div>
-                      <div className="text-sm font-black text-green-400">{percentage.toFixed(1)}%</div>
+                      <div className="flex gap-2">
+                        <button 
+                          onClick={() => { setEditingGoal(goal); setActiveModal('goal'); }}
+                          className="w-8 h-8 rounded-lg bg-white/5 hover:bg-green-500/20 text-white/40 hover:text-green-500 flex items-center justify-center transition-all"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteGoal(goal.id)}
+                          className="w-8 h-8 rounded-lg bg-white/5 hover:bg-red-500/20 text-white/40 hover:text-red-500 flex items-center justify-center transition-all"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        </button>
+                      </div>
                     </div>
 
                     <div className="h-4 w-full bg-white/[0.03] rounded-full overflow-hidden mb-6 p-1">
@@ -179,6 +270,21 @@ const Budgets: React.FC = () => {
                         </div>
                       </div>
                     </div>
+
+                    <div className="flex gap-4 mt-8 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                      <button 
+                        onClick={() => { setSelectedGoal(goal); setActiveModal('contribution'); }}
+                        className="flex-1 h-10 bg-green-500/10 hover:bg-green-500/20 text-green-500 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all border border-green-500/20"
+                      >
+                        {t('savings_goals.add_contribution')}
+                      </button>
+                      <button 
+                        onClick={() => { setSelectedGoal(goal); setActiveModal('withdrawal'); }}
+                        className="flex-1 h-10 bg-red-500/10 hover:bg-red-500/20 text-red-500 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all border border-red-500/20"
+                      >
+                        {t('savings_goals.withdraw')}
+                      </button>
+                    </div>
                   </div>
                   <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-green-500/5 rounded-full blur-3xl group-hover:scale-150 transition-transform"></div>
                 </div>
@@ -190,18 +296,72 @@ const Budgets: React.FC = () => {
 
       <Modal
         isOpen={activeModal === 'budget'}
-        onClose={() => setActiveModal(null)}
-        title={t('budgets.new_budget')}
+        onClose={() => { setActiveModal(null); setEditingBudget(null); }}
+        title={editingBudget ? t('budgets.edit_budget') : t('budgets.new_budget')}
       >
-        <BudgetForm onSuccess={() => { setActiveModal(null); fetchData(); }} onCancel={() => setActiveModal(null)} />
+        <BudgetForm initialData={editingBudget || undefined} onSuccess={handleFormSuccess} onCancel={() => { setActiveModal(null); setEditingBudget(null); }} />
       </Modal>
 
       <Modal
         isOpen={activeModal === 'goal'}
-        onClose={() => setActiveModal(null)}
-        title={t('savings_goals.new_goal')}
+        onClose={() => { setActiveModal(null); setEditingGoal(null); }}
+        title={editingGoal ? t('savings_goals.edit_goal') : t('savings_goals.new_goal')}
       >
-        <SavingsGoalForm onSuccess={() => { setActiveModal(null); fetchData(); }} onCancel={() => setActiveModal(null)} />
+        <SavingsGoalForm initialData={editingGoal || undefined} onSuccess={handleFormSuccess} onCancel={() => { setActiveModal(null); setEditingGoal(null); }} />
+      </Modal>
+
+      <Modal
+        isOpen={activeModal === 'contribution' || activeModal === 'withdrawal'}
+        onClose={() => setActiveModal(null)}
+        title={activeModal === 'contribution' ? t('savings_goals.add_contribution') : t('savings_goals.withdraw')}
+      >
+        <form onSubmit={handleActionSubmit} className="space-y-6">
+          <div>
+            <label className={labelClasses}>{t('common.amount')}</label>
+            <input 
+              type="number"
+              step="0.01"
+              required
+              value={actionAmount}
+              onChange={e => setActionAmount(e.target.value)}
+              className={inputClasses}
+              placeholder="0.00"
+            />
+          </div>
+          {activeModal === 'contribution' && (
+            <div>
+              <label className={labelClasses}>{t('common.account')}</label>
+              <select 
+                required
+                value={selectedAccountId}
+                onChange={e => setSelectedAccountId(e.target.value)}
+                className={inputClasses}
+              >
+                {accounts.map(acc => (
+                  <option key={acc.id} value={acc.id} className="bg-gray-800 text-white">{acc.name} ({acc.currency})</option>
+                ))}
+              </select>
+            </div>
+          )}
+          <div className="flex gap-4 pt-4">
+            <button 
+              type="button"
+              onClick={() => setActiveModal(null)}
+              className="flex-1 h-14 rounded-2xl border border-white/5 font-black text-white/40 hover:bg-white/5 hover:text-white transition-all uppercase tracking-widest text-xs"
+            >
+              {t('common.cancel')}
+            </button>
+            <button 
+              type="submit"
+              disabled={isSubmitting}
+              className={`flex-1 h-14 rounded-2xl font-black hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-widest text-xs disabled:opacity-50 ${
+                activeModal === 'contribution' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+              }`}
+            >
+              {isSubmitting ? '...' : t('common.save')}
+            </button>
+          </div>
+        </form>
       </Modal>
     </div>
   );

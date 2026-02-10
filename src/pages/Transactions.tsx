@@ -5,6 +5,8 @@ import type { Expense } from '../services/expenseService';
 import { categoryService } from '../services/categoryService';
 import type { Category } from '../services/categoryService';
 import { useToast } from '../hooks/useToast';
+import Modal from '../components/ui/Modal';
+import TransactionForm from '../components/forms/TransactionForm';
 
 const Transactions: React.FC = () => {
   const { t } = useTranslation();
@@ -14,6 +16,8 @@ const Transactions: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchExpenses = useCallback(async () => {
     setIsLoading(true);
@@ -30,6 +34,17 @@ const Transactions: React.FC = () => {
       setIsLoading(false);
     }
   }, [searchTerm, selectedCategoryId, showToast, t]);
+
+  const handleDeleteExpense = async (id: string) => {
+    if (!window.confirm(t('common.confirm_delete'))) return;
+    try {
+      await expenseService.deleteExpense(id);
+      showToast(t('common.success'), 'success');
+      fetchExpenses();
+    } catch {
+      showToast(t('common.error'), 'error');
+    }
+  };
 
   useEffect(() => {
     fetchExpenses();
@@ -138,6 +153,7 @@ const Transactions: React.FC = () => {
                   <th className="px-6 pb-2">{t('common.category')}</th>
                   <th className="px-6 pb-2">{t('common.account')}</th>
                   <th className="px-6 pb-2 text-right">{t('common.amount')}</th>
+                  <th className="px-6 pb-2 text-center">{t('common.actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -164,12 +180,28 @@ const Transactions: React.FC = () => {
                       <td className="px-6 py-4 bg-white/[0.02] border-y border-white/5 group-hover:border-accent-purple/50 text-[10px] font-black uppercase tracking-widest text-white/20">
                         {e.accountName}
                       </td>
-                      <td className="px-6 py-4 bg-white/[0.02] rounded-r-[1.5rem] border-y border-r border-white/5 group-hover:border-accent-purple/50 text-right">
+                      <td className="px-6 py-4 bg-white/[0.02] border-y border-white/5 group-hover:border-accent-purple/50 text-right">
                         <div className="text-lg font-black text-white">{formatCurrency(e.amount, e.currencyCode)}</div>
                         <div className="flex gap-1 justify-end mt-1">
                           {e.tags?.map(tag => (
                             <span key={tag.id} className="text-[7px] font-black uppercase px-1 border border-white/10 rounded">{tag.name}</span>
                           ))}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 bg-white/[0.02] rounded-r-[1.5rem] border-y border-r border-white/5 group-hover:border-accent-purple/50">
+                        <div className="flex justify-center gap-2">
+                          <button 
+                            onClick={() => { setEditingExpense(e); setIsModalOpen(true); }}
+                            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-accent-purple/20 text-white/40 hover:text-accent-purple flex items-center justify-center transition-all shadow-xl"
+                          >
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                          </button>
+                          <button 
+                            onClick={() => handleDeleteExpense(e.id)}
+                            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-red-500/20 text-white/40 hover:text-red-500 flex items-center justify-center transition-all shadow-xl"
+                          >
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -180,6 +212,21 @@ const Transactions: React.FC = () => {
           </div>
         )}
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => { setIsModalOpen(false); setEditingExpense(null); }}
+        title={t('transactions.edit_transaction')}
+      >
+        {editingExpense && (
+          <TransactionForm 
+            type="Expense"
+            initialData={editingExpense}
+            onSuccess={() => { setIsModalOpen(false); setEditingExpense(null); fetchExpenses(); }}
+            onCancel={() => { setIsModalOpen(false); setEditingExpense(null); }}
+          />
+        )}
+      </Modal>
     </div>
   );
 };

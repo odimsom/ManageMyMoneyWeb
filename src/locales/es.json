@@ -110,7 +110,14 @@
     "title": "Notificaciones",
     "mark_all_read": "Marcar todo como leído",
     "mark_read": "Marcar como leído",
-    "empty": "No se encontraron notificaciones"
+    "empty": "No se encontraron notificaciones",
+    "reminders": "Recordatorios",
+    "alerts": "Alertas",
+    "severity": "Severidad",
+    "low": "Baja",
+    "medium": "Media",
+    "high": "Alta",
+    "critical": "Crítica"
   },
   "common": {
     "loading": "Cargando...",
@@ -148,7 +155,24 @@
     "icon": "Icono",
     "monthly": "Mensual",
     "yearly": "Anual",
-    "optional": "Opcional"
+    "daily": "Diario",
+    "weekly": "Semanal",
+    "optional": "Opcional",
+    "tags": "Etiquetas",
+    "is_recurring": "Transacción Recurrente",
+    "frequency": "Frecuencia",
+    "attachments": "Adjuntos",
+    "add_tag": "Añadir Etiqueta",
+    "no_tags": "Sin etiquetas",
+    "upload_attachment": "Subir Adjunto",
+    "view_attachments": "Ver Adjuntos",
+    "day_of_month": "Día del Mes",
+    "day_of_week": "Día de la Semana",
+    "required": "Requerido",
+    "actions": "Acciones",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "confirm_delete": "¿Estás seguro de que deseas eliminar este elemento?"
   },
   "categories": {
     "title": "Categorías",
@@ -170,7 +194,8 @@
     "period": "Periodo",
     "spent": "Gastado",
     "limit": "Límite",
-    "budget_label": "Presupuesto"
+    "budget_label": "Presupuesto",
+    "edit_budget": "Editar Presupuesto"
   },
   "savings_goals": {
     "title": "Metas de Ahorro",
@@ -183,7 +208,10 @@
     "target_date": "Fecha Objetivo",
     "current": "Actual",
     "target": "Objetivo",
-    "initial_contribution": "Contribución Inicial"
+    "initial_contribution": "Contribución Inicial",
+    "add_contribution": "Añadir Contribución",
+    "withdraw": "Retirar",
+    "edit_goal": "Editar Meta de Ahorro"
   },
   "transactions": {
     "all_categories": "Todas las Categorías",
