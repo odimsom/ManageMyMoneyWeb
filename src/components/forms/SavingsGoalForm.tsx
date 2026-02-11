@@ -70,8 +70,8 @@ const SavingsGoalForm: React.FC<SavingsGoalFormProps> = ({ initialData, onSucces
     }
   };
 
-  const inputClasses = (error?: string) => `w-full h-14 bg-white/5 border ${error ? 'border-red-500' : 'border-white/10'} rounded-2xl px-6 text-white placeholder:text-white/20 focus:border-accent-purple/50 focus:bg-white/[0.08] outline-none transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed`;
-  const labelClasses = "text-[10px] font-black uppercase tracking-widest text-white/30 mb-2 block ml-4";
+  const inputClasses = (error?: string) => `w-full h-14 bg-glass border ${error ? 'border-red-500' : 'border-border-subtle'} rounded-2xl px-6 text-base-content placeholder:text-base-content-muted focus:border-accent-purple/50 focus:bg-glass/20 outline-none transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed`;
+  const labelClasses = "text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2 block ml-4";
   const errorClasses = "text-[10px] font-bold text-red-500 mt-2 ml-4 animate-fade-in";
 
   return (
@@ -155,14 +155,14 @@ const SavingsGoalForm: React.FC<SavingsGoalFormProps> = ({ initialData, onSucces
         <button 
           type="button"
           onClick={onCancel}
-          className="flex-1 h-16 rounded-2xl border border-white/5 font-black text-white/40 hover:bg-white/5 hover:text-white transition-all uppercase tracking-widest text-xs"
+          className="flex-1 h-16 rounded-2xl border border-border-subtle bg-glass font-black text-base-content-muted hover:bg-glass/20 hover:text-base-content transition-all uppercase tracking-widest text-xs"
         >
           {t('common.cancel')}
         </button>
         <button 
           type="submit"
           disabled={isSubmitting}
-          className="flex-1 h-16 rounded-2xl bg-white text-black font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 uppercase tracking-widest text-xs disabled:opacity-50"
+          className="flex-1 h-16 rounded-2xl bg-accent-purple text-white font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-accent-purple/20 uppercase tracking-widest text-xs disabled:opacity-50"
         >
           {isSubmitting ? '...' : t('common.save')}
         </button>

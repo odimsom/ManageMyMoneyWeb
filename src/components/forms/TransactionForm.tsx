@@ -223,10 +223,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
     }));
   };
 
-  const inputClasses = (error?: string) => `w-full h-14 bg-white/5 border ${error ? 'border-red-500' : 'border-white/10'} rounded-2xl px-6 text-white placeholder:text-white/20 focus:border-accent-purple/50 focus:bg-white/[0.08] outline-none transition-all font-medium`;
-  const labelClasses = "text-[10px] font-black uppercase tracking-widest text-white/30 mb-2 block ml-4";
+  const inputClasses = (error?: string) => `w-full h-14 bg-glass border ${error ? 'border-red-500' : 'border-border-subtle'} rounded-2xl px-6 text-base-content placeholder:text-base-content-muted focus:border-accent-purple/50 focus:bg-glass/20 outline-none transition-all font-medium`;
+  const labelClasses = "text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2 block ml-4";
   const errorClasses = "text-[10px] font-bold text-red-500 mt-2 ml-4 animate-fade-in";
-  const checkboxClasses = "w-5 h-5 rounded border-white/10 bg-white/5 checked:bg-accent-purple transition-all cursor-pointer";
+  const checkboxClasses = "w-5 h-5 rounded border-border-subtle bg-glass checked:bg-accent-purple transition-all cursor-pointer";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -280,7 +280,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
             className={inputClasses(errors.accountId)}
           >
             {accounts.map(acc => (
-              <option key={acc.id} value={acc.id} className="bg-gray-800 text-white">{acc.name} ({acc.currency})</option>
+              <option key={acc.id} value={acc.id} className="bg-card text-base-content">{acc.name} ({acc.currency})</option>
             ))}
           </select>
           {errors.accountId && <div className={errorClasses}>{errors.accountId}</div>}
@@ -294,12 +294,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
             className={inputClasses(errors.categoryId)}
           >
             {categories.length === 0 && (
-              <option value="" disabled className="bg-gray-800 text-white">
+              <option value="" disabled className="bg-card text-base-content">
                 {type === 'Income' ? t('income.no_sources_prompt') || 'No sources found' : t('categories.no_categories')}
               </option>
             )}
             {categories.map(cat => (
-              <option key={cat.id} value={cat.id} className="bg-gray-800 text-white">
+              <option key={cat.id} value={cat.id} className="bg-card text-base-content">
                 {cat.name}
               </option>
             ))}
@@ -322,7 +322,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
       </button>
 
       {showAdvanced && (
-        <div className="space-y-6 p-6 rounded-[2rem] bg-white/[0.02] border border-white/5 animate-fade-in-up">
+        <div className="space-y-6 p-6 rounded-[2rem] bg-glass border border-border-subtle animate-fade-in-up">
           <div className="flex items-center gap-4">
             <input 
               type="checkbox"
@@ -331,7 +331,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
               onChange={e => setFormData({ ...formData, isRecurring: e.target.checked })}
               className={checkboxClasses}
             />
-            <label htmlFor="isRecurring" className="text-sm font-bold text-white/60 cursor-pointer select-none">
+            <label htmlFor="isRecurring" className="text-sm font-bold text-base-content-muted cursor-pointer select-none">
               {t('common.is_recurring')}
             </label>
           </div>
@@ -345,10 +345,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
                   onChange={e => setFormData({ ...formData, frequency: e.target.value as 'Daily' | 'Weekly' | 'Monthly' | 'Yearly' })}
                   className={inputClasses()}
                 >
-                  <option value="Daily" className="bg-gray-800">{t('common.daily')}</option>
-                  <option value="Weekly" className="bg-gray-800">{t('common.weekly')}</option>
-                  <option value="Monthly" className="bg-gray-800">{t('common.monthly')}</option>
-                  <option value="Yearly" className="bg-gray-800">{t('common.yearly')}</option>
+                  <option value="Daily" className="bg-card text-base-content">{t('common.daily')}</option>
+                  <option value="Weekly" className="bg-card text-base-content">{t('common.weekly')}</option>
+                  <option value="Monthly" className="bg-card text-base-content">{t('common.monthly')}</option>
+                  <option value="Yearly" className="bg-card text-base-content">{t('common.yearly')}</option>
                 </select>
               </div>
               {formData.frequency === 'Monthly' && (
@@ -372,13 +372,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
                     onChange={e => setFormData({ ...formData, dayOfWeek: parseInt(e.target.value) })}
                     className={inputClasses()}
                   >
-                    <option value="0" className="bg-gray-800">Sunday</option>
-                    <option value="1" className="bg-gray-800">Monday</option>
-                    <option value="2" className="bg-gray-800">Tuesday</option>
-                    <option value="3" className="bg-gray-800">Wednesday</option>
-                    <option value="4" className="bg-gray-800">Thursday</option>
-                    <option value="5" className="bg-gray-800">Friday</option>
-                    <option value="6" className="bg-gray-800">Saturday</option>
+                    <option value="0" className="bg-card text-base-content">Sunday</option>
+                    <option value="1" className="bg-card text-base-content">Monday</option>
+                    <option value="2" className="bg-card text-base-content">Tuesday</option>
+                    <option value="3" className="bg-card text-base-content">Wednesday</option>
+                    <option value="4" className="bg-card text-base-content">Thursday</option>
+                    <option value="5" className="bg-card text-base-content">Friday</option>
+                    <option value="6" className="bg-card text-base-content">Saturday</option>
                   </select>
                 </div>
               )}
@@ -388,7 +388,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
           <div>
             <label className={labelClasses}>{t('common.tags')}</label>
             <div className="flex flex-wrap gap-2 px-4 py-2">
-              {availableTags.length === 0 && <p className="text-white/20 text-xs italic">{t('common.no_tags')}</p>}
+              {availableTags.length === 0 && <p className="text-base-content-muted text-xs italic">{t('common.no_tags')}</p>}
               {availableTags.map(tag => (
                 <button
                   key={tag.id}
@@ -396,9 +396,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
                   onClick={() => toggleTag(tag.id)}
                   className={`px-4 h-8 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border ${
                     formData.tagIds.includes(tag.id)
-                      ? 'bg-accent-purple border-accent-purple text-white'
-                      : 'border-white/10 text-white/40 hover:border-white/20'
-                  }`}
+                        ? 'bg-accent-purple border-accent-purple text-white'
+                        : 'border-border-subtle text-base-content-muted hover:border-accent-purple/40 hover:text-base-content'
+                    }`}
                 >
                   {tag.name}
                 </button>
@@ -419,15 +419,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
                 />
                 <label 
                   htmlFor="file-upload"
-                  className="w-full h-14 border-2 border-dashed border-white/10 rounded-2xl flex items-center justify-center gap-2 text-white/40 hover:border-accent-purple/40 hover:text-white/60 transition-all cursor-pointer"
+                  className="w-full h-14 border-2 border-dashed border-border-subtle rounded-2xl flex items-center justify-center gap-2 text-base-content-muted hover:border-accent-purple/40 hover:text-base-content transition-all cursor-pointer"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
                   <span className="text-[10px] font-black uppercase tracking-widest">{t('common.upload_attachment')}</span>
                 </label>
                 {files.length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2 text-[10px] font-medium text-white/40">
+                  <div className="mt-4 flex flex-wrap gap-2 text-[10px] font-medium text-base-content-muted">
                     {files.map((f, i) => (
-                      <span key={i} className="px-3 py-1 bg-white/5 rounded-full">{f.name}</span>
+                      <span key={i} className="px-3 py-1 bg-glass rounded-full border border-border-subtle">{f.name}</span>
                     ))}
                   </div>
                 )}
@@ -441,14 +441,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
         <button 
           type="button"
           onClick={onCancel}
-          className="flex-1 h-16 rounded-2xl border border-white/5 font-black text-white/40 hover:bg-white/5 hover:text-white transition-all uppercase tracking-widest text-xs"
+          className="flex-1 h-16 rounded-2xl border border-border-subtle bg-glass font-black text-base-content-muted hover:bg-glass/20 hover:text-base-content transition-all uppercase tracking-widest text-xs"
         >
           {t('common.cancel')}
         </button>
         <button 
           type="submit"
           disabled={isSubmitting}
-          className="flex-1 h-16 rounded-2xl bg-white text-black font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 uppercase tracking-widest text-xs disabled:opacity-50"
+          className="flex-1 h-16 rounded-2xl bg-accent-purple text-white font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-accent-purple/20 uppercase tracking-widest text-xs disabled:opacity-50"
         >
           {isSubmitting ? '...' : (initialData ? t('common.save') : (type === 'Expense' ? t('dashboard.add_expense') : t('dashboard.add_income')))}
         </button>

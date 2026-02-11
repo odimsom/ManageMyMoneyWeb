@@ -86,7 +86,7 @@ const Transactions: React.FC = () => {
   return (
     <div className="flex flex-col gap-10 animate-fade-in-up pb-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <h1 className="text-4xl font-black text-white">{t('dashboard.recent_transactions')}</h1>
+        <h1 className="text-4xl font-black text-base-content">{t('dashboard.recent_transactions')}</h1>
         
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
@@ -99,7 +99,7 @@ const Transactions: React.FC = () => {
             </button>
             <button 
               onClick={() => handleExport('csv')}
-              className="h-12 bg-white/5 hover:bg-white/10 text-white/60 px-6 rounded-xl border border-white/5 font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-2"
+              className="h-12 bg-glass hover:bg-glass/20 text-base-content-muted px-6 rounded-xl border border-border-subtle font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5l5 5v11a2 2 0 01-2 2z" /></svg>
               {t('transactions.csv_export')}
@@ -108,14 +108,14 @@ const Transactions: React.FC = () => {
 
           <div className="relative group">
             <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none opacity-20 group-focus-within:opacity-100 transition-opacity">
-              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+              <svg className="w-4 h-4 text-base-content" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             </div>
             <input 
               type="text" 
               placeholder={t('transactions.search_placeholder')} 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="h-12 bg-card rounded-xl pl-12 pr-6 border border-white/5 focus:border-accent-purple/50 outline-none font-bold text-xs transition-all w-64"
+              className="h-12 bg-card rounded-xl pl-12 pr-6 border border-border-subtle focus:border-accent-purple/50 outline-none font-bold text-xs transition-all w-64 text-base-content"
             />
           </div>
 
@@ -123,32 +123,32 @@ const Transactions: React.FC = () => {
             <select 
               value={selectedCategoryId}
               onChange={(e) => setSelectedCategoryId(e.target.value)}
-              className="h-12 bg-card rounded-xl px-6 pr-10 border border-white/5 focus:border-accent-purple/50 outline-none font-black text-[10px] uppercase tracking-widest transition-all appearance-none cursor-pointer"
+              className="h-12 bg-card rounded-xl px-6 pr-10 border border-border-subtle focus:border-accent-purple/50 outline-none font-black text-[10px] uppercase tracking-widest transition-all appearance-none cursor-pointer text-base-content"
             >
               <option value="">{t('transactions.all_categories')}</option>
               {categories.map(cat => (
-                <option key={cat.id} value={cat.id} className="bg-gray-800 text-white">{cat.name}</option>
+                <option key={cat.id} value={cat.id}>{cat.name}</option>
               ))}
             </select>
             <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-20">
-               <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M19 9l-7 7-7-7" /></svg>
+               <svg className="w-3 h-3 text-base-content" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M19 9l-7 7-7-7" /></svg>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-card rounded-[2.5rem] p-10 border border-white/5">
+      <div className="bg-card rounded-[2.5rem] p-10 border border-border-subtle">
         {isLoading ? (
           <div className="flex flex-col gap-4 animate-pulse">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-16 bg-white/5 rounded-2xl"></div>
+              <div key={i} className="h-16 bg-glass rounded-2xl"></div>
             ))}
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-separate border-spacing-y-4">
               <thead>
-                <tr className="text-[10px] font-black uppercase tracking-widest text-white/20">
+                <tr className="text-[10px] font-black uppercase tracking-widest text-base-content-muted">
                   <th className="px-6 pb-2">{t('common.description')}</th>
                   <th className="px-6 pb-2">{t('common.category')}</th>
                   <th className="px-6 pb-2">{t('common.account')}</th>
@@ -159,46 +159,46 @@ const Transactions: React.FC = () => {
               <tbody>
                 {expenses.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="text-center py-20 text-white/10 font-black uppercase tracking-widest text-sm italic">
+                    <td colSpan={5} className="text-center py-20 text-base-content-muted font-black uppercase tracking-widest text-sm italic">
                       {t('transactions.no_expenses')}
                     </td>
                   </tr>
                 ) : (
                   expenses.map((e) => (
-                    <tr key={e.id} className="group hover:bg-white/[0.03] transition-all">
-                      <td className="px-6 py-4 bg-white/[0.02] rounded-l-[1.5rem] border-y border-l border-white/5 group-hover:border-accent-purple/50">
+                    <tr key={e.id} className="group hover:bg-glass transition-all">
+                      <td className="px-6 py-4 bg-glass rounded-l-[1.5rem] border-y border-l border-border-subtle group-hover:border-accent-purple/50">
                         <div className="flex flex-col">
-                          <div className="font-black text-white group-hover:text-accent-purple transition-colors">{e.description}</div>
-                          <div className="text-[9px] font-black uppercase text-white/10 tracking-tighter mt-1">{new Date(e.date).toLocaleDateString()}</div>
+                          <div className="font-black text-base-content group-hover:text-accent-purple transition-colors">{e.description}</div>
+                          <div className="text-[9px] font-black uppercase text-base-content-muted tracking-tighter mt-1">{new Date(e.date).toLocaleDateString()}</div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 bg-white/[0.02] border-y border-white/5 group-hover:border-accent-purple/50">
-                        <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase tracking-widest text-white/40">
-                          {e.categoryName}
+                      <td className="px-6 py-4 bg-glass border-y border-border-subtle group-hover:border-accent-purple/50">
+                        <span className="px-3 py-1 bg-glass rounded-lg text-[10px] font-black uppercase tracking-widest text-base-content-muted">
+                          {e.categoryName || t('common.uncategorized') || 'General'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 bg-white/[0.02] border-y border-white/5 group-hover:border-accent-purple/50 text-[10px] font-black uppercase tracking-widest text-white/20">
-                        {e.accountName}
+                      <td className="px-6 py-4 bg-glass border-y border-border-subtle group-hover:border-accent-purple/50 text-[10px] font-black uppercase tracking-widest text-base-content-muted">
+                        {e.accountName || t('common.no_account') || 'Default Account'}
                       </td>
-                      <td className="px-6 py-4 bg-white/[0.02] border-y border-white/5 group-hover:border-accent-purple/50 text-right">
-                        <div className="text-lg font-black text-white">{formatCurrency(e.amount, e.currencyCode)}</div>
+                      <td className="px-6 py-4 bg-glass border-y border-border-subtle group-hover:border-accent-purple/50 text-right">
+                        <div className="text-lg font-black text-base-content">{formatCurrency(e.amount, e.currencyCode)}</div>
                         <div className="flex gap-1 justify-end mt-1">
                           {e.tags?.map(tag => (
-                            <span key={tag.id} className="text-[7px] font-black uppercase px-1 border border-white/10 rounded">{tag.name}</span>
+                            <span key={tag.id} className="text-[7px] font-black uppercase px-1 border border-border-subtle rounded text-base-content-muted">{tag.name}</span>
                           ))}
                         </div>
                       </td>
-                      <td className="px-6 py-4 bg-white/[0.02] rounded-r-[1.5rem] border-y border-r border-white/5 group-hover:border-accent-purple/50">
+                      <td className="px-6 py-4 bg-glass rounded-r-[1.5rem] border-y border-r border-border-subtle group-hover:border-accent-purple/50">
                         <div className="flex justify-center gap-2">
                           <button 
                             onClick={() => { setEditingExpense(e); setIsModalOpen(true); }}
-                            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-accent-purple/20 text-white/40 hover:text-accent-purple flex items-center justify-center transition-all shadow-xl"
+                            className="w-10 h-10 rounded-xl bg-glass hover:bg-accent-purple/20 text-base-content-muted hover:text-accent-purple flex items-center justify-center transition-all shadow-xl"
                           >
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                           </button>
                           <button 
                             onClick={() => handleDeleteExpense(e.id)}
-                            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-red-500/20 text-white/40 hover:text-red-500 flex items-center justify-center transition-all shadow-xl"
+                            className="w-10 h-10 rounded-xl bg-glass hover:bg-red-500/20 text-base-content-muted hover:text-red-500 flex items-center justify-center transition-all shadow-xl"
                           >
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                           </button>

@@ -16,12 +16,14 @@ import Settings from './pages/Settings';
 import Reminders from './pages/Reminders';
 
 import { ToastProvider } from './context/ToastContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   return (
     <ToastProvider>
-      <AuthProvider>
-        <Router>
+      <ThemeProvider>
+        <AuthProvider>
+          <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -43,6 +45,7 @@ function App() {
           </Routes>
         </Router>
       </AuthProvider>
+     </ThemeProvider>
     </ToastProvider>
   );
 }

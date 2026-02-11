@@ -62,31 +62,31 @@ const TransferForm: React.FC<TransferFormProps> = ({ onSuccess, onCancel }) => {
     <form onSubmit={handleSubmit} className="space-y-6 p-1">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">{t('accounts.from_account')}</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-base-content-muted ml-4">{t('accounts.from_account')}</label>
           <select
             required
-            className="w-full h-14 bg-[#0a0a0a] rounded-2xl px-6 border border-white/5 focus:border-accent-purple/50 outline-none font-bold text-sm transition-all appearance-none"
+            className="w-full h-14 bg-glass rounded-2xl px-6 border border-border-subtle focus:border-accent-purple/50 outline-none font-bold text-sm transition-all appearance-none text-base-content"
             value={formData.fromAccountId}
             onChange={(e) => setFormData({ ...formData, fromAccountId: e.target.value })}
           >
-            <option value="">{t('common.select_account')}</option>
+            <option value="" className="bg-card text-base-content">{t('common.select_account')}</option>
             {accounts.map(acc => (
-              <option key={acc.id} value={acc.id}>{acc.name} ({acc.currency} {acc.balance})</option>
+              <option key={acc.id} value={acc.id} className="bg-card text-base-content">{acc.name} ({acc.currency} {acc.balance})</option>
             ))}
           </select>
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">{t('accounts.to_account')}</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-base-content-muted ml-4">{t('accounts.to_account')}</label>
           <select
             required
-            className="w-full h-14 bg-[#0a0a0a] rounded-2xl px-6 border border-white/5 focus:border-accent-purple/50 outline-none font-bold text-sm transition-all appearance-none"
+            className="w-full h-14 bg-glass rounded-2xl px-6 border border-border-subtle focus:border-accent-purple/50 outline-none font-bold text-sm transition-all appearance-none text-base-content"
             value={formData.toAccountId}
             onChange={(e) => setFormData({ ...formData, toAccountId: e.target.value })}
           >
-            <option value="">{t('common.select_account')}</option>
+            <option value="" className="bg-card text-base-content">{t('common.select_account')}</option>
             {accounts.map(acc => (
-              <option key={acc.id} value={acc.id}>{acc.name} ({acc.currency} {acc.balance})</option>
+              <option key={acc.id} value={acc.id} className="bg-card text-base-content">{acc.name} ({acc.currency} {acc.balance})</option>
             ))}
           </select>
         </div>
@@ -94,12 +94,12 @@ const TransferForm: React.FC<TransferFormProps> = ({ onSuccess, onCancel }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">{t('common.amount')}</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-base-content-muted ml-4">{t('common.amount')}</label>
           <input
             type="number"
             step="0.01"
             required
-            className="w-full h-14 bg-[#0a0a0a] rounded-2xl px-6 border border-white/5 focus:border-accent-purple/50 outline-none font-bold text-sm transition-all"
+            className="w-full h-14 bg-glass rounded-2xl px-6 border border-border-subtle focus:border-accent-purple/50 outline-none font-bold text-sm transition-all text-base-content placeholder:text-base-content-muted"
             placeholder="0.00"
             value={formData.amount}
             onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) })}
@@ -107,11 +107,11 @@ const TransferForm: React.FC<TransferFormProps> = ({ onSuccess, onCancel }) => {
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">{t('common.date')}</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-base-content-muted ml-4">{t('common.date')}</label>
           <input
             type="date"
             required
-            className="w-full h-14 bg-[#0a0a0a] rounded-2xl px-6 border border-white/5 focus:border-accent-purple/50 outline-none font-bold text-sm transition-all"
+            className="w-full h-14 bg-glass rounded-2xl px-6 border border-border-subtle focus:border-accent-purple/50 outline-none font-bold text-sm transition-all text-base-content"
             value={formData.date}
             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           />
@@ -119,9 +119,9 @@ const TransferForm: React.FC<TransferFormProps> = ({ onSuccess, onCancel }) => {
       </div>
 
       <div className="space-y-2">
-        <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-4">{t('common.description')} ({t('common.optional') || 'Optional'})</label>
+        <label className="text-[10px] font-black uppercase tracking-widest text-base-content-muted ml-4">{t('common.description')} ({t('common.optional') || 'Optional'})</label>
         <textarea
-          className="w-full h-32 bg-[#0a0a0a] rounded-2xl p-6 border border-white/5 focus:border-accent-purple/50 outline-none font-bold text-sm transition-all resize-none"
+          className="w-full h-32 bg-glass rounded-2xl p-6 border border-border-subtle focus:border-accent-purple/50 outline-none font-bold text-sm transition-all resize-none text-base-content placeholder:text-base-content-muted"
           placeholder={t('accounts.transfer_placeholder')}
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -132,7 +132,7 @@ const TransferForm: React.FC<TransferFormProps> = ({ onSuccess, onCancel }) => {
         <button
           type="button"
           onClick={onCancel}
-          className="flex-1 h-14 bg-white/5 text-white font-black rounded-full hover:bg-white/10 transition-all border border-white/5 uppercase tracking-widest text-xs"
+          className="flex-1 h-14 bg-glass text-base-content-muted font-black rounded-full hover:bg-glass/20 hover:text-base-content transition-all border border-border-subtle uppercase tracking-widest text-xs"
         >
           {t('common.cancel')}
         </button>

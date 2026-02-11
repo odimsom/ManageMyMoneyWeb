@@ -40,8 +40,8 @@ const AccountForm: React.FC<AccountFormProps> = ({ onSuccess, onCancel }) => {
     }
   };
 
-  const inputClasses = "w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-6 text-white placeholder:text-white/20 focus:border-accent-purple/50 focus:bg-white/[0.08] outline-none transition-all font-medium";
-  const labelClasses = "text-[10px] font-black uppercase tracking-widest text-white/30 mb-2 block ml-4";
+  const inputClasses = "w-full h-14 bg-glass border border-border-subtle rounded-2xl px-6 text-base-content placeholder:text-base-content-muted focus:border-accent-purple/50 focus:bg-glass/20 outline-none transition-all font-medium";
+  const labelClasses = "text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2 block ml-4";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -60,31 +60,31 @@ const AccountForm: React.FC<AccountFormProps> = ({ onSuccess, onCancel }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className={labelClasses}>{t('dashboard.account_type')}</label>
-          <select 
-            required
-            value={formData.type}
-            onChange={e => setFormData({ ...formData, type: e.target.value })}
-            className={inputClasses}
-          >
-            <option value="Checking" className="bg-gray-800 text-white">Checking</option>
-            <option value="Savings" className="bg-gray-800 text-white">Savings</option>
-            <option value="CreditCard" className="bg-gray-800 text-white">Credit Card</option>
-            <option value="Cash" className="bg-gray-800 text-white">Cash</option>
-            <option value="Investment" className="bg-gray-800 text-white">Investment</option>
-          </select>
+            <select 
+              required
+              value={formData.type}
+              onChange={e => setFormData({ ...formData, type: e.target.value })}
+              className={inputClasses}
+            >
+              <option value="Checking" className="bg-card text-base-content">Checking</option>
+              <option value="Savings" className="bg-card text-base-content">Savings</option>
+              <option value="CreditCard" className="bg-card text-base-content">Credit Card</option>
+              <option value="Cash" className="bg-card text-base-content">Cash</option>
+              <option value="Investment" className="bg-card text-base-content">Investment</option>
+            </select>
         </div>
         <div>
           <label className={labelClasses}>{t('dashboard.currency')}</label>
-          <select 
-            required
-            value={formData.currency}
-            onChange={e => setFormData({ ...formData, currency: e.target.value })}
-            className={inputClasses}
-          >
-            <option value="USD" className="bg-gray-800 text-white">USD</option>
-            <option value="DOP" className="bg-gray-800 text-white">DOP</option>
-            <option value="EUR" className="bg-gray-800 text-white">EUR</option>
-          </select>
+            <select 
+              required
+              value={formData.currency}
+              onChange={e => setFormData({ ...formData, currency: e.target.value })}
+              className={inputClasses}
+            >
+              <option value="USD" className="bg-card text-base-content">USD</option>
+              <option value="DOP" className="bg-card text-base-content">DOP</option>
+              <option value="EUR" className="bg-card text-base-content">EUR</option>
+            </select>
         </div>
       </div>
 
@@ -117,14 +117,14 @@ const AccountForm: React.FC<AccountFormProps> = ({ onSuccess, onCancel }) => {
         <button 
           type="button"
           onClick={onCancel}
-          className="flex-1 h-16 rounded-2xl border border-white/5 font-black text-white/40 hover:bg-white/5 hover:text-white transition-all uppercase tracking-widest text-xs"
+          className="flex-1 h-16 rounded-2xl border border-border-subtle bg-glass font-black text-base-content-muted hover:bg-glass/20 hover:text-base-content transition-all uppercase tracking-widest text-xs"
         >
           {t('common.cancel')}
         </button>
         <button 
           type="submit"
           disabled={isSubmitting}
-          className="flex-1 h-16 rounded-2xl bg-white text-black font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 uppercase tracking-widest text-xs disabled:opacity-50"
+          className="flex-1 h-16 rounded-2xl bg-accent-purple text-white font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-accent-purple/20 uppercase tracking-widest text-xs disabled:opacity-50"
         >
           {isSubmitting ? '...' : t('dashboard.create_account')}
         </button>

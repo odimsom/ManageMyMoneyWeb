@@ -89,21 +89,21 @@ const Reminders: React.FC = () => {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-pulse">
-        <div className="h-96 bg-white/5 rounded-[2.5rem]"></div>
-        <div className="h-96 bg-white/5 rounded-[2.5rem]"></div>
+        <div className="h-96 bg-glass rounded-[2.5rem]"></div>
+        <div className="h-96 bg-glass rounded-[2.5rem]"></div>
       </div>
     );
   }
 
-  const inputClasses = "w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-6 text-white placeholder:text-white/20 focus:border-accent-purple/50 focus:bg-white/[0.08] outline-none transition-all font-medium";
-  const labelClasses = "text-[10px] font-black uppercase tracking-widest text-white/30 mb-2 block ml-4";
+  const inputClasses = "w-full h-14 bg-glass border border-border-subtle rounded-2xl px-6 text-base-content placeholder:text-base-content-muted focus:border-accent-purple/50 focus:bg-glass/20 outline-none transition-all font-medium";
+  const labelClasses = "text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2 block ml-4";
 
   return (
     <div className="flex flex-col gap-20 animate-fade-in-up pb-10">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <section>
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-black text-white">{t('notifications.reminders')}</h2>
+            <h2 className="text-3xl font-black text-base-content">{t('notifications.reminders')}</h2>
             <button 
               onClick={() => setIsModalOpen(true)}
               className="px-6 h-12 bg-accent-purple text-white font-black rounded-full hover:scale-105 active:scale-95 transition-all shadow-xl shadow-accent-purple/20 text-xs uppercase tracking-widest"
@@ -113,19 +113,19 @@ const Reminders: React.FC = () => {
           </div>
           <div className="space-y-4">
             {reminders.length === 0 ? (
-              <p className="text-white/20 italic">{t('notifications.empty')}</p>
+              <p className="text-base-content-muted italic">{t('notifications.empty')}</p>
             ) : (
               reminders.map(reminder => (
-                <div key={reminder.id} className={`bg-card p-6 rounded-3xl border border-white/5 flex items-center justify-between transition-all ${reminder.isCompleted ? 'opacity-40' : 'hover:border-accent-purple/30'}`}>
+                <div key={reminder.id} className={`bg-card p-6 rounded-3xl border border-border-subtle flex items-center justify-between transition-all ${reminder.isCompleted ? 'opacity-40' : 'hover:border-accent-purple/30'}`}>
                   <div>
-                    <h4 className={`text-lg font-black ${reminder.isCompleted ? 'line-through text-white/40' : 'text-white'}`}>{reminder.title}</h4>
-                    <p className="text-sm text-white/40">{reminder.description}</p>
+                    <h4 className={`text-lg font-black ${reminder.isCompleted ? 'line-through text-base-content-muted' : 'text-base-content'}`}>{reminder.title}</h4>
+                    <p className="text-sm text-base-content-muted">{reminder.description}</p>
                     <div className="text-[10px] font-black uppercase tracking-widest text-accent-purple mt-2">{new Date(reminder.dueDate).toLocaleDateString()}</div>
                   </div>
                   {!reminder.isCompleted && (
                     <button 
                       onClick={() => handleCompleteReminder(reminder.id)}
-                      className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/20 hover:text-green-500 hover:border-green-500/40 hover:bg-green-500/10 transition-all font-black"
+                      className="w-10 h-10 rounded-full border border-border-subtle flex items-center justify-center text-base-content-muted hover:text-green-500 hover:border-green-500/40 hover:bg-green-500/10 transition-all font-black"
                     >
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                     </button>
@@ -137,27 +137,27 @@ const Reminders: React.FC = () => {
         </section>
 
         <section>
-          <h2 className="text-3xl font-black text-white mb-8">{t('notifications.alerts')}</h2>
+          <h2 className="text-3xl font-black text-base-content mb-8">{t('notifications.alerts')}</h2>
           <div className="space-y-4">
             {alerts.length === 0 ? (
-              <p className="text-white/20 italic">{t('notifications.empty')}</p>
+              <p className="text-base-content-muted italic">{t('notifications.empty')}</p>
             ) : (
               alerts.map(alert => (
-                <div key={alert.id} className={`bg-card p-6 rounded-3xl border border-white/5 flex flex-col gap-4 transition-all ${alert.isAcknowledged ? 'opacity-40' : 'hover:border-white/10'}`}>
+                <div key={alert.id} className={`bg-card p-6 rounded-3xl border border-border-subtle flex flex-col gap-4 transition-all ${alert.isAcknowledged ? 'opacity-40' : 'hover:border-border-subtle'}`}>
                   <div className="flex items-center justify-between">
                     <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${getSeverityColor(alert.severity)}`}>
                       {t(`notifications.${alert.severity.toLowerCase()}`)}
                     </span>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white/20">{new Date(alert.createdAt).toLocaleString()}</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-base-content-muted">{new Date(alert.createdAt).toLocaleString()}</span>
                   </div>
                   <div>
-                    <h4 className="text-lg font-black text-white">{alert.title}</h4>
-                    <p className="text-sm text-white/40">{alert.message}</p>
+                    <h4 className="text-lg font-black text-base-content">{alert.title}</h4>
+                    <p className="text-sm text-base-content-muted">{alert.message}</p>
                   </div>
                   {!alert.isAcknowledged && (
                     <button 
                       onClick={() => handleAcknowledgeAlert(alert.id)}
-                      className="text-[10px] font-black uppercase tracking-widest text-accent-purple hover:text-white transition-colors self-end"
+                      className="text-[10px] font-black uppercase tracking-widest text-accent-purple hover:text-base-content transition-colors self-end"
                     >
                       {t('notifications.mark_read')}
                     </button>
@@ -208,7 +208,7 @@ const Reminders: React.FC = () => {
             <button 
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="flex-1 h-14 rounded-2xl border border-white/5 font-black text-white/40 hover:bg-white/5 hover:text-white transition-all uppercase tracking-widest text-xs"
+              className="flex-1 h-14 rounded-2xl border border-border-subtle bg-glass font-black text-base-content-muted hover:bg-glass/20 hover:text-base-content transition-all uppercase tracking-widest text-xs"
             >
               {t('common.cancel')}
             </button>

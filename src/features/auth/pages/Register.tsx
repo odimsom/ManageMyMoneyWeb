@@ -13,7 +13,7 @@ const Register: React.FC = () => {
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    currency: 'USD',
+    currency: 'DOP',
   });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -141,9 +141,9 @@ const Register: React.FC = () => {
                   onChange={handleChange}
                   className="w-full bg-white/[0.03] border border-white/5 rounded-full h-14 px-8 focus:border-accent-purple/50 focus:bg-white/[0.05] transition-all outline-none font-bold text-white appearance-none cursor-pointer"
                 >
+                  <option value="DOP">DOP (RD$)</option>
                   <option value="USD">USD ($)</option>
                   <option value="EUR">EUR (€)</option>
-                  <option value="DOP">DOP (RD$)</option>
                 </select>
               </div>
             </div>

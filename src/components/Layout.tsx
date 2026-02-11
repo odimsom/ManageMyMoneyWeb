@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../features/auth/context/AuthContext';
 
 import NotificationList from './layout/NotificationList';
+import { useTheme } from '../context/ThemeContext';
 
 const Layout: React.FC = () => {
   const { t } = useTranslation();
   const { user, logout } = useAuth();
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -47,27 +49,27 @@ const Layout: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-bg-deep text-white flex p-4 md:p-6 lg:p-10 gap-6 lg:gap-10" data-theme="night">
+    <div className="min-h-screen bg-bg-deep text-base-content flex p-4 md:p-6 lg:p-10 gap-6 lg:gap-10" data-theme={theme}>
       
       {/* Sidebar - Fixed Floating Pill */}
-      <aside className="hidden lg:flex flex-col w-20 bg-card rounded-[2.5rem] p-4 items-center justify-between border border-white/5 shadow-2xl fixed left-6 top-10 bottom-10 z-30">
-        <div className="flex flex-col items-center gap-10">
-           <div className="w-12 h-12 bg-accent-purple rounded-2xl flex items-center justify-center rotate-12 shadow-lg shadow-accent-purple/20">
-              <span className="text-xl font-black italic">M</span>
+      <aside className="hidden lg:flex flex-col w-20 bg-card rounded-[2.5rem] p-4 items-center justify-between border border-border-subtle shadow-2xl fixed left-6 top-10 bottom-10 z-30 transition-all duration-300 ease-in-out hover:w-24 overflow-y-auto no-scrollbar">
+        <div className="flex flex-col items-center gap-10 w-full">
+           <div className="w-12 h-12 bg-accent-purple rounded-2xl flex items-center justify-center rotate-12 shadow-lg shadow-accent-purple/20 flex-shrink-0">
+              <span className="text-xl font-black italic text-white">M</span>
            </div>
            
-           <nav className="flex flex-col gap-6">
+           <nav className="flex flex-col gap-4 w-full items-center">
               {navItems.map((item) => {
                  const isActive = location.pathname === item.path;
                  return (
                   <Link
                     key={item.name}
                     to={item.path}
-                    className={`p-4 rounded-2xl transition-all relative group ${isActive ? 'bg-accent-purple text-white' : 'text-white/20 hover:text-white hover:bg-white/5'}`}
+                    className={`p-3 md:p-4 rounded-2xl transition-all relative group flex items-center justify-center ${isActive ? 'bg-accent-purple text-white scale-110 shadow-lg shadow-accent-purple/20' : 'text-base-content-muted hover:text-base-content hover:bg-glass hover:scale-105'}`}
                     title={item.name}
                   >
                     {item.icon}
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full px-3 py-1 bg-white text-black text-[10px] font-black uppercase rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none">
+                    <div className="absolute left-full ml-4 top-1/2 -translate-y-1/2 px-3 py-1 bg-card text-base-content text-[10px] font-black uppercase rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0 whitespace-nowrap z-50 pointer-events-none shadow-xl border border-border-subtle">
                       {item.name}
                     </div>
                   </Link>
@@ -76,19 +78,19 @@ const Layout: React.FC = () => {
            </nav>
         </div>
 
-        <div className="flex flex-col gap-6 items-center">
-           <button onClick={handleLogout} className="p-4 rounded-2xl text-white/20 hover:text-red-500 hover:bg-red-500/10 transition-all" title={t('common.logout') || 'Logout'}>
+        <div className="flex flex-col gap-6 items-center w-full pt-10">
+           <button onClick={handleLogout} className="p-4 rounded-2xl text-base-content-muted hover:text-red-500 hover:bg-red-500/10 transition-all hover:scale-105 active:scale-95" title={t('common.logout') || 'Logout'}>
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
            </button>
         </div>
       </aside>
 
       {/* Main Container */}
-      <div className="flex-1 flex flex-col min-w-0 lg:pl-32">
+      <div className="flex-1 flex flex-col min-w-0 lg:pl-[7.5rem] transition-all duration-300">
         
         {/* Modern Header */}
         <header className="flex items-center justify-between mb-8 lg:mb-12">
-            <div className="flex items-center gap-12 flex-1">
+            <div className="flex items-center gap-12 flex-1 min-w-0">
                <div className="hidden md:flex flex-1 max-w-md relative group">
                   <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none opacity-20 group-focus-within:opacity-100 transition-opacity">
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -96,25 +98,25 @@ const Layout: React.FC = () => {
                   <input 
                     type="text" 
                     placeholder={t('transactions.search_placeholder')} 
-                    className="w-full h-14 bg-card rounded-2xl pl-16 pr-8 border border-white/5 focus:border-accent-purple/50 outline-none font-bold text-sm transition-all"
+                    className="w-full h-14 bg-card rounded-2xl pl-16 pr-8 border border-border-subtle focus:border-accent-purple/50 focus:bg-glass outline-none font-bold text-sm transition-all"
                   />
                </div>
             </div>
 
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 md:gap-6 flex-shrink-0">
                <NotificationList />
-               <div className="flex flex-col items-end">
-                  <span className="text-sm font-black text-white">{user?.firstName} {user?.lastName}</span>
-                  <span className="text-[9px] font-black uppercase tracking-widest text-white/30">{t('common.premium_plan') || 'Premium Plan'}</span>
+               <div className="hidden sm:flex flex-col items-end">
+                  <span className="text-sm font-black text-base-content truncate max-w-[150px]">{user?.firstName} {user?.lastName}</span>
+                  <span className="text-[9px] font-black uppercase tracking-widest text-base-content-muted">{t('common.premium_plan') || 'Premium Plan'}</span>
                </div>
-               <div className="w-12 h-12 rounded-2xl bg-accent-purple/10 border border-accent-purple/20 flex items-center justify-center text-accent-purple font-black">
+               <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-accent-purple/10 border border-accent-purple/20 flex items-center justify-center text-accent-purple font-black transition-transform hover:scale-105">
                   {user?.firstName?.charAt(0)}
                </div>
             </div>
         </header>
 
 
-        <main className="flex-1">
+        <main className="flex-1 w-full max-w-[1600px] mx-auto overflow-x-hidden">
             <Outlet />
         </main>
       </div>

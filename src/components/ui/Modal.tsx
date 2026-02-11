@@ -30,20 +30,20 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
   if (!isRendered && !isOpen) return null;
 
   return (
-    <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+    <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity" 
         onClick={onClose}
       ></div>
       
       <div 
-        className={`relative w-full max-w-2xl bg-card border border-white/10 rounded-[2.5rem] shadow-2xl transition-all duration-300 transform ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-8'}`}
+        className={`relative w-full max-w-2xl bg-card border border-border-subtle rounded-[2.5rem] shadow-2xl transition-all duration-500 transform overflow-hidden ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-12'}`}
       >
-        <div className="flex items-center justify-between p-8 border-b border-white/5">
-          <h2 className="text-2xl font-black text-white">{title}</h2>
+        <div className="flex items-center justify-between p-8 border-b border-border-subtle">
+          <h2 className="text-2xl font-black text-base-content">{title}</h2>
           <button 
             onClick={onClose}
-            className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all"
+            className="w-10 h-10 rounded-full bg-glass flex items-center justify-center text-base-content-muted hover:text-base-content hover:bg-glass/20 transition-all border border-border-subtle"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" />

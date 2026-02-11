@@ -82,9 +82,9 @@ const Reports: React.FC = () => {
   if (isLoading) {
     return <div className="animate-pulse space-y-10">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[...Array(3)].map((_, i) => <div key={i} className="h-32 bg-white/5 rounded-[2rem]"></div>)}
+        {[...Array(3)].map((_, i) => <div key={i} className="h-32 bg-glass rounded-[2rem]"></div>)}
       </div>
-      <div className="h-96 bg-white/5 rounded-[2.5rem]"></div>
+      <div className="h-96 bg-glass rounded-[2.5rem]"></div>
     </div>;
   }
 
@@ -92,12 +92,12 @@ const Reports: React.FC = () => {
     <div className="flex flex-col gap-10 animate-fade-in-up pb-10">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-black tracking-tighter mb-2">{t('reports.title')}</h1>
-          <p className="text-white/40 font-medium">{t('reports.description')}</p>
+          <h1 className="text-4xl font-black tracking-tighter mb-2 text-base-content">{t('reports.title')}</h1>
+          <p className="text-base-content-muted font-medium">{t('reports.description')}</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex flex-col gap-2">
-            <span className="text-[9px] font-black uppercase text-white/20 tracking-widest px-2">{t('reports.income_label')}</span>
+            <span className="text-[9px] font-black uppercase text-base-content-muted tracking-widest px-2">{t('reports.income_label')}</span>
             <button 
               onClick={() => handleExportIncome()}
               className="h-10 bg-green-500/10 hover:bg-green-500/20 text-green-500 px-5 rounded-xl border border-green-500/20 font-black text-[9px] uppercase tracking-widest transition-all flex items-center gap-2"
@@ -106,9 +106,9 @@ const Reports: React.FC = () => {
               {t('transactions.excel_export')}
             </button>
           </div>
-          <div className="w-px h-10 bg-white/5 mx-2 self-end mb-1"></div>
+          <div className="w-px h-10 bg-border-subtle mx-2 self-end mb-1"></div>
           <div className="flex flex-col gap-2">
-            <span className="text-[9px] font-black uppercase text-white/20 tracking-widest px-2">{t('reports.expenses_label')}</span>
+            <span className="text-[9px] font-black uppercase text-base-content-muted tracking-widest px-2">{t('reports.expenses_label')}</span>
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => handleExportExpenses('excel')}
@@ -119,7 +119,7 @@ const Reports: React.FC = () => {
               </button>
               <button 
                 onClick={() => handleExportExpenses('csv')}
-                className="h-10 bg-white/5 hover:bg-white/10 text-white/60 px-5 rounded-xl border border-white/5 font-black text-[9px] uppercase tracking-widest transition-all flex items-center gap-2"
+                className="h-10 bg-glass hover:bg-glass/20 text-base-content-muted px-5 rounded-xl border border-border-subtle font-black text-[9px] uppercase tracking-widest transition-all flex items-center gap-2"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5l5 5v11a2 2 0 01-2 2z" /></svg>
                 {t('transactions.csv_export')}
@@ -131,38 +131,38 @@ const Reports: React.FC = () => {
 
       {/* Financial Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-card rounded-[2rem] p-8 border border-white/5">
-          <h4 className="text-[10px] font-black uppercase tracking-widest text-white/20 mb-2">{t('reports.net_worth')}</h4>
-          <div className="text-3xl font-black text-white">{summary ? formatCurrency(summary.netWorth) : '$0.00'}</div>
+        <div className="bg-card rounded-[2rem] p-8 border border-border-subtle">
+          <h4 className="text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2">{t('reports.net_worth')}</h4>
+          <div className="text-3xl font-black text-base-content">{summary ? formatCurrency(summary.netWorth) : '$0.00'}</div>
           <div className="mt-4 flex items-center gap-2">
             <span className="text-[10px] font-black uppercase text-green-500">+{t('reports.savings_rate', { rate: summary?.savingsRate || 0 })}</span>
           </div>
         </div>
-        <div className="bg-card rounded-[2rem] p-8 border border-white/5">
-          <h4 className="text-[10px] font-black uppercase tracking-widest text-white/20 mb-2">{t('reports.assets')}</h4>
+        <div className="bg-card rounded-[2rem] p-8 border border-border-subtle">
+          <h4 className="text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2">{t('reports.assets')}</h4>
           <div className="text-3xl font-black text-green-400">{summary ? formatCurrency(summary.totalAssets) : '$0.00'}</div>
         </div>
-        <div className="bg-card rounded-[2rem] p-8 border border-white/5">
-          <h4 className="text-[10px] font-black uppercase tracking-widest text-white/20 mb-2">{t('reports.liabilities')}</h4>
+        <div className="bg-card rounded-[2rem] p-8 border border-border-subtle">
+          <h4 className="text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2">{t('reports.liabilities')}</h4>
           <div className="text-3xl font-black text-red-500">{summary ? formatCurrency(summary.totalLiabilities) : '$0.00'}</div>
         </div>
       </div>
 
       {/* Monthly Breakdown Chart */}
-      <div className="bg-card rounded-[2.5rem] p-10 border border-white/5">
+      <div className="bg-card rounded-[2.5rem] p-10 border border-border-subtle">
         <div className="flex justify-between items-center mb-10">
-          <h3 className="text-xl font-black">{t('reports.monthly_performance')}</h3>
-          <div className="text-sm font-black text-white/40">{new Date().toLocaleString(i18n.language, { month: 'long', year: 'numeric' })}</div>
+          <h3 className="text-xl font-black text-base-content">{t('reports.monthly_performance')}</h3>
+          <div className="text-sm font-black text-base-content-muted">{new Date().toLocaleString(i18n.language, { month: 'long', year: 'numeric' })}</div>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           <div className="space-y-8">
             <div>
               <div className="flex justify-between mb-4">
-                <span className="text-sm font-black text-white/60">{t('reports.income_vs_expenses')}</span>
-                <span className="text-sm font-black text-white">{monthlyReport ? ((monthlyReport.totalExpenses / monthlyReport.totalIncome) * 100).toFixed(1) : 0}%</span>
+                <span className="text-sm font-black text-base-content-muted">{t('reports.income_vs_expenses')}</span>
+                <span className="text-sm font-black text-base-content">{monthlyReport ? ((monthlyReport.totalExpenses / monthlyReport.totalIncome) * 100).toFixed(1) : 0}%</span>
               </div>
-              <div className="h-4 w-full bg-white/5 rounded-full overflow-hidden flex">
+              <div className="h-4 w-full bg-glass rounded-full overflow-hidden flex border border-border-subtle">
                 <div 
                   className="h-full bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.4)]" 
                   style={{ width: monthlyReport ? `${(monthlyReport.totalIncome / (monthlyReport.totalIncome + monthlyReport.totalExpenses)) * 100}%` : '50%' }}
@@ -178,17 +178,17 @@ const Reports: React.FC = () => {
               </div>
             </div>
 
-            <div className="pt-6 border-t border-white/5">
-              <h4 className="text-sm font-black mb-6 text-white/60">{t('reports.top_expense_categories')}</h4>
+            <div className="pt-6 border-t border-border-subtle">
+              <h4 className="text-sm font-black mb-6 text-base-content-muted">{t('reports.top_expense_categories')}</h4>
               <div className="space-y-4">
                 {monthlyReport?.topExpenseCategories.map((cat, i) => (
                   <div key={i} className="flex items-center gap-4">
                     <div className="flex-1">
                       <div className="flex justify-between text-[10px] font-black uppercase mb-1">
-                        <span>{cat.name}</span>
-                        <span>{formatCurrency(cat.amount)}</span>
+                        <span className="text-base-content">{cat.name}</span>
+                        <span className="text-base-content">{formatCurrency(cat.amount)}</span>
                       </div>
-                      <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-1.5 w-full bg-glass border border-border-subtle rounded-full overflow-hidden">
                         <div className="h-full bg-accent-purple" style={{ width: monthlyReport ? `${(cat.amount / monthlyReport.totalExpenses) * 100}%` : '0%' }}></div>
                       </div>
                     </div>
@@ -198,18 +198,18 @@ const Reports: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white/[0.02] rounded-[2rem] p-8">
-            <h4 className="text-sm font-black mb-6 text-white/60">{t('reports.budget_performance')}</h4>
+          <div className="bg-glass rounded-[2rem] p-8 border border-border-subtle">
+            <h4 className="text-sm font-black mb-6 text-base-content-muted">{t('reports.budget_performance')}</h4>
             <div className="space-y-6">
               {budgetPerformance.map((bp, i) => (
                 <div key={i}>
                   <div className="flex justify-between text-[10px] font-black uppercase mb-2">
-                    <span>{bp.budgetName}</span>
+                    <span className="text-base-content">{bp.budgetName}</span>
                     <span className={bp.status === 'OverBudget' ? 'text-red-500' : bp.status === 'NearLimit' ? 'text-yellow-500' : 'text-green-500'}>
                       {bp.performancePercentage}% {t('reports.used')}
                     </span>
                   </div>
-                  <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-glass border border-border-subtle rounded-full overflow-hidden">
                     <div 
                       className={`h-full transition-all duration-1000 ${bp.status === 'OverBudget' ? 'bg-red-500' : bp.status === 'NearLimit' ? 'bg-yellow-500' : 'bg-green-500'}`} 
                       style={{ width: `${Math.min(bp.performancePercentage, 100)}%` }}

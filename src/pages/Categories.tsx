@@ -54,7 +54,7 @@ const Categories: React.FC = () => {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
         {[...Array(6)].map((_, i) => (
-          <div key={i} className="h-40 bg-white/5 rounded-[2.5rem]"></div>
+          <div key={i} className="h-40 bg-glass rounded-[2.5rem]"></div>
         ))}
       </div>
     );
@@ -64,17 +64,17 @@ const Categories: React.FC = () => {
     <div className="flex flex-col gap-10 animate-fade-in-up pb-10">
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">
-          <h1 className="text-4xl font-black text-white">{t('categories.title')}</h1>
+          <h1 className="text-4xl font-black text-base-content">{t('categories.title')}</h1>
           <div className="flex gap-4 mt-2">
             <button 
               onClick={() => setFilterType('Expense')}
-              className={`text-xs font-black uppercase tracking-widest transition-all ${filterType === 'Expense' ? 'text-accent-purple' : 'text-white/20 hover:text-white/40'}`}
+              className={`text-xs font-black uppercase tracking-widest transition-all ${filterType === 'Expense' ? 'text-accent-purple' : 'text-base-content-muted hover:text-base-content'}`}
             >
               {t('categories.expense_title')}
             </button>
             <button 
               onClick={() => setFilterType('Income')}
-              className={`text-xs font-black uppercase tracking-widest transition-all ${filterType === 'Income' ? 'text-green-500' : 'text-white/20 hover:text-white/40'}`}
+              className={`text-xs font-black uppercase tracking-widest transition-all ${filterType === 'Income' ? 'text-green-500' : 'text-base-content-muted hover:text-base-content'}`}
             >
               {t('categories.income_title')}
             </button>
@@ -90,18 +90,18 @@ const Categories: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {categories.length === 0 ? (
-          <div className="col-span-full bg-card rounded-[2.5rem] p-20 border border-white/5 flex flex-col items-center justify-center gap-6">
-            <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center text-white/10">
+          <div className="col-span-full bg-card rounded-[2.5rem] p-20 border border-border-subtle flex flex-col items-center justify-center gap-6">
+            <div className="w-20 h-20 bg-glass border border-border-subtle rounded-full flex items-center justify-center text-base-content-muted">
               <span className="text-4xl">🏷️</span>
             </div>
             <div className="text-center">
-              <div className="text-xl font-black text-white mb-2">{t('categories.no_categories')}</div>
-              <p className="text-white/20 font-medium">{t('categories.create_custom')}</p>
+              <div className="text-xl font-black text-base-content mb-2">{t('categories.no_categories')}</div>
+              <p className="text-base-content-muted font-medium">{t('categories.create_custom')}</p>
             </div>
           </div>
         ) : (
           categories.map((category) => (
-            <div key={category.id} className="bg-card rounded-[2.5rem] p-8 border border-white/5 hover:border-accent-purple/30 transition-all group overflow-hidden relative flex flex-col gap-4">
+            <div key={category.id} className="bg-card rounded-[2.5rem] p-8 border border-border-subtle hover:border-accent-purple/30 transition-all group overflow-hidden relative flex flex-col gap-4">
               <div className="flex items-center justify-between mb-2">
                 <div 
                   className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-inner"
@@ -109,28 +109,28 @@ const Categories: React.FC = () => {
                 >
                   {category.icon || '📝'}
                 </div>
-                <div className="text-[10px] font-black uppercase tracking-widest text-white/20 bg-white/5 px-3 py-1 rounded-full">
+                <div className="text-[10px] font-black uppercase tracking-widest text-base-content-muted bg-glass border border-border-subtle px-3 py-1 rounded-full">
                   {category.type}
                 </div>
               </div>
               
               <div className="flex-1">
-                <h3 className="text-xl font-black text-white group-hover:text-accent-purple transition-colors truncate">
+                <h3 className="text-xl font-black text-base-content group-hover:text-accent-purple transition-colors truncate">
                   {category.name}
                 </h3>
                 {category.description && (
-                  <p className="text-sm text-white/40 mt-1 line-clamp-2">
+                  <p className="text-sm text-base-content-muted mt-1 line-clamp-2">
                     {category.description}
                   </p>
                 )}
               </div>
 
               {category.subcategories && category.subcategories.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-white/5">
-                  <div className="text-[10px] font-black uppercase tracking-widest text-white/10 mb-2">{t('categories.subcategories')}</div>
+                <div className="mt-4 pt-4 border-t border-border-subtle">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2">{t('categories.subcategories')}</div>
                   <div className="flex flex-wrap gap-2">
                     {category.subcategories.map(sub => (
-                      <span key={sub.id} className="text-[9px] font-bold px-2 py-1 bg-white/5 rounded-lg text-white/40 group-hover:text-white/60 transition-colors">
+                      <span key={sub.id} className="text-[9px] font-bold px-2 py-1 bg-glass border border-border-subtle rounded-lg text-base-content-muted group-hover:text-base-content transition-colors">
                         {sub.name}
                       </span>
                     ))}

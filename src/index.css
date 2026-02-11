@@ -4,39 +4,58 @@
 @custom-variant dark (&:where(.dark, [data-theme="dark"], [data-theme="night"], [data-theme="dark"] *));
 
 @theme {
-  --color-glass: rgba(255, 255, 255, 0.03);
-  --color-glass-border: rgba(255, 255, 255, 0.05);
+  --color-glass: var(--glass-bg);
+  --color-glass-border: var(--border-subtle);
   
-  /* Reference palette from image */
-  --color-bg-deep: #050505;
-  --color-card: #0f0f12;
+  /* Palette */
+  --color-bg-deep: var(--bg-primary);
+  --color-card: var(--bg-secondary);
   --color-accent-purple: #9c7cf4;
   --color-accent-yellow: #f4d35e;
+  --color-base-content: var(--text-primary);
+  --color-base-content-muted: var(--text-secondary);
 }
 
 @layer base {
-  :root {
+  :root, [data-theme="night"] {
+    --bg-primary: #050505;
+    --bg-secondary: #0f0f12;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.4);
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --glass-bg: rgba(255, 255, 255, 0.03);
     --glass-blur: blur(25px);
+  }
+
+  [data-theme="light"] {
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #ffffff;
+    --text-primary: #1a1a1a;
+    --text-secondary: rgba(26, 26, 26, 0.5);
+    --border-subtle: rgba(0, 0, 0, 0.05);
+    --glass-bg: rgba(0, 0, 0, 0.02);
+    --glass-blur: blur(20px);
   }
   
   body {
-    background-color: var(--color-bg-deep);
-    color: white;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
 @layer components {
   .glass-panel {
-    @apply bg-white/[0.02] backdrop-blur-2xl border border-white/5 shadow-2xl;
+    @apply bg-glass backdrop-blur-2xl border border-border-subtle shadow-2xl;
   }
   
   .card-elite {
-    background-color: #0c0c0e;
+    background-color: var(--bg-secondary);
     border-radius: 2.5rem;
     padding: 3rem;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
   }
 
   .btn-pill {

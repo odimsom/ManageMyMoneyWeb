@@ -33,8 +33,8 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ onSuccess, onCanc
     }
   };
 
-  const inputClasses = "w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-6 text-white placeholder:text-white/20 focus:border-accent-purple/50 focus:bg-white/[0.08] outline-none transition-all font-medium";
-  const labelClasses = "text-[10px] font-black uppercase tracking-widest text-white/30 mb-2 block ml-4";
+  const inputClasses = "w-full h-14 bg-glass border border-border-subtle rounded-2xl px-6 text-base-content placeholder:text-base-content-muted focus:border-accent-purple/50 focus:bg-glass/20 outline-none transition-all font-medium";
+  const labelClasses = "text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2 block ml-4";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -58,9 +58,9 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ onSuccess, onCanc
           onChange={e => setFormData({ ...formData, type: e.target.value })}
           className={inputClasses}
         >
-          <option value="BankAccount">{t('accounts.bank_account')}</option>
-          <option value="Cash">{t('accounts.cash')}</option>
-          <option value="Other">{t('accounts.other')}</option>
+          <option value="BankAccount" className="bg-card text-base-content">{t('accounts.bank_account')}</option>
+          <option value="Cash" className="bg-card text-base-content">{t('accounts.cash')}</option>
+          <option value="Other" className="bg-card text-base-content">{t('accounts.other')}</option>
         </select>
       </div>
 
@@ -70,9 +70,9 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ onSuccess, onCanc
           id="isDefault"
           checked={formData.isDefault}
           onChange={e => setFormData({ ...formData, isDefault: e.target.checked })}
-          className="w-5 h-5 rounded border-white/10 bg-white/5 text-accent-purple focus:ring-accent-purple/50"
+          className="w-5 h-5 rounded border-border-subtle bg-glass text-accent-purple focus:ring-accent-purple/50 cursor-pointer"
         />
-        <label htmlFor="isDefault" className="text-xs font-bold text-white/60 cursor-pointer">
+        <label htmlFor="isDefault" className="text-xs font-bold text-base-content-muted cursor-pointer">
           {t('accounts.set_default')}
         </label>
       </div>
@@ -81,14 +81,14 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({ onSuccess, onCanc
         <button 
           type="button"
           onClick={onCancel}
-          className="flex-1 h-16 rounded-2xl border border-white/5 font-black text-white/40 hover:bg-white/5 hover:text-white transition-all uppercase tracking-widest text-xs"
+          className="flex-1 h-16 rounded-2xl border border-border-subtle bg-glass font-black text-base-content-muted hover:bg-glass/20 hover:text-base-content transition-all uppercase tracking-widest text-xs"
         >
           {t('common.cancel')}
         </button>
         <button 
           type="submit"
           disabled={isSubmitting}
-          className="flex-1 h-16 rounded-2xl bg-white text-black font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 uppercase tracking-widest text-xs disabled:opacity-50"
+          className="flex-1 h-16 rounded-2xl bg-accent-purple text-white font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-accent-purple/20 uppercase tracking-widest text-xs disabled:opacity-50"
         >
           {isSubmitting ? '...' : t('common.save')}
         </button>

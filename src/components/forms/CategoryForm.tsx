@@ -60,41 +60,41 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess, onCancel }) => {
     }
   };
 
-  const inputClasses = "w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-6 text-white placeholder:text-white/20 focus:border-accent-purple/50 focus:bg-white/[0.08] outline-none transition-all font-medium";
-  const labelClasses = "text-[10px] font-black uppercase tracking-widest text-white/30 mb-2 block ml-4";
-  const selectClasses = "w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-6 text-white placeholder:text-white/20 focus:border-accent-purple/50 focus:bg-white/[0.08] outline-none transition-all font-medium appearance-none";
+  const inputClasses = "w-full h-14 bg-glass border border-border-subtle rounded-2xl px-6 text-base-content placeholder:text-base-content-muted focus:border-accent-purple/50 focus:bg-glass/20 outline-none transition-all font-medium";
+  const labelClasses = "text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2 block ml-4";
+  const selectClasses = "w-full h-14 bg-glass border border-border-subtle rounded-2xl px-6 text-base-content placeholder:text-base-content-muted focus:border-accent-purple/50 focus:bg-glass/20 outline-none transition-all font-medium appearance-none";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className={labelClasses}>{t('categories.transaction_type')}</label>
-          <select 
-            value={formData.transactionType}
-            onChange={e => {
-              setFormData({ ...formData, transactionType: e.target.value as 'Income' | 'Expense' });
-              setParentId(''); // Reset parent when type changes
-            }}
-            className={selectClasses}
-          >
-            <option value="Expense" className="bg-gray-800 text-white">{t('common.expense')}</option>
-            <option value="Income" className="bg-gray-800 text-white">{t('common.income')}</option>
-          </select>
+            <select 
+              value={formData.transactionType}
+              onChange={e => {
+                setFormData({ ...formData, transactionType: e.target.value as 'Income' | 'Expense' });
+                setParentId(''); // Reset parent when type changes
+              }}
+              className={selectClasses}
+            >
+              <option value="Expense" className="bg-card text-base-content">{t('common.expense')}</option>
+              <option value="Income" className="bg-card text-base-content">{t('common.income')}</option>
+            </select>
         </div>
         <div>
           <label className={labelClasses}>{t('categories.subcategories')} ({t('common.optional')})</label>
-          <select 
-            value={parentId}
-            onChange={e => setParentId(e.target.value)}
-            className={selectClasses}
-          >
-            <option value="" className="bg-gray-800 text-white">{t('common.none') || 'None (Top Level)'}</option>
-            {parentCategories.map(cat => (
-              <option key={cat.id} value={cat.id} className="bg-gray-800 text-white">
-                {cat.icon} {cat.name}
-              </option>
-            ))}
-          </select>
+            <select 
+              value={parentId}
+              onChange={e => setParentId(e.target.value)}
+              className={selectClasses}
+            >
+              <option value="" className="bg-card text-base-content">{t('common.none') || 'None (Top Level)'}</option>
+              {parentCategories.map(cat => (
+                <option key={cat.id} value={cat.id} className="bg-card text-base-content">
+                  {cat.icon} {cat.name}
+                </option>
+              ))}
+            </select>
         </div>
       </div>
 
@@ -113,15 +113,15 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess, onCancel }) => {
         {!parentId && (
            <div>
             <label className={labelClasses}>{t('common.type')}</label>
-            <select 
-              value={formData.type}
-              onChange={e => setFormData({ ...formData, type: e.target.value })}
-              className={selectClasses}
-            >
-              <option value="Variable" className="bg-gray-800 text-white">{t('common.variable')}</option>
-              <option value="Fixed" className="bg-gray-800 text-white">{t('common.fixed')}</option>
-              <option value="Discretionary" className="bg-gray-800 text-white">{t('common.discretionary')}</option>
-            </select>
+              <select 
+                value={formData.type}
+                onChange={e => setFormData({ ...formData, type: e.target.value })}
+                className={selectClasses}
+              >
+                <option value="Variable" className="bg-card text-base-content">{t('common.variable')}</option>
+                <option value="Fixed" className="bg-card text-base-content">{t('common.fixed')}</option>
+                <option value="Discretionary" className="bg-card text-base-content">{t('common.discretionary')}</option>
+              </select>
           </div>
         )}
       </div>
@@ -148,7 +148,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess, onCancel }) => {
                 onChange={e => setFormData({ ...formData, color: e.target.value })}
                 className="h-14 w-14 rounded-2xl border-none outline-none bg-transparent cursor-pointer"
               />
-              <span className="text-white/50 text-sm font-black">{formData.color}</span>
+                <span className="text-base-content-muted text-sm font-black">{formData.color}</span>
             </div>
           </div>
           <div>
@@ -168,14 +168,14 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSuccess, onCancel }) => {
         <button 
           type="button"
           onClick={onCancel}
-          className="flex-1 h-16 rounded-2xl border border-white/5 font-black text-white/40 hover:bg-white/5 hover:text-white transition-all uppercase tracking-widest text-xs"
+          className="flex-1 h-16 rounded-2xl border border-border-subtle bg-glass font-black text-base-content-muted hover:bg-glass/20 hover:text-base-content transition-all uppercase tracking-widest text-xs"
         >
           {t('common.cancel')}
         </button>
         <button 
           type="submit"
           disabled={isSubmitting}
-          className="flex-1 h-16 rounded-2xl bg-white text-black font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 uppercase tracking-widest text-xs disabled:opacity-50"
+          className="flex-1 h-16 rounded-2xl bg-accent-purple text-white font-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-accent-purple/20 uppercase tracking-widest text-xs disabled:opacity-50"
         >
           {isSubmitting ? '...' : t('common.save')}
         </button>
