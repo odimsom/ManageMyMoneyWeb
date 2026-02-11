@@ -7,6 +7,8 @@ import type { Account } from '../services/accountService';
 import Modal from '../components/ui/Modal';
 import TransactionForm from '../components/forms/TransactionForm';
 
+import IncomeSourceForm from '../components/forms/IncomeSourceForm';
+
 const IncomePage: React.FC = () => {
   const { t } = useTranslation();
   const [incomes, setIncomes] = useState<Income[]>([]);
@@ -14,6 +16,8 @@ const IncomePage: React.FC = () => {
   const [, setAccounts] = useState<Account[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSourceModalOpen, setIsSourceModalOpen] = useState(false);
+  const [selectedSource, setSelectedSource] = useState<IncomeSource | undefined>(undefined);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -39,6 +43,21 @@ const IncomePage: React.FC = () => {
 
   const formatCurrency = (amount: number, currency = 'USD') => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount);
+  };
+
+  const handleAddSource = () => {
+    setSelectedSource(undefined);
+    setIsSourceModalOpen(true);
+  };
+
+  const handleEditSource = (source: IncomeSource) => {
+    setSelectedSource(source);
+    setIsSourceModalOpen(true);
+  };
+
+  const handleSourceSuccess = () => {
+    setIsSourceModalOpen(false);
+    fetchData();
   };
 
   if (isLoading) {
@@ -101,17 +120,23 @@ const IncomePage: React.FC = () => {
             <h3 className="text-lg font-black mb-8">{t('income.sources')}</h3>
             <div className="space-y-6">
               {sources.map(source => (
-                <div key={source.id} className="flex items-center justify-between">
+                <div key={source.id} className="flex items-center justify-between text-white/60 hover:text-white transition-colors">
                   <div>
                     <div className="text-sm font-black">{source.name}</div>
                     {source.averageAmount && <div className="text-[9px] font-black uppercase text-white/20">{t('income.avg')}: {formatCurrency(source.averageAmount)}</div>}
                   </div>
-                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/20 hover:text-white hover:bg-white/10 cursor-pointer transition-all">
+                  <div 
+                    onClick={() => handleEditSource(source)}
+                    className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/20 hover:text-white hover:bg-white/10 cursor-pointer transition-all"
+                  >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                   </div>
                 </div>
               ))}
-              <button className="w-full h-12 rounded-2xl border-2 border-dashed border-white/5 hover:border-accent-purple/40 hover:bg-accent-purple/5 transition-all text-[10px] font-black uppercase text-white/40 hover:text-white">
+              <button 
+                onClick={handleAddSource}
+                className="w-full h-12 rounded-2xl border-2 border-dashed border-white/5 hover:border-accent-purple/40 hover:bg-accent-purple/5 transition-all text-[10px] font-black uppercase text-white/40 hover:text-white"
+              >
                 {t('income.add_source')}
               </button>
             </div>
@@ -131,6 +156,18 @@ const IncomePage: React.FC = () => {
             setIsModalOpen(false);
             fetchData();
           }}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isSourceModalOpen}
+        onClose={() => setIsSourceModalOpen(false)}
+        title={selectedSource ? t('income.edit_source') : t('income.add_source')}
+      >
+        <IncomeSourceForm 
+          initialData={selectedSource}
+          onSuccess={handleSourceSuccess}
+          onCancel={() => setIsSourceModalOpen(false)}
         />
       </Modal>
     </div>

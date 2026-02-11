@@ -247,18 +247,30 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
           {errors.accountId && <div className={errorClasses}>{errors.accountId}</div>}
         </div>
         <div>
-          <label className={labelClasses}>{t('common.category')}</label>
+          <label className={labelClasses}>{type === 'Income' ? t('common.source') : t('common.category')}</label>
           <select 
             required
             value={formData.categoryId}
             onChange={e => setFormData({ ...formData, categoryId: e.target.value })}
             className={inputClasses(errors.categoryId)}
           >
+            {categories.length === 0 && (
+              <option value="" disabled className="bg-gray-800 text-white">
+                {type === 'Income' ? t('income.no_sources_prompt') || 'No sources found' : t('categories.no_categories')}
+              </option>
+            )}
             {categories.map(cat => (
-              <option key={cat.id} value={cat.id} className="bg-gray-800 text-white">{cat.name}</option>
+              <option key={cat.id} value={cat.id} className="bg-gray-800 text-white">
+                {cat.name}
+              </option>
             ))}
           </select>
           {errors.categoryId && <div className={errorClasses}>{errors.categoryId}</div>}
+          {type === 'Income' && categories.length === 0 && (
+            <p className="text-[10px] text-accent-purple mt-2 ml-4 font-bold">
+              {t('income.setup_sources_hint') || 'You need to create an Income Source first in the Income section.'}
+            </p>
+          )}
         </div>
       </div>
 

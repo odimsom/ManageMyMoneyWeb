@@ -93,7 +93,9 @@
     "no_records": "No income records found",
     "sources": "Income Sources",
     "avg": "Avg",
-    "add_source": "Add New Source"
+    "add_source": "Add New Source",
+    "edit_source": "Edit Income Source",
+    "source_name_placeholder": "e.g. Salary, Freelance"
   },
   "settings": {
     "title": "Settings",
@@ -169,6 +171,9 @@
     "day_of_month": "Day of Month",
     "day_of_week": "Day of Week",
     "required": "Required",
+    "source": "Source",
+    "income_source": "Income Source",
+    "description_placeholder": "Optional description",
     "actions": "Actions",
     "edit": "Edit",
     "delete": "Delete",

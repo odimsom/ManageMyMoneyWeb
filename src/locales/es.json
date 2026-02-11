@@ -93,7 +93,9 @@
     "no_records": "No se encontraron registros de ingresos",
     "sources": "Fuentes de Ingresos",
     "avg": "Prom",
-    "add_source": "Añadir Nueva Fuente"
+    "add_source": "Añadir Nueva Fuente",
+    "edit_source": "Editar Fuente de Ingreso",
+    "source_name_placeholder": "ej. Salario, Freelance"
   },
   "settings": {
     "title": "Configuración",
@@ -169,6 +171,9 @@
     "day_of_month": "Día del Mes",
     "day_of_week": "Día de la Semana",
     "required": "Requerido",
+    "source": "Fuente",
+    "income_source": "Fuente de Ingreso",
+    "description_placeholder": "Descripción opcional",
     "actions": "Acciones",
     "edit": "Editar",
     "delete": "Eliminar",
