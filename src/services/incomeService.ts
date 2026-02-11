@@ -2,8 +2,8 @@ import api from './api';
 
 export interface Income {
   id: string;
-  sourceId: string;
-  sourceName: string;
+  incomeSourceId: string;
+  incomeSourceName: string;
   accountId: string;
   accountName: string;
   amount: number;
@@ -22,21 +22,22 @@ export interface IncomeSource {
 }
 
 export interface CreateIncomeRequest {
-  sourceId: string;
+  incomeSourceId: string;
   accountId: string;
   amount: number;
   date: string;
-  description?: string;
+  description: string;
+  currency?: string;
   isRecurring: boolean;
 }
 
 export interface UpdateIncomeRequest {
-  sourceId: string;
-  accountId: string;
-  amount: number;
-  date: string;
+  incomeSourceId?: string;
+  accountId?: string;
+  amount?: number;
+  date?: string;
   description?: string;
-  isRecurring: boolean;
+  isRecurring?: boolean;
 }
 
 export interface CreateIncomeSourceRequest {

@@ -29,7 +29,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
   const [formData, setFormData] = useState({
     amount: initialData?.amount.toString() || '',
     description: initialData?.description || '',
-    categoryId: initialData && 'categoryId' in initialData ? initialData.categoryId : (initialData && 'sourceId' in initialData ? initialData.sourceId : ''),
+    categoryId: initialData && 'categoryId' in initialData ? initialData.categoryId : (initialData && 'incomeSourceId' in initialData ? initialData.incomeSourceId : ''),
     accountId: initialData?.accountId || '',
     date: initialData?.date ? new Date(initialData.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
     currency: (initialData && 'currencyCode' in initialData ? (initialData as Expense | Income).currencyCode : 'USD'),
@@ -105,7 +105,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
           });
         } else {
           await incomeService.updateIncome(initialData.id, {
-            sourceId: formData.categoryId,
+            incomeSourceId: formData.categoryId,
             accountId: formData.accountId,
             amount: parseFloat(formData.amount),
             date: formData.date,
@@ -143,11 +143,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
           }
         } else {
           const incomeResp = await incomeService.createIncome({
-            sourceId: formData.categoryId,
+            incomeSourceId: formData.categoryId,
             accountId: formData.accountId,
             amount: parseFloat(formData.amount),
             date: formData.date,
             description: formData.description,
+            currency: formData.currency,
             isRecurring: formData.isRecurring
           });
           createdId = incomeResp.id;
