@@ -5,6 +5,7 @@
 
 @theme {
   --color-glass: var(--glass-bg);
+  --color-border-subtle: var(--border-subtle);
   --color-glass-border: var(--border-subtle);
   
   /* Palette */
