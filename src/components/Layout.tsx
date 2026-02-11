@@ -109,8 +109,16 @@ const Layout: React.FC = () => {
                   <span className="text-sm font-black text-base-content truncate max-w-[150px]">{user?.firstName} {user?.lastName}</span>
                   <span className="text-[9px] font-black uppercase tracking-widest text-base-content-muted">{t('common.premium_plan') || 'Premium Plan'}</span>
                </div>
-               <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-accent-purple/10 border border-accent-purple/20 flex items-center justify-center text-accent-purple font-black transition-transform hover:scale-105">
-                  {user?.firstName?.charAt(0)}
+               <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-accent-purple/10 border border-accent-purple/20 flex items-center justify-center overflow-hidden text-accent-purple font-black transition-transform hover:scale-105">
+                  {user?.avatarUrl ? (
+                    <img 
+                      src={user.avatarUrl.startsWith('http') ? user.avatarUrl : `${import.meta.env.VITE_API_URL || 'https://managemymoneyapi-production.up.railway.app'}${user.avatarUrl}`} 
+                      alt="Avatar" 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    user?.firstName?.charAt(0)
+                  )}
                </div>
             </div>
         </header>

@@ -2,14 +2,47 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../features/auth/context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { useRef, useState } from 'react';
 
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const { user } = useAuth();
+  const { user, uploadAvatar } = useAuth();
   const { theme, setTheme } = useTheme();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const apiBaseUrl = import.meta.env.VITE_API_URL || 'https://managemymoneyapi-production.up.railway.app';
+
+  const avatarUrl = user?.avatarUrl 
+    ? (user.avatarUrl.startsWith('http') ? user.avatarUrl : `${apiBaseUrl}${user.avatarUrl}`)
+    : null;
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      alert('File size exceeds 2MB limit');
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      await uploadAvatar(file);
+    } catch (error) {
+      console.error('Failed to upload avatar', error);
+      alert('Failed to upload avatar');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -94,9 +127,33 @@ const Settings: React.FC = () => {
             </h3>
             
             <div className="flex flex-col items-center py-6">
-              <div className="w-24 h-24 rounded-[2rem] bg-accent-purple/10 border border-accent-purple/20 flex items-center justify-center text-4xl font-black text-accent-purple mb-6 shadow-2xl">
-                {user?.firstName?.charAt(0)}
+              <div 
+                onClick={handleAvatarClick}
+                className={`w-24 h-24 rounded-[2rem] bg-accent-purple/10 border border-accent-purple/20 flex items-center justify-center overflow-hidden cursor-pointer group relative shadow-2xl mb-6 ${isUploading ? 'opacity-50' : ''}`}
+              >
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                ) : (
+                  <span className="text-4xl font-black text-accent-purple">{user?.firstName?.charAt(0)}</span>
+                )}
+                
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                </div>
+
+                {isUploading && (
+                  <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                    <div className="w-8 h-8 border-4 border-accent-purple border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                )}
               </div>
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleFileChange} 
+                className="hidden" 
+                accept="image/*"
+              />
               <h4 className="text-2xl font-black text-base-content">{user?.firstName} {user?.lastName}</h4>
               <p className="text-base-content-muted font-medium mb-10">{user?.email}</p>
               

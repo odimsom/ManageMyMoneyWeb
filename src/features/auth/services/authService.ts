@@ -101,6 +101,23 @@ export const authService = {
     throw new Error(response.data.message || 'Failed to update profile');
   },
 
+  uploadAvatar: async (file: File): Promise<User> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await api.post<ApiResponse<User>>('/api/Auth/profile/avatar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    
+    if (response.data.success && response.data.data) {
+      localStorage.setItem('user', JSON.stringify(response.data.data));
+      return response.data.data;
+    }
+    throw new Error(response.data.message || 'Failed to upload avatar');
+  },
+
   changePassword: async (data: ChangePasswordRequest): Promise<void> => {
     const response = await api.post<ApiResponse<null>>('/api/Auth/change-password', data);
     if (!response.data.success) {

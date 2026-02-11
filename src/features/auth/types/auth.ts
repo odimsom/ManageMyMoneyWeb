@@ -4,6 +4,7 @@ export interface User {
   firstName: string;
   lastName: string;
   currency: string;
+  avatarUrl?: string;
 }
 
 export interface LoginRequest {
@@ -62,6 +63,7 @@ export interface UpdateUserProfileRequest {
   firstName: string;
   lastName: string;
   currency: string;
+  avatarUrl?: string;
 }
 
 export interface ChangePasswordRequest {
