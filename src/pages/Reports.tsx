@@ -133,18 +133,18 @@ const Reports: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-card rounded-[2rem] p-8 border border-border-subtle">
           <h4 className="text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2">{t('reports.net_worth')}</h4>
-          <div className="text-3xl font-black text-base-content">{summary ? formatCurrency(summary.netWorth) : '$0.00'}</div>
+          <div className="text-3xl font-black text-base-content">{summary ? formatCurrency(summary.netBalance) : '$0.00'}</div>
           <div className="mt-4 flex items-center gap-2">
-            <span className="text-[10px] font-black uppercase text-green-500">+{t('reports.savings_rate', { rate: summary?.savingsRate || 0 })}</span>
+            <span className="text-[10px] font-black uppercase text-green-500">+{summary?.savingsRate || 0}% {t('reports.savings_rate_label')}</span>
           </div>
         </div>
         <div className="bg-card rounded-[2rem] p-8 border border-border-subtle">
-          <h4 className="text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2">{t('reports.assets')}</h4>
-          <div className="text-3xl font-black text-green-400">{summary ? formatCurrency(summary.totalAssets) : '$0.00'}</div>
+          <h4 className="text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2">{t('reports.total_income')}</h4>
+          <div className="text-3xl font-black text-green-400">{summary ? formatCurrency(summary.totalIncome) : '$0.00'}</div>
         </div>
         <div className="bg-card rounded-[2rem] p-8 border border-border-subtle">
-          <h4 className="text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2">{t('reports.liabilities')}</h4>
-          <div className="text-3xl font-black text-red-500">{summary ? formatCurrency(summary.totalLiabilities) : '$0.00'}</div>
+          <h4 className="text-[10px] font-black uppercase tracking-widest text-base-content-muted mb-2">{t('reports.total_expenses')}</h4>
+          <div className="text-3xl font-black text-red-500">{summary ? formatCurrency(summary.totalExpenses) : '$0.00'}</div>
         </div>
       </div>
 
@@ -181,15 +181,15 @@ const Reports: React.FC = () => {
             <div className="pt-6 border-t border-border-subtle">
               <h4 className="text-sm font-black mb-6 text-base-content-muted">{t('reports.top_expense_categories')}</h4>
               <div className="space-y-4">
-                {monthlyReport?.topExpenseCategories.map((cat, i) => (
+                {monthlyReport?.expensesByCategory.map((cat, i) => (
                   <div key={i} className="flex items-center gap-4">
                     <div className="flex-1">
                       <div className="flex justify-between text-[10px] font-black uppercase mb-1">
-                        <span className="text-base-content">{cat.name}</span>
+                        <span className="text-base-content">{cat.categoryName}</span>
                         <span className="text-base-content">{formatCurrency(cat.amount)}</span>
                       </div>
                       <div className="h-1.5 w-full bg-glass border border-border-subtle rounded-full overflow-hidden">
-                        <div className="h-full bg-accent-purple" style={{ width: monthlyReport ? `${(cat.amount / monthlyReport.totalExpenses) * 100}%` : '0%' }}></div>
+                        <div className="h-full bg-accent-purple" style={{ width: monthlyReport ? `${(cat.amount / Math.max(monthlyReport.totalExpenses, 1)) * 100}%` : '0%' }}></div>
                       </div>
                     </div>
                   </div>

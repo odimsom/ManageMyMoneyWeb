@@ -51,6 +51,9 @@
     "top_expense_categories": "Top Expense Categories",
     "budget_performance": "Budget Performance",
     "savings_rate": "{{rate}}% savings rate",
+    "savings_rate_label": "Savings Rate",
+    "total_income": "Total Income",
+    "total_expenses": "Total Expenses",
     "used": "used",
     "income_label": "Income",
     "expenses_label": "Expenses"

@@ -51,6 +51,9 @@
     "top_expense_categories": "Categorías de Gastos Principales",
     "budget_performance": "Rendimiento del Presupuesto",
     "savings_rate": "{{rate}}% tasa de ahorro",
+    "savings_rate_label": "Tasa de Ahorro",
+    "total_income": "Ingresos Totales",
+    "total_expenses": "Gastos Totales",
     "used": "usado",
     "income_label": "Ingresos",
     "expenses_label": "Gastos"

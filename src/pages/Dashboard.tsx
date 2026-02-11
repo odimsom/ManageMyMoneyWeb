@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { dashboardService } from '../services/dashboardService';
 import { reportService } from '../services/reportService';
-import type { FinancialSummary, MonthlyReport } from '../services/reportService';
+import type { FinancialSummary, MonthlyReport, CategoryBreakdownItem } from '../services/reportService';
 import { accountService } from '../services/accountService';
 import type { Account } from '../services/accountService';
 import type { Expense } from '../services/expenseService';
@@ -73,7 +73,7 @@ const Dashboard: React.FC = () => {
   }
 
   const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
-  const topCategories = report?.topExpenseCategories || [];
+  const topCategories = report?.expensesByCategory || [];
 
   return (
     <div className="flex flex-col gap-10 animate-fade-in-up pb-10">
@@ -98,7 +98,7 @@ const Dashboard: React.FC = () => {
                <div className="relative z-10">
                   <h4 className="text-[11px] font-black uppercase tracking-widest mb-1 opacity-50">{t('dashboard.current_balance')}</h4>
                   <div className="text-3xl font-black tracking-tighter">
-                    {summary ? formatCurrency(summary.netWorth) : formatCurrency(totalBalance)}
+                    {summary ? formatCurrency(summary.netBalance) : formatCurrency(totalBalance)}
                   </div>
                </div>
                <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
@@ -127,7 +127,7 @@ const Dashboard: React.FC = () => {
             <div>
                <h2 className="text-3xl font-black text-white mb-2">{t('dashboard.welcome', { name: user?.firstName })}</h2>
                <p className="text-white/60 font-medium max-w-md">
-                 {report && report.netSavings > 0 
+                 {report && report.netBalance > 0 
                    ? t('dashboard.savings_positive') 
                    : t('dashboard.savings_negative')}
                </p>
@@ -148,7 +148,7 @@ const Dashboard: React.FC = () => {
                 </div>
                 <span className="text-[10px] font-black uppercase tracking-widest text-base-content-muted group-hover:text-base-content transition-colors">{t('dashboard.total_balance')}</span>
              </div>
-             <div className="text-2xl font-black text-base-content">{summary ? formatCurrency(summary.netWorth) : formatCurrency(totalBalance)}</div>
+             <div className="text-2xl font-black text-base-content">{summary ? formatCurrency(summary.netBalance) : formatCurrency(totalBalance)}</div>
              <p className="text-[9px] font-bold text-base-content-muted mt-2">{t('dashboard.active_accounts', { count: accounts.length })}</p>
           </div>
 
@@ -181,8 +181,8 @@ const Dashboard: React.FC = () => {
                 </div>
                 <span className="text-[10px] font-black uppercase tracking-widest text-base-content-muted group-hover:text-base-content transition-colors">{t('dashboard.net_cash_flow')}</span>
              </div>
-             <div className={`text-2xl font-black ${(report?.netSavings || 0) >= 0 ? 'text-blue-400' : 'text-red-400'}`}>
-                {formatCurrency(report?.netSavings || 0)}
+             <div className={`text-2xl font-black ${(report?.netBalance || 0) >= 0 ? 'text-blue-400' : 'text-red-400'}`}>
+                {formatCurrency(report?.netBalance || 0)}
              </div>
              <p className="text-[9px] font-bold text-base-content-muted mt-2">{t('dashboard.performance_overview')}</p>
           </div>
@@ -253,11 +253,11 @@ const Dashboard: React.FC = () => {
                        {topCategories.length === 0 ? (
                            <div className="text-sm text-base-content-muted font-black uppercase italic text-center py-10">{t('dashboard.no_data')}</div>
                        ) : (
-                           topCategories.map((cat, idx) => (
+                           topCategories.map((cat: CategoryBreakdownItem, idx: number) => (
                                <div key={idx} className="group">
                                    <div className="flex justify-between items-end mb-3">
                                        <div>
-                                          <div className="text-[10px] font-black uppercase tracking-widest text-base-content-muted group-hover:text-base-content transition-colors mb-1">{cat.name}</div>
+                                          <div className="text-[10px] font-black uppercase tracking-widest text-base-content-muted group-hover:text-base-content transition-colors mb-1">{cat.categoryName}</div>
                                           <div className="text-sm font-black text-base-content">{formatCurrency(cat.amount)}</div>
                                        </div>
                                    </div>

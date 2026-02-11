@@ -1,30 +1,71 @@
 import api from './api';
 
 export interface FinancialSummary {
-  totalAssets: number;
-  totalLiabilities: number;
-  netWorth: number;
-  monthlyCashFlow: number;
-  unbudgetedSpending: number;
+  totalIncome: number;
+  totalExpenses: number;
+  netBalance: number;
   savingsRate: number;
+  currency: string;
+  fromDate: string;
+  toDate: string;
+}
+
+export interface CategoryBreakdownItem {
+  categoryId: string;
+  categoryName: string;
+  categoryIcon?: string;
+  categoryColor?: string;
+  amount: number;
+  percentage: number;
+  transactionCount: number;
+}
+
+export interface IncomeSourceBreakdownItem {
+  sourceId: string;
+  sourceName: string;
+  amount: number;
+  percentage: number;
+}
+
+export interface DailyBalanceItem {
+  date: string;
+  income: number;
+  expenses: number;
+  balance: number;
 }
 
 export interface MonthlyReport {
-  month: number;
   year: number;
+  month: number;
+  monthName: string;
   totalIncome: number;
   totalExpenses: number;
-  netSavings: number;
-  topExpenseCategories: { name: string; amount: number }[];
-  incomeSources: { name: string; amount: number }[];
+  netBalance: number;
+  savingsRate: number;
+  currency: string;
+  expensesByCategory: CategoryBreakdownItem[];
+  incomeBySource: IncomeSourceBreakdownItem[];
+  dailyBalance: DailyBalanceItem[];
+  comparedToPreviousMonth: number;
+}
+
+export interface MonthlyTrendItem {
+  month: number;
+  monthName: string;
+  income: number;
+  expenses: number;
+  balance: number;
 }
 
 export interface YearlyReport {
   year: number;
   totalIncome: number;
   totalExpenses: number;
-  netSavings: number;
-  monthlyBreakdown: { month: number; income: number; expenses: number }[];
+  netBalance: number;
+  averageMonthlySavings: number;
+  currency: string;
+  monthlyTrends: MonthlyTrendItem[];
+  expensesByCategory: CategoryBreakdownItem[];
 }
 
 export interface ComparisonReportRequest {
@@ -34,13 +75,32 @@ export interface ComparisonReportRequest {
   period2End: string;
 }
 
+export interface PeriodSummary {
+  startDate: string;
+  endDate: string;
+  totalIncome: number;
+  totalExpenses: number;
+  balance: number;
+}
+
+export interface CategoryComparisonItem {
+  categoryId: string;
+  categoryName: string;
+  period1Amount: number;
+  period2Amount: number;
+  change: number;
+  changePercentage: number;
+}
+
 export interface ComparisonReportResponse {
-  period1Income: number;
-  period1Expenses: number;
-  period2Income: number;
-  period2Expenses: number;
+  period1: PeriodSummary;
+  period2: PeriodSummary;
+  incomeChange: number;
   incomeChangePercentage: number;
+  expenseChange: number;
   expenseChangePercentage: number;
+  balanceChange: number;
+  categoryComparison: CategoryComparisonItem[];
 }
 
 export interface BudgetPerformance {
@@ -49,7 +109,7 @@ export interface BudgetPerformance {
   spentAmount: number;
   remainingAmount: number;
   performancePercentage: number;
-  status: 'UnderBudget' | 'NearLimit' | 'OverBudget';
+  status: 'UnderBudget' | 'NearLimit' | 'OverBudget' | string;
 }
 
 const getFinancialSummary = async (fromDate?: string, toDate?: string) => {
