@@ -21,7 +21,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
   const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [accounts, setAccounts] = useState<Account[]>([]);
-  const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
+  const [categories, setCategories] = useState<{ id: string; name: string; isSource?: boolean }[]>([]);
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
   
@@ -44,19 +44,38 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [accs, cats, tags] = await Promise.all([
+        const [accs, tags] = await Promise.all([
           accountService.getAccounts(),
-          type === 'Expense' 
-            ? categoryService.getExpenseCategories() 
-            : incomeService.getIncomeSources(),
           expenseService.getTags()
         ]);
         setAccounts(accs);
-        setCategories(cats);
         setAvailableTags(tags);
+
+        if (type === 'Expense') {
+          const cats = await categoryService.getExpenseCategories();
+          setCategories(cats);
+          if (cats.length > 0 && !formData.categoryId) setFormData(prev => ({ ...prev, categoryId: cats[0].id }));
+        } else {
+          const [sources, incomeCats] = await Promise.all([
+            incomeService.getIncomeSources(),
+            categoryService.getIncomeCategories()
+          ]);
+          
+          // Merge sources and categories for a unified list
+          // Sources take precedence if names match
+          const unified: { id: string; name: string; isSource?: boolean }[] = [...sources.map(s => ({ ...s, isSource: true }))];
+          
+          incomeCats.forEach(cat => {
+            if (!unified.find(u => u.name.toLowerCase() === cat.name.toLowerCase())) {
+              unified.push({ ...cat, isSource: false });
+            }
+          });
+          
+          setCategories(unified);
+          if (unified.length > 0 && !formData.categoryId) setFormData(prev => ({ ...prev, categoryId: unified[0].id }));
+        }
         
-        if (accs.length > 0) setFormData(prev => ({ ...prev, accountId: accs[0].id }));
-        if (cats.length > 0) setFormData(prev => ({ ...prev, categoryId: cats[0].id }));
+        if (accs.length > 0 && !formData.accountId) setFormData(prev => ({ ...prev, accountId: accs[0].id }));
       } catch (error) {
         console.error('Failed to fetch form data', error);
       }
@@ -92,6 +111,26 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
     setIsSubmitting(true);
     try {
       let createdId: string | undefined;
+      let targetSourceId = formData.categoryId;
+
+      // Handle Automagic Source Creation for Income
+      if (type === 'Income') {
+        const selected = categories.find(c => c.id === formData.categoryId);
+        if (selected && !selected.isSource) {
+          // It's a Category, not a Source. Create the Source on the fly.
+          try {
+            const newSource = await incomeService.createIncomeSource({
+              name: selected.name,
+              description: `Auto-created from category ${selected.name}`
+            });
+            targetSourceId = newSource.id;
+          } catch (err) {
+            console.error('Failed to auto-create income source:', err);
+            // If it fails (e.g. source already exists but ID didn't match), 
+            // try to find it by name or just proceed and let backend handle it
+          }
+        }
+      }
 
       if (initialData) {
         if (type === 'Expense') {
@@ -104,7 +143,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
           });
         } else {
           await incomeService.updateIncome(initialData.id, {
-            incomeSourceId: formData.categoryId,
+            incomeSourceId: targetSourceId,
             accountId: formData.accountId,
             amount: parseFloat(formData.amount),
             date: formData.date,
@@ -142,7 +181,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
           }
         } else {
           const incomeResp = await incomeService.createIncome({
-            incomeSourceId: formData.categoryId,
+            incomeSourceId: targetSourceId,
             accountId: formData.accountId,
             amount: parseFloat(formData.amount),
             date: formData.date,
