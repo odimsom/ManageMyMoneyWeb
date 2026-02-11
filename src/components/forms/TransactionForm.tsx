@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { accountService } from '../../services/accountService';
 import type { Account } from '../../services/accountService';
 import { categoryService } from '../../services/categoryService';
-import type { Category } from '../../services/categoryService';
 import { expenseService } from '../../services/expenseService';
 import type { Tag, Expense } from '../../services/expenseService';
 import { incomeService } from '../../services/incomeService';
@@ -22,7 +21,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
   const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [accounts, setAccounts] = useState<Account[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
   
@@ -49,7 +48,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type, initialData, on
           accountService.getAccounts(),
           type === 'Expense' 
             ? categoryService.getExpenseCategories() 
-            : categoryService.getIncomeCategories(),
+            : incomeService.getIncomeSources(),
           expenseService.getTags()
         ]);
         setAccounts(accs);
